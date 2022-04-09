@@ -1,0 +1,79 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>AI Movie Rater</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css'%}" />
+  </head>
+
+  <body>
+    <!--Header Titles and Nav-->
+    <header>
+      <img src="../static/res/logo.png" />
+      <button type="button" class="buttons" id="signup">Sign Up</button>
+    </header>
+
+    <!--Movie RecyclerView-->
+    <table class="movies">
+      {% for movie in movies %}
+      <tr class="movie">
+        <td><img src="{{ movie | get_cover }}" alt="Cover" /></td>
+        <td>{{ movie | get_item }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <!--Sidebar with Social Media Navigation and Usefull Links-->
+    <aside class="side-bar">
+      <img
+        src="../static/res/ig.png"
+        class="aside_img_1"
+        onclick="window.open('https://www.instagram.com/')"
+        alt="Instagram"
+      />
+      <img
+        src="../static/res/fb.png"
+        class="aside_img_2"
+        onclick="window.open('https://www.facebook.com/')"
+        alt="Facebook"
+      />
+      <img
+        src="../static/res/tw.png"
+        class="aside_img_3"
+        onclick="window.open('https://twitter.com/?lang=pt')"
+        alt="Twitter"
+      />
+      <img
+        src="../static/res/share.png"
+        class="aside_img_4"
+        onclick="window.open('https://outlook.live.com/owa/')"
+        alt="Share"
+      />
+      <img
+        src="../static/res/info.png"
+        class="aside_img_5"
+        onclick="window.open('https://www.iscte-iul.pt/')"
+        alt="Information"
+      />
+      <img
+        src="../static/res/party_icon.png"
+        class="aside_img_6"
+        onclick="window.open('https://www.facebook.com/groups/129376820574859/')"
+        alt="Festas"
+      />
+    </aside>
+
+    <!-- Footer Content -->
+    <footer>
+      <nav>
+        <a href="https://www.iscte-iul.pt/">ISCTE-IUL </a> |
+        <a href="https://www.iscte-iul.pt/">AEISCTE-IUL </a> |
+        <a href="https://www.iscte-iul.pt/">ISTA-IUL</a>
+      </nav>
+      <p>
+        All rights reserved to João Folgado, Miguel Encarnação and Pedro
+        Oliveira
+      </p>
+    </footer>
+  </body>
+</html>
