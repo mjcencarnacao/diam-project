@@ -5,8 +5,9 @@ from django.db import models
 
 
 class Movie(models.Model):
-    id = models.AutoField(primary_key=True)
+
     raw = models.JSONField()
+    name = models.CharField('Movie Name', max_length=120, blank=True, null=True)
     entry = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
