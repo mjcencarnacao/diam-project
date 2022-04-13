@@ -45,8 +45,8 @@
       <nav id="nav">
          <ul class="links">
             <li class="active"><a href="index.html">IMDB Top 250 Movies</a></li>
-            <li><a href="{% url 'home:login' %}">Login</a></li>
-            <li><a href="register.html">Register</a></li>
+            <li><a href="{% url 'login_view' %}">Login</a></li>
+            <li><a href="{% url 'register' %}">Register</a></li>
          </ul>
          <ul class="icons">
             <li>
@@ -89,15 +89,15 @@
             {% for movie in movies %}
             <article>
                <header>
-                  <span class="date">{{ movie | get_movie_year }}</span>
+                  <span class="date">{{ movie.raw | get_movie_year }}</span>
                   <h2>
-                     <a href="#">{{ movie | get_movie_name }}</a>
+                     <a href="#">{{ movie.raw | get_movie_name }}</a>
                   </h2>
                </header>
-               <a href="#" class="image fit"
-                  ><img src="{{ movie | get_movie_cover }}" alt=""
+               <a href="{% url 'home:movie-details' movie.id %}" class="image fit"
+                  ><img src="{{ movie.raw | get_movie_cover }}" alt=""
                   /></a>
-               <p>{{ movie | get_movie_description }}</p>
+               <p>{{ movie.raw | get_movie_description }}</p>
                <ul class="actions special">
                   <li><a href="#" class="button">AI Rating</a></li>
                </ul>

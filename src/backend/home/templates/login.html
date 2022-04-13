@@ -24,8 +24,8 @@
 					<nav id="nav">
 						<ul class="links">
 							<li><a href="index.html">This is Massively</a></li>
-							<li class="active"><a href="{% url 'home:login' %}">Login Page</a></li>
-							<li><a href="{% url 'home:register' %}">Sign In Page</a></li>
+							<li class="active"><a href="{% url 'login_view' %}">Login Page</a></li>
+							<li><a href="{% url 'register' %}">Sign In Page</a></li>
 						</ul>
 						<ul class="icons">
 							<li><a href="#" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
@@ -34,16 +34,8 @@
 					<footer id="main">
 						<section>
 							<form method="post" action="#">
-								<div class="fields">
-									<div class="field">
-										<label for="name">Nome:</label>
-										<input type="text" name="name" id="name" />
-									</div>
-									<div class="field">
-										<label for="password">Password:</label>
-										<input type="password" name="password" id="password" />
-									</div>
-								</div>
+								{% csrf_token %}
+								{{form.as_p}}
 								<ul class="actions">
 									<li><input type="submit" value="Login" /></li>
 								</ul>
