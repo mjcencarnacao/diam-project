@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% load static %}
+<html>
+  <body class="is-preload">
+    {% block content %}
+    <div id="main">
+      <center>
+        <section class="posts">
+          <article>
+            <header>
+              <span class="date">Movie Year</span>
+              <h2>
+                <a href="#">Movie Name</a>
+              </h2>
+            </header>
+            <img src="{% static '../static/images/cover.jpg' %}" alt="" />
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+              reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+              sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+            <ul class="actions special">
+              <li><a href="#" class="button">Y</a></li>
+              <li><a href="#" class="button">N</a></li>
+              <li><a href="#" class="button">W</a></li>
+            </ul>
+          </article>
+        </section>
+      </center>
+    </div>
+    {% endblock content %}
+  </body>
+</html>

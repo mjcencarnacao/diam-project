@@ -1,117 +1,54 @@
+{% extends 'base.html' %} {% load static %}
 <!DOCTYPE html>
 <html>
-   <head>
-      <title>AI For You</title>
-      <meta charset="utf-8" />
-      <meta
-         name="viewport"
-         content="width=device-width, initial-scale=1, user-scalable=no"
-         />
-      {% load static %}
-      <link rel="stylesheet" href="{% static '../static/assets/css/main.css'%}" />
-      <noscript
-         >
-         <link
-            rel="stylesheet"
-            href="{% static '../static/assets/css/noscript.css'%}"
-            />
-      </noscript>
-   </head>
-   <body class="is-preload">
-      <!-- Wrapper -->
-      <div id="wrapper" class="fade-in">
-      <!-- Intro -->
-      <div id="intro">
-         <h1>AI<br />For You</h1>
-         <p>
-            AI Powered Open Source Tool that helps you find the right movie<br />IMDB
-            TOP 250 Database
-         </p>
-         <ul class="actions">
-            <li>
-               <a
-                  href="#header"
-                  class="button icon solid solo fa-arrow-down scrolly"
-                  >Continue</a
-                  >
-            </li>
-         </ul>
-      </div>
-      <!-- Header -->
-      <header id="header">
-         <a href="index.html" class="logo">AI For You</a>
-      </header>
-      <!-- Nav -->
-      <nav id="nav">
-         <ul class="links">
-            <li class="active"><a href="index.html">IMDB Top 250 Movies</a></li>
-            <li><a href="{% url 'home:login' %}">Login</a></li>
-            <li><a href="register.html">Register</a></li>
-         </ul>
-         <ul class="icons">
-            <li>
-               <a href="#" class="icon brands fa-github"
-                  ><span class="label">GitHub</span></a
-                  >
-            </li>
-         </ul>
-      </nav>
-      <!-- Main -->
-      <div id="main">
-         <!-- Featured Post -->
-         <article class="post featured">
-            <header class="major">
-               <span class="date">Updated IMDB List</span>
-               <h2>
-                  <a href="#"
-                     >Not Sure about<br />
-                  what to watch?</a
-                     >
-               </h2>
-               <p>
-                  Here are the Top 250 movies of all time, powered by AI and
-                  Django<br />
-                  Comments in movies are analysed by our AI solution in order to
-                  give you a general view of what the public thinks of.
-               </p>
-            </header>
-            <a href="#" class="image main"
-               ><img src="{% static '../static/images/pic01.jpg'%}" alt=""
-               /></a>
-            <ul class="actions special">
-               <li>
-                  <a href="#" class="button large">Visit IMDB Official Website</a>
-               </li>
-            </ul>
-         </article>
-         <!-- Posts -->
-         <section class="posts">
-            {% for movie in movies %}
-            <article>
-               <header>
-                  <span class="date">{{ movie | get_movie_year }}</span>
-                  <h2>
-                     <a href="#">{{ movie | get_movie_name }}</a>
-                  </h2>
-               </header>
-               <a href="#" class="image fit"
-                  ><img src="{{ movie | get_movie_cover }}" alt=""
-                  /></a>
-               <p>{{ movie | get_movie_description }}</p>
-               <ul class="actions special">
-                  <li><a href="#" class="button">AI Rating</a></li>
-               </ul>
-            </article>
-            {% endfor %}
-         </section>
-      </div>
-      <!-- Scripts -->
-      <script src="{% static '../static/assets/js/jquery.min.js'%}"></script>
-      <script src="{% static '../static/assets/js/jquery.scrollex.min.js'%}"></script>
-      <script src="{% static '../static/assets/js/jquery.scrolly.min.js'%}"></script>
-      <script src="{% static '../static/assets/js/browser.min.js'%}"></script>
-      <script src="{% static '../static/assets/js/breakpoints.min.js'%}"></script>
-      <script src="{% static '../static/assets/js/util.js'%}"></script>
-      <script src="{% static '../static/assets/js/main.js'%}"></script>
-   </body>
+  <body class="is-preload">
+    {% block content %}
+    <div id="main">
+      <article class="post featured">
+        <header class="major">
+          <span class="date">Updated IMDB List</span>
+          <h2>
+            <a href="#"
+              >Not Sure about<br />
+              what to watch?</a
+            >
+          </h2>
+          <p>
+            Here are the Top 250 movies of all time, powered by AI and Django<br />
+            Comments in movies are analysed by our AI solution in order to give
+            you a general view of what the public thinks of.
+          </p>
+        </header>
+        <a href="#" class="image main"
+          ><img src="{% static '../static/images/pic01.jpg'%}" alt=""
+        /></a>
+        <ul class="actions special">
+          <li>
+            <a href="#" class="button large">Visit IMDB Official Website</a>
+          </li>
+        </ul>
+      </article>
+      <!-- Posts -->
+      <section class="posts">
+        {% for movie in movies %}
+        <article>
+          <header>
+            <span class="date">{{ movie | get_movie_year }}</span>
+            <h2>
+              <a href="#">{{ movie | get_movie_name }}</a>
+            </h2>
+          </header>
+          <a href="#" class="image fit"
+            ><img src="{{ movie | get_movie_cover }}" alt=""
+          /></a>
+          <p>{{ movie | get_movie_description }}</p>
+          <ul class="actions special">
+            <li><a href="#" class="button">AI Rating</a></li>
+          </ul>
+        </article>
+        {% endfor %}
+      </section>
+    </div>
+    {% endblock content %}
+  </body>
 </html>

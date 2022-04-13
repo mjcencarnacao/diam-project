@@ -17,4 +17,7 @@ def get_login_page(request):
 
 def get_register_page(request):
     return render(request, 'register.html')
+
+def get_details_page(request):
+    return render(request, 'details.html')
     

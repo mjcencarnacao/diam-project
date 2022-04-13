@@ -1,0 +1,35 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AI For You</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, user-scalable=no"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static '../static/assets/css/main.css' %}"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="{% static '../static/assets/css/noscript.css'%}"
+      />
+    </noscript>
+  </head>
+  <body class="is-preload">
+    {% block header %} {% include './header.html' %} {% endblock %}
+    <div class="dynamicContent">{% block content %}{% endblock content %}</div>
+    {% block footer %} {% include './footer.html' %} {% endblock %}
+
+    <script src="{% static '../static/assets/js/jquery.min.js'%}"></script>
+    <script src="{% static '../static/assets/js/jquery.scrollex.min.js'%}"></script>
+    <script src="{% static '../static/assets/js/jquery.scrolly.min.js'%}"></script>
+    <script src="{% static '../static/assets/js/browser.min.js'%}"></script>
+    <script src="{% static '../static/assets/js/breakpoints.min.js'%}"></script>
+    <script src="{% static '../static/assets/js/util.js'%}"></script>
+    <script src="{% static '../static/assets/js/main.js'%}"></script>
+  </body>
+</html>
