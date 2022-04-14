@@ -12,13 +12,14 @@ from services.scrapper import Scrapper
 def movie_details(request, movie_id):
     movie = Movie.objects.get(pk=movie_id)
     movie_comments_path = f"https://www.imdb.com{movie.raw['imdb_url']}reviews/?ref_=tt_ql_urv"
-    try:
-        check = Comments.objects.get(movie=movie.id)
-    except Comments.DoesNotExist:
+
+    check = Comments.objects.filter(movie=movie.id)
+    if not check:
+        print("funciona")
         # Podemos vir a ter um problema aqui caso sejamos nós a adicionar um filme ( solução pode passar por um boolean)
         comments_dictionary: Dict = Scrapper.get_movie_comments(movie_comments_path)
         for keys, value in comments_dictionary.items():
-            Comments(tittle=keys, comment=value, movie=movie, critic=request.user).save()
+            Comments(title=keys, comment=value, movie=movie, critic=request.user).save()
 
     comments = Comments.objects.filter(movie=movie)
     return render(request, 'show_details.html', {'movie': movie, 'comments': comments})
