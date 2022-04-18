@@ -1,6 +1,6 @@
 # Setup Docker
 
-_______
+---
 
 ## Start docker
 
@@ -12,7 +12,7 @@ docker-compose up
 
 ## Connect PGAdmin to Postgres Databse
 
-First see all dockers running in your PC 
+First see all dockers running in your PC
 
 ```
 docker ps
@@ -27,14 +27,16 @@ docker inspect 'just the two first numbers of COINTAINER ID '
 Save postgres IP Address
 
 Third, run on browser 'http://localhost:5050/' and loggin with
+
 ```
 ->EmailUser: root@root.com
 ->pass: root
 ```
 
 Fourh
+
 ```
-Connect with postgresql 
+Connect with postgresql
 -> Add New Server
 General:
 -> Choose you databaseName
@@ -44,6 +46,7 @@ Connection
 ->Username: postgres
 ->password:12345
 ```
+
 ## Dont Forget to setup django settings.py
 
 ```
@@ -57,6 +60,19 @@ DATABASES = {
     }
 }
 ```
-| WARNING: Fazer sempre migrate da primeira vez que se inicia o docker |
-|----------------------------------------------------------------------|
-____
+
+Pipenv Commands
+
+```
+pipenv shell -> Start Environment (always run everytime you open your editor)
+
+pipenv install <package> -> installs packages and adds it to the lock file
+
+pipenv uninstall <package> -> uninstalls packages and removes it from the lock file
+
+```
+
+| WARNING: Migrate on First Run |
+| ----------------------------- |
+
+---
