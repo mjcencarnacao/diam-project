@@ -20,5 +20,7 @@ class Comments(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     critic = models.ForeignKey(User, on_delete=models.CASCADE)
     entry = models.DateTimeField(auto_now_add=True)
+    Ai_FeedBack = models.IntegerField("AiFeedBack", null=False)
+    Ai_Probability_FeedBack = models.FloatField("AiProbabilityFeedBack", null=False)
 
 

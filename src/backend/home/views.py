@@ -15,7 +15,6 @@ def movie_details(request, movie_id):
 
     check = Comments.objects.filter(movie=movie.id)
     if not check:
-        print("funciona")
         # Podemos vir a ter um problema aqui caso sejamos nós a adicionar um filme ( solução pode passar por um boolean)
         comments_dictionary: Dict = Scrapper.get_movie_comments(movie_comments_path)
         for keys, value in comments_dictionary.items():
