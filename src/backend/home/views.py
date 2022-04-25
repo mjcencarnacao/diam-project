@@ -5,11 +5,12 @@ from services import views
 import json
 from .models import Movie, Comments
 from services.scrapper import Scrapper
+from services.AIService import AIService
 
 
-# Create your views here. Request -> Response
 
 def movie_details(request, movie_id):
+    ai_service: AIService = AIService()
     movie = Movie.objects.get(pk=movie_id)
     movie_comments_path = f"https://www.imdb.com{movie.raw['imdb_url']}reviews/?ref_=tt_ql_urv"
 
@@ -18,7 +19,13 @@ def movie_details(request, movie_id):
         # Podemos vir a ter um problema aqui caso sejamos nós a adicionar um filme ( solução pode passar por um boolean)
         comments_dictionary: Dict = Scrapper.get_movie_comments(movie_comments_path)
         for keys, value in comments_dictionary.items():
-            Comments(title=keys, comment=value, movie=movie, critic=request.user).save()
+            ai_feedback, ai_prob = ai_service.classify(value)
+            Comments(title=keys,
+                     comment=value,
+                     movie=movie,
+                     critic=request.user,
+                     Ai_FeedBack=ai_feedback,
+                     Ai_Probability_FeedBack=ai_prob).save()
 
     comments = Comments.objects.filter(movie=movie)
     return render(request, 'show_details.html', {'movie': movie, 'comments': comments})
@@ -32,7 +39,6 @@ def get_home_page(request):
             movie_info = Movie.objects.get(name=movie['name'])
         except Movie.DoesNotExist:
             Movie(name=movie['name'], raw=movie).save()
-            print("sucesso")
 
     movies = Movie.objects.all()
     return render(request, 'index.html', {'movies': movies})
