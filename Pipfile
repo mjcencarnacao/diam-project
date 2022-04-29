@@ -4,14 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-beautifulsoup4 = "*"
+nltk = "==3.7"
+numpy = "==1.22.0"
+pandas = "==1.3.5"
+regex = "==2022.3.15"
+scikit-learn = "==1.0.2"
+scipy = "==1.7.3"
+Django = "==4.0.3"
+psycopg2 = "*"
 requests = "*"
+bs4 = "*"
 lxml = "*"
-django = "*"
-pillow = "*"
-grequests = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.10"
+python_version = "3.8"
