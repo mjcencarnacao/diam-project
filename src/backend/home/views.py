@@ -28,7 +28,7 @@ def movie_details(request, movie_id):
                      Ai_Probability_FeedBack=ai_prob).save()
 
     comments = Comments.objects.filter(movie=movie)
-    return render(request, 'show_details.html', {'movie': movie, 'comments': comments})
+    return render(request, 'details.html', {'movie': movie, 'comments': comments})
 
 
 def get_home_page(request):

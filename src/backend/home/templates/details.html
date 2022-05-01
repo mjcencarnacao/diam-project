@@ -1,0 +1,174 @@
+{% extends 'base.html' %} {% load static %}
+<html>
+  <body class="is-preload">
+    {% block content %}
+    <div id="main">
+      <section clasbase.htmls="posts">
+        <article>
+          <div style="float: left; margin-right: 40px">
+            <img
+              style="width: 350px !important; height: 500px !important"
+              src="{{ movie.raw | get_movie_cover }}"
+              alt=""
+            />
+            <ul class="actions special">
+              <li>
+                <a href="#" class="button"><i class="fa fa-eye"></i></a>
+              </li>
+              <li>
+                <a href="#" class="button"><i class="fas fa-heart"></i></a>
+              </li>
+              <li>
+                <a href="#" class="button"><i class="fas fa-cloud"></i></a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <b>Year: </b>{{ movie.raw | get_movie_year }}<br />
+            <b>Title: </b>{{ movie.name }} <br />
+            <br />
+            <b>Description: </b>{{ movie.raw | get_movie_description }}<br />
+            <br />
+            <b>Genre: </b>{{ movie.raw | get_movie_genre }}<br />
+            <b>Actors: </b>{{ movie.raw | get_movie_actors }} <br />
+            <div class="flex-wrapper">
+              <div class="single-chart">
+                <svg viewBox="0 0 36 36" class="circular-chart green">
+                  <path
+                    class="circle-bg"
+                    d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                  <path
+                    class="circle"
+                    stroke-dasharray="60, 100"
+                    d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831"
+                  />
+                  <text x="18" y="20.35" class="percentage">60%</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+
+      <div class="container">
+        <div class="row">
+          <div class="col-md-8">
+            {% for comment in comments %}
+            <section class="comment-list">
+              <article class="row">
+                <div class="col-md-2 col-sm-2 hidden-xs">
+                  <div class="col-md-10 col-sm-10">
+                    <div class="panel-body" style="display: inline">
+                      <header class="text-left">
+                        <div class="comment-user">
+                          <i class="fa fa-user"></i> User
+                        </div>
+                        <time class="comment-date" datetime="16-12-2014 01:05"
+                          ><i class="fa fa-clock-o"></i>Dec 16, 2014</time
+                        >
+                      </header>
+                    </div>
+                    <div class="comment-post">
+                      <p>
+                        <strong>{{ comment.title }}</strong><br />
+                        {{ comment.comment }}
+                      </p>
+                    </div>
+                    <p class="text-right">
+                      <i
+                        id="{{ comment.id }}-0star"
+                        onmouseover="doThis('{{ comment.id }}')"
+                        onclick="doThat('{{ comment.id }}')"
+                        class="fas fa-star mb fa-star-s"
+                      ></i>
+                      <a
+                        id="{{ comment.id }}-nota"
+                        style="color: black; display: none"
+                      >
+                        7 / 10
+                      </a>
+                      <i
+                        id="{{ comment.id }}-1star"
+                        style="display: none"
+                        class="fas fa-star mb fa-star-s"
+                      ></i>
+                      <i
+                        id="{{ comment.id }}-2star"
+                        style="display: none"
+                        class="fas fa-star mb fa-star-s"
+                      ></i>
+                      <i
+                        id="{{ comment.id }}-3star"
+                        style="display: none"
+                        class="fas fa-star mb fa-star-s"
+                      ></i>
+                      <i
+                        id="{{ comment.id }}-4star"
+                        style="display: none"
+                        class="fas fa-star mb fa-star-s"
+                      ></i>
+                      <i
+                        id="{{ comment.id }}-5star"
+                        style="display: none"
+                        class="fas fa-star mb fa-star-s"
+                      ></i>
+                      <i
+                        id="{{ comment.id }}-6star"
+                        style="display: none"
+                        class="fas fa-star mb fa-star-s"
+                      ></i>
+                      <i
+                        id="{{ comment.id }}-7star"
+                        style="display: none"
+                        class="fas fa-star mb fa-star-s"
+                      ></i>
+                      <i
+                        id="{{ comment.id }}-8star"
+                        style="display: none"
+                        class="fas fa-star mb fa-star-s"
+                      ></i>
+                      <i
+                        id="{{ comment.id }}-9star"
+                        style="display: none"
+                        class="fas fa-star mb fa-star-s"
+                      ></i>
+                      <i
+                        id="{{ comment.id }}-10star"
+                        style="display: none"
+                        class="fas fa-star mb fa-star-s"
+                      ></i>
+                      <i
+                        id="{{ comment.id }}-heart"
+                        class="fas fa-heart mb fa-heart-s"
+                        onmouseover="paintheart('{{ comment.id }}')"
+                        onmouseout="unpaintheart('{{ comment.id }}')"
+                        onclick="doHeart('{{ comment.id }}')"
+                      ></i>
+                    </p>
+                  </div>
+                </div>
+              </article>
+              <hr />
+              {% endfor %}
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endblock content %}
+  </body>
+</html>
