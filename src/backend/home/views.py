@@ -1,12 +1,13 @@
 from typing import Dict
 
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 from services import views
 import json
 from .models import Movie, Comments
 from services.scrapper import Scrapper
 from services.AIService import AIService
-
+from members.forms import SignUpForm
 
 
 def movie_details(request, movie_id):
@@ -44,9 +45,16 @@ def get_home_page(request):
     return render(request, 'index.html', {'movies': movies})
 
 
-def get_login_page(request):
-    return render(request, 'login.html')
-
-
 def get_register_page(request):
-    return render(request, 'register.html')
+    submitted = False
+    if request.method == 'POST':
+        form = SignUpForm(request.POT)
+        if form.is_valid():
+            form.save()
+            movies = Movie.objects.all()
+            return HttpResponseRedirect('login.html')
+    else:
+        form = SignUpForm
+        if 'submitted' in request.GET:
+            submitted = True
+    return render(request, 'register.html', {'form': form, 'submitted': submitted})
