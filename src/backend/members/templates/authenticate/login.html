@@ -3,18 +3,18 @@
   <body class="is-preload">
     {% block content %}
     <section id="main">
+
+      {%if messages %}
+      {% for message in messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {{message}}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+      {% endfor %}
+      {% endif %}
       <form method="post" action="#">
         {% csrf_token %} {{form.as_p}}
-        <div class="fields">
-          <div class="field">
-            <label for="name">Nome:</label>
-            <input type="text" name="name" id="name" />
-          </div>
-          <div class="field">
-            <label for="password">Password:</label>
-            <input type="password" name="password" id="password" />
-          </div>
-        </div>
+
         <ul class="actions">
           <li><input type="submit" value="Login" /></li>
         </ul>

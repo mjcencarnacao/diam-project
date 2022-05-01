@@ -19,21 +19,37 @@ class LoginForm(forms.Form):
         )
     )
 
+    fields = ('username', 'password')
+
 
 class SignUpForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'is_regular_user', 'is_premium_user', 'is_pro_user')
 
-        labels = {
-            'name': '',
-            'description': '',
-            'event_date': 'YYYY-MM-DD HH:MM:SS',
-            'venue': 'Venue',
-            'manage': 'Manager',
-            'attendees': 'Attendees',
+        username = forms.CharField(
+            widget=forms.TextInput(
+                attrs={
+                    "class": "form-control"
+                }
+            )
+        )
+        password1 = forms.CharField(
+            widget=forms.PasswordInput(
+                attrs={
+                    "class": "form-control"
+                }
+            )
+        )
 
-        }
+        password2 = forms.CharField(
+            widget=forms.PasswordInput(
+                attrs={
+                    "class": "form-control"
+                }
+            )
+        )
+
+        fields = ('username', 'email', 'password1', 'password2')
 
         widgets = {
             'username': forms.TextInput(attrs={"class": "form-control"}),
