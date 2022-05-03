@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, LoginForm
 from django.contrib.auth import authenticate, login
+from django.contrib import messages
 
 
 # Create your views here.
@@ -12,7 +13,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             msg = 'user created'
-            return redirect('login_view')
+            return redirect('members:login_user')
         else:
             msg = 'form is not valid'
     else:
@@ -20,7 +21,7 @@ def register(request):
     return render(request, 'register.html', {'form': form, 'msg': msg})
 
 
-def login_view(request):
+def login_user(request):
     form = LoginForm(request.POST or None)
     msg = None
     if request.method == 'POST':
@@ -30,12 +31,14 @@ def login_view(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect('home:home_page')
             else:
-                msg = 'invalid credential'
-        else:
-            msg = 'error validation form'
-    return render(request, 'login.html', {'form': form, 'msg': msg})
+                messages.success(request, "Invalid Credentials")
+                return redirect('members:login_user')
+    else:
+        msg = 'error validation form'
+        return render(request, 'authenticate/login.html', {'form': form})
+
 
 
 def home(request):
