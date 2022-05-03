@@ -65,3 +65,13 @@ function unpaintheart(id) {
   var strheart = id + "-heart";
   document.getElementById(strheart).style.color = "black";
 }
+
+function hoverplus(id){
+  var strplus = id;
+  document.getElementById(strplus).style.transform = 'scale(1.5)';
+}
+
+function hoverplusout(id){
+  var strplus = id;
+  document.getElementById(strplus).style.transform = 'scale(1)';
+}

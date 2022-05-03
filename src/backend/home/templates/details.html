@@ -1,10 +1,16 @@
 {% extends 'base.html' %} {% load static %}
 <html>
+  {% block extrastyle %}
+    <link
+    rel="stylesheet"
+    href="{% static '../static/assets/css/main2.css' %}"
+  />
+  {% endblock extrastyle %}
   <body class="is-preload">
     {% block content %}
     <div id="main">
-      <section clasbase.htmls="posts">
-        <article>
+      
+     
           <div style="float: left; margin-right: 40px">
             <img
               style="width: 350px !important; height: 500px !important"
@@ -52,17 +58,21 @@
               </div>
             </div>
           </div>
-        </article>
-      </section>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
+          <div style="display: block; padding-bottom: 2px !important;">
+         <h2 style="display:inline; font-size: larger;">Comentários dos Utilizadores</h2>
+         <div style="display:inline; padding-left: 65% !important;"><i
+          id="comment_plus"
+          class="fa fa-plus"
+          onmouseover="hoverplus('comment_plus')"
+          onmouseout="hoverplusout('comment_plus')"
+        ></i></div>
+        </div>
+          <hr style="width: 90% !important; margin-left: 5%;"/>
+
+
+     
+
+
 
       <div class="container">
         <div class="row">
