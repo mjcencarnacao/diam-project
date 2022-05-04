@@ -75,3 +75,27 @@ function hoverplusout(id){
   var strplus = id;
   document.getElementById(strplus).style.transform = 'scale(1)';
 }
+
+function clickplus(){
+  document.getElementById('form_comment').style.display = 'block';
+  document.getElementById('form_comment').style.paddingTop = '4rem';
+  document.getElementById('comment_hr').style.display = 'block';
+  document.getElementById('form_comment_in').style.display = 'block';
+  document.getElementById('slide_up').style.display = 'inline';
+}
+
+function slideup(){
+  document.getElementById('form_comment').style.display = 'none';
+  document.getElementById('form_comment').style.paddingTop = '0rem';
+  document.getElementById('form_comment_in').style.display = 'none';
+  document.getElementById('comment_hr').style.display = 'none';
+  document.getElementById('slide_up').style.display = 'none';
+}
+
+function slideupover(){
+  document.getElementById('slide_up').style.transform = 'scale(2)';
+}
+
+function slideupout(){
+  document.getElementById('slide_up').style.transform = 'scale(1)';
+}

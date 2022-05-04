@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
+from home.models import Comments
+from django.forms import ModelForm
 
 
 class LoginForm(forms.Form):
@@ -75,3 +77,4 @@ class SignUpForm(UserCreationForm):
             'password2': forms.PasswordInput(attrs={"class": "form-control"}),
             'email': forms.EmailInput(attrs={"class": "form-control"}),
         }
+

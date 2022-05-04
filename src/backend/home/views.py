@@ -58,3 +58,8 @@ def get_register_page(request):
         if 'submitted' in request.GET:
             submitted = True
     return render(request, 'register.html', {'form': form, 'submitted': submitted})
+
+
+def user_comment(request):
+    return render(request, 'details.html')
+
