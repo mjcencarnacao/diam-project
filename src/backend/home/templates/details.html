@@ -65,12 +65,25 @@
           class="fa fa-plus"
           onmouseover="hoverplus('comment_plus')"
           onmouseout="hoverplusout('comment_plus')"
+          onclick="clickplus()"
         ></i></div>
         </div>
           <hr style="width: 90% !important; margin-left: 5%;"/>
 
 
-     
+     <div id="form_comment" class = "container" style="display:none !important; padding-bottom: 0 !important;">
+      <form id="form_comment_in" action method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="Title">Título: </label
+        ><input style="border: 1px solid #eeeeee !important;" type="text" placeholder="" name="titulo" required /><br />
+        <label for="Comment">Comentário: </label
+        ><textarea style="border: 1px solid #eeeeee !important;" type="text" placeholder="Introduza o seu comentário..." name="comentario" required></textarea><br />
+        <input type="submit" value="Submeter">
+        </form>
+    </div>
+    <i id="slide_up" class='fa fa-caret-up' style="padding: 1% 0% 1% 93% !important; display: none;" 
+       onclick="slideup()" onmouseover="slideupover()" onmouseout="slideupout()"></i>
+    <hr id="comment_hr" style="width: 90% !important; margin-left: 5%; display:none !important"/>
 
 
 

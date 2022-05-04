@@ -23,3 +23,4 @@ class Comments(models.Model):
     entry = models.DateTimeField(auto_now_add=True)
     Ai_FeedBack = models.IntegerField("AiFeedBack", null=True)
     Ai_Probability_FeedBack = models.FloatField("AiProbabilityFeedBack", null=True)
+    
