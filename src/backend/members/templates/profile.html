@@ -1,0 +1,55 @@
+{% extends 'base.html' %} {% load static %}
+<!DOCTYPE html>
+<html>
+  <body class="is-preload">
+    {% block content %}
+    <div id="main">
+      <article class="post featured">
+        <header class="major">
+          <span class="date">Updated IMDB List</span>
+          <h2>
+            <a href="#"
+              >Welcome to<br />
+              Your Profile Page</a
+            >
+          </h2>
+          <p>
+            Here you can find your personal info that you shared with us! <br />
+            For any information please contact the website administrator.
+          </p>
+        </header>
+        <ul class="actions special">
+          <li>
+            <a href="#" class="button large"
+              >Go Back to your Top 250 IMDB Movies</a
+            >
+          </li>
+        </ul>
+      </article>
+      <!-- Posts -->
+      <center>
+        <section class="posts">
+          <article>
+            <header>
+              <span class="date"
+                >Member since: {{ request.user.user_since }}</span
+              >
+              <h2>
+                <a>{{ request.user.first_name }}</a>
+              </h2>
+            </header>
+            <a href="" class="image fit"><img src="" alt="" /></a>
+            <p>This is the description field.</p>
+            <p>Email: {{ request.user.email }}</p>
+            <ul class="actions special">
+              <li>
+                <a href="" class="button">Edit Profile</a>
+              </li>
+            </ul>
+          </article>
+        </section>
+      </center>
+    </div>
+    {% endblock content %}
+  </body>
+</html>
