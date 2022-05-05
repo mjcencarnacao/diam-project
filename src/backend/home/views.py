@@ -1,16 +1,31 @@
 from typing import Dict
+from urllib.request import Request
 
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.http import HttpResponseRedirect, JsonResponse
 from services import views
 import json
 from .models import Movie, Comments
 from services.scrapper import Scrapper
 from services.AIService import AIService
 from members.forms import SignUpForm
-
+from django.urls import reverse
 
 def movie_details(request, movie_id):
+
+    if request.method == 'POST':
+        ai_service: AIService = AIService()
+        comment_value = request.POST.get('comentario')
+        ai_feedback, ai_prob = ai_service.classify(comment_value)
+        movie = Movie.objects.get(pk=movie_id)
+        Comments(title = request.POST.get('titulo'),
+                 comment = comment_value,
+                 movie = movie,
+                 critic = request.user,
+                 Ai_FeedBack=ai_feedback,
+                 Ai_Probability_FeedBack=ai_prob).save()
+                  
+
     ai_service: AIService = AIService()
     movie = Movie.objects.get(pk=movie_id)
     movie_comments_path = f"https://www.imdb.com{movie.raw['imdb_url']}reviews/?ref_=tt_ql_urv"
@@ -58,6 +73,36 @@ def get_register_page(request):
         if 'submitted' in request.GET:
             submitted = True
     return render(request, 'register.html', {'form': form, 'submitted': submitted})
+
+
+
+def like(request):
+    if request.method == 'POST':
+        result = '' 
+        id : int = request.POST.get('postid')
+        p_id : int = id
+        post = get_object_or_404(Comments, id = id)
+        post.likes += 1
+        result = post.likes
+        post.save()
+
+    return JsonResponse({'result': result, 'p_id': p_id, })
+
+
+def dislike(request):
+    if request.method == 'POST':
+        result = '' 
+        id : int = request.POST.get('postid')
+        p_id : int = id
+        post = get_object_or_404(Comments, id = id)
+        if(post.likes == 0):
+            result = post.likes
+            return JsonResponse({'result': result, 'p_id': p_id, })
+        post.likes -= 1
+        result = post.likes
+        post.save()
+
+    return JsonResponse({'result': result, 'p_id': p_id, })
 
 
 def user_comment(request):

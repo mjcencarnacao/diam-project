@@ -5,6 +5,7 @@
     rel="stylesheet"
     href="{% static '../static/assets/css/main2.css' %}"
   />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   {% endblock extrastyle %}
   <body class="is-preload">
     {% block content %}
@@ -84,9 +85,6 @@
     <i id="slide_up" class='fa fa-caret-up' style="padding: 1% 0% 1% 93% !important; display: none;" 
        onclick="slideup()" onmouseover="slideupover()" onmouseout="slideupout()"></i>
     <hr id="comment_hr" style="width: 90% !important; margin-left: 5%; display:none !important"/>
-
-
-
       <div class="container">
         <div class="row">
           <div class="col-md-8">
@@ -100,9 +98,8 @@
                         <div class="comment-user">
                           <i class="fa fa-user"></i> User
                         </div>
-                        <time class="comment-date" datetime="16-12-2014 01:05"
-                          ><i class="fa fa-clock-o"></i>Dec 16, 2014</time
-                        >
+                        <time class="comment-date" datetime="16-12-2014 01:05">
+                          <i class="fa fa-clock-o"></i>Dec 16, 2014</time>
                       </header>
                     </div>
                     <div class="comment-post">
@@ -111,77 +108,62 @@
                         {{ comment.comment }}
                       </p>
                     </div>
-                    <p class="text-right">
+                    <div style="display: flex; height: 16px !important;" class="text-right">
                       <i
-                        id="{{ comment.id }}-0star"
-                        onmouseover="doThis('{{ comment.id }}')"
-                        onclick="doThat('{{ comment.id }}')"
-                        class="fas fa-star mb fa-star-s"
-                      ></i>
-                      <a
+                      
+                      id="{{ comment.id }}-aifeedback"
+                      onmouseover="doThis('{{ comment.id }}', '{{ comment.Ai_FeedBack }}')"
+                      onclick="doThat('{{ comment.id }}')"
+                      class="fa fa-search"
+                    ></i>
+                      <h2 style="display:none; margin-bottom: 0 !important; font-size: large !important;" id="{{ comment.id }}-aiscore">&nbsp;<b>AI Score:</b></h2>&nbsp;<h2
+                        style="display:none; margin-bottom: 0 !important; font-size: large !important;"
                         id="{{ comment.id }}-nota"
-                        style="color: black; display: none"
+                        style="display: none"
                       >
-                        7 / 10
-                      </a>
-                      <i
-                        id="{{ comment.id }}-1star"
-                        style="display: none"
-                        class="fas fa-star mb fa-star-s"
-                      ></i>
-                      <i
-                        id="{{ comment.id }}-2star"
-                        style="display: none"
-                        class="fas fa-star mb fa-star-s"
-                      ></i>
-                      <i
-                        id="{{ comment.id }}-3star"
-                        style="display: none"
-                        class="fas fa-star mb fa-star-s"
-                      ></i>
-                      <i
-                        id="{{ comment.id }}-4star"
-                        style="display: none"
-                        class="fas fa-star mb fa-star-s"
-                      ></i>
-                      <i
-                        id="{{ comment.id }}-5star"
-                        style="display: none"
-                        class="fas fa-star mb fa-star-s"
-                      ></i>
-                      <i
-                        id="{{ comment.id }}-6star"
-                        style="display: none"
-                        class="fas fa-star mb fa-star-s"
-                      ></i>
-                      <i
-                        id="{{ comment.id }}-7star"
-                        style="display: none"
-                        class="fas fa-star mb fa-star-s"
-                      ></i>
-                      <i
-                        id="{{ comment.id }}-8star"
-                        style="display: none"
-                        class="fas fa-star mb fa-star-s"
-                      ></i>
-                      <i
-                        id="{{ comment.id }}-9star"
-                        style="display: none"
-                        class="fas fa-star mb fa-star-s"
-                      ></i>
-                      <i
-                        id="{{ comment.id }}-10star"
-                        style="display: none"
-                        class="fas fa-star mb fa-star-s"
-                      ></i>
-                      <i
-                        id="{{ comment.id }}-heart"
-                        class="fas fa-heart mb fa-heart-s"
-                        onmouseover="paintheart('{{ comment.id }}')"
-                        onmouseout="unpaintheart('{{ comment.id }}')"
-                        onclick="doHeart('{{ comment.id }}')"
-                      ></i>
-                    </p>
+                      </h2>
+                      &nbsp;
+                      <div style="display: inline-block !important">
+                      <button 
+                          style="all: unset !important; cursor: pointer;"
+                          type="submit" 
+                          class="like-button"
+                          data-rowid="{{ comment.id }}" value="{{ comment.id }}"
+                          id = "like-button-{{ comment.id }}">
+                      <span
+                        style = "vertical-align: 10px; margin-bottom: 0px;"
+                        id="{{ comment.id }}-thumbsup"
+                        class="fas fa-thumbs-up"
+                        onmouseover="paintthumbsup('{{ comment.id }}')"
+                        onmouseout="unpaintthumbsup('{{ comment.id }}')"
+                        
+                        
+                      ></span>
+                    </div>
+                      &nbsp;
+                      <div style="display: inline-block !important">
+                        <button 
+                          style="all: unset !important; cursor: pointer;"
+                          type="submit" 
+                          class="dislike-button"
+                          data-rowid="{{ comment.id }}" value="{{ comment.id }}"
+                          id = "dislike-button-{{ comment.id }}">
+                          <span
+                          style = "vertical-align: 10px; margin-bottom: 0px;"
+                          id="{{ comment.id }}-thumbsdown"
+                          class="fas fa-thumbs-down fa-flip-horizontal"
+                          onmouseover="paintthumbsdown('{{ comment.id }}')"
+                          onmouseout="unpaintthumbsdown('{{ comment.id }}')"
+                        
+                        ></span>
+                      </button>
+                  </div>
+                      &nbsp;
+                      <h2
+                        id="{{ comment.id }}-likes"
+                        style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
+                </h2>       
+                    </div>
                   </div>
                 </div>
               </article>
@@ -192,6 +174,55 @@
         </div>
       </div>
     </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+      $(document).on('click', '.like-button', function (e) {
+        e.preventDefault();
+        var rowid = $(this).data('rowid')
+        var like_button = "#like-button-" + rowid
+        $.ajax({
+          type: 'POST',
+          url: '{% url "home:like" %}',
+          data: {
+            postid: $(like_button).val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
+            action: 'post'
+          },
+          success: function (json) {
+            var comment_id = json['p_id'] + "-likes"
+            document.getElementById(comment_id).innerHTML = json['result'] + " likes"
+            document.getElementById(comment_id).style.display = "inline"
+            console.log(json)
+          },
+          error: function (xhr, errmsg, err) {
+          }
+        });
+      })
+
+      $(document).on('click', '.dislike-button', function (e) {
+        e.preventDefault();
+        var rowid = $(this).data('rowid')
+        var dislike_button = "#dislike-button-" + rowid
+        $.ajax({
+          type: 'POST',
+          url: '{% url "home:dislike" %}',
+          data: {
+            postid: $(dislike_button).val(),
+            csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
+            action: 'post'
+          },
+          success: function (json) {
+            var comment_id = json['p_id'] + "-likes"
+            document.getElementById(comment_id).innerHTML = json['result'] + " likes"
+            document.getElementById(comment_id).style.display = "inline"
+            console.log(json)
+          },
+          error: function (xhr, errmsg, err) {
+          }
+        });
+      })
+    </script>
     {% endblock content %}
   </body>
 </html>

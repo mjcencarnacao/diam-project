@@ -1,70 +1,75 @@
-function doThis(id) {
-  var str0 = id + "-0star";
+function doThis(id, feedback) {
+  var evaluation;
   var strnota = id + "-nota";
-  var str1 = id + "-1star";
-  var str2 = id + "-2star";
-  var str3 = id + "-3star";
-  var str4 = id + "-4star";
-  var str5 = id + "-5star";
-  var str6 = id + "-6star";
-  var str7 = id + "-7star";
-  var str8 = id + "-8star";
-  var str9 = id + "-9star";
-  var str10 = id + "-10star";
+  if(feedback == 0) {
+    evaluation = "Negativo ";
+    document.getElementById(strnota).style.color = "red";
+  }
+    else {
+      evaluation = "Positivo ";
+      document.getElementById(strnota).style.color = "green";
+    }
+  
+  var aifeedback = id + "-aifeedback";
+  var aiscore = id + "-aiscore";
 
-  document.getElementById(str0).style.display = "inline";
+  document.getElementById(aifeedback).style.display = "inline";
+  document.getElementById(strnota).innerHTML = evaluation;
   document.getElementById(strnota).style.display = "inline";
-  document.getElementById(str1).style.display = "inline";
-  document.getElementById(str1).style.color = "orange";
-  document.getElementById(str2).style.display = "inline";
-  document.getElementById(str2).style.color = "orange";
-  document.getElementById(str3).style.display = "inline";
-  document.getElementById(str3).style.color = "orange";
-  document.getElementById(str4).style.display = "inline";
-  document.getElementById(str4).style.color = "orange";
-  document.getElementById(str5).style.display = "inline";
-  document.getElementById(str5).style.color = "orange";
-  document.getElementById(str6).style.display = "inline";
-  document.getElementById(str6).style.color = "orange";
-  document.getElementById(str7).style.display = "inline";
-  document.getElementById(str7).style.color = "orange";
+  document.getElementById(aiscore).style.display = "inline";
 }
 
 function doThat(id) {
-  var str0 = id + "-0star";
+  var aiscore = id + "-aiscore";
   var strnota = id + "-nota";
-  var str1 = id + "-1star";
-  var str2 = id + "-2star";
-  var str3 = id + "-3star";
-  var str4 = id + "-4star";
-  var str5 = id + "-5star";
-  var str6 = id + "-6star";
-  var str7 = id + "-7star";
-
+ 
+  document.getElementById(aiscore).style.display = "none";
   document.getElementById(strnota).style.display = "none";
-  document.getElementById(str1).style.display = "none";
-  document.getElementById(str2).style.display = "none";
-  document.getElementById(str3).style.display = "none";
-  document.getElementById(str4).style.display = "none";
-  document.getElementById(str5).style.display = "none";
-  document.getElementById(str6).style.display = "none";
-  document.getElementById(str7).style.display = "none";
 }
 
-function doHeart(id) {
-  var strheart = id + "-heart";
-  document.getElementById(strheart).style.color = "red";
+function doThumbsup(id, likes_value) {
+  var thumbsup = id + "-thumbsup";
+  var likes = id + "-likes";
+  //var likes_evaluation = likes_value + " likes"
+  document.getElementById(thumbsup).style.color = "green";
+  //document.getElementById(likes).innerHTML = likes_evaluation;
+  document.getElementById(likes).style.display = "inline";
 }
 
-function paintheart(id) {
-  var strheart = id + "-heart";
-  document.getElementById(strheart).style.color = "red";
+function paintthumbsup(id) {
+  var thumbsup = id + "-thumbsup";
+  document.getElementById(thumbsup).style.color = "green";
 }
 
-function unpaintheart(id) {
-  var strheart = id + "-heart";
-  document.getElementById(strheart).style.color = "black";
+function unpaintthumbsup(id) {
+  var thumbsup = id + "-thumbsup";
+  document.getElementById(thumbsup).style.color = "black";
 }
+
+function doThumbsdown(id, likes_value) {
+  var thumbsdown = id + "-thumbsdown";
+  var likes = id + "-likes";
+  //var likes_evaluation = likes_value + " likes"
+
+  //document.getElementById(likes).innerHTML = likes_evaluation;
+  document.getElementById(thumbsdown).style.color = "red";
+  document.getElementById(likes).style.display = "inline";
+}
+
+function paintthumbsdown(id) {
+  var thumbsdown = id + "-thumbsdown";
+  document.getElementById(thumbsdown).style.color = "red";
+}
+
+function unpaintthumbsdown(id) {
+  var thumbsdown = id + "-thumbsdown";
+  document.getElementById(thumbsdown).style.color = "black";
+}
+
+
+
+
+
 
 function hoverplus(id){
   var strplus = id;
