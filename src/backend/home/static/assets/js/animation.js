@@ -68,7 +68,15 @@ function unpaintthumbsdown(id) {
 
 
 
+function hoverfilter(id){
+  var strfilter = id;
+  document.getElementById(strfilter).style.transform = 'scale(1.5)';
+}
 
+function hoverfilterout(id){
+  var strfilter = id;
+  document.getElementById(strfilter).style.transform = 'scale(1)';
+}
 
 
 function hoverplus(id){

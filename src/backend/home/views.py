@@ -14,6 +14,25 @@ from django.urls import reverse
 def movie_details(request, movie_id):
 
     if request.method == 'POST':
+        if 'filter_button_negative' in request.POST:
+            movie_id = movie_id
+            movie = Movie.objects.get(pk=movie_id)
+            comments = Comments.objects.filter(movie=movie,Ai_FeedBack=0)
+            return render(request, 'details.html', {'movie': movie, 'comments': comments})
+
+        if 'filter_button_positive' in request.POST:
+            movie_id = movie_id
+            movie = Movie.objects.get(pk=movie_id)
+            comments = Comments.objects.filter(movie=movie,Ai_FeedBack=1)
+            return render(request, 'details.html', {'movie': movie, 'comments': comments})
+
+        if 'filter_button_user' in request.POST:
+            movie_id = movie_id
+            movie = Movie.objects.get(pk=movie_id)
+            critic_id : int = request.POST.get('filter_button_user')
+            comments = Comments.objects.filter(movie=movie,critic_id=critic_id)
+            return render(request, 'details.html', {'movie': movie, 'comments': comments})
+
         ai_service: AIService = AIService()
         comment_value = request.POST.get('comentario')
         ai_feedback, ai_prob = ai_service.classify(comment_value)
