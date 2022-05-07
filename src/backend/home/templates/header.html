@@ -41,7 +41,11 @@
       </form>
       {% endif %}
       <ul class="icons">
+        {% if user.is_authenticated %}
+        <li style="padding-right: 0 !important;">
+          {% else %}
         <li>
+          {% endif %}
           <a href="#" class="icon brands fa-github"
             ><span class="label">GitHub</span></a
           >
@@ -51,13 +55,16 @@
           {% if profile.user.user_picture == None %}
           <img
             src="{% static 'default-user-image.png' %}"
-            style="max-width: 25px; max-height: 25px; border-radius: 50%"
+            style="max-width: 27px; max-height: 27px; border-radius: 50%; vertical-align: -5%;"
           />
           {% else %}
           <a href="" class="image fit"
             ><img src="{{ request.user.user_picture }}" alt="" />
           </a>
           {% endif %}
+        </li>
+        <li>
+          <a href="{% url 'members:logout' %}" class="fas fa-sign-out-alt"></a>
         </li>
         {% endif %}
       </ul>
