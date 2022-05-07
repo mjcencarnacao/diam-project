@@ -38,14 +38,22 @@
                 <a>{{ request.user.first_name }}</a>
               </h2>
             </header>
-            <a href="" class="image fit"><img src="" alt="" /></a>
-            <p>This is the description field.</p>
-            <p>Email: {{ request.user.email }}</p>
-            <ul class="actions special">
-              <li>
-                <a href="" class="button">Edit Profile</a>
-              </li>
-            </ul>
+            {% if profile.user.user_picture == None %}
+            <form method="post" enctype="multipart/form-data">
+              <a type="submit">
+                <img
+                  src="{% static 'default-user-image.png' %}"
+                  style="max-width: 25%; max-height: 25%; border-radius: 50%"
+                />
+              </a>
+            </form>
+            {% else %}
+            <a href="" class="image fit"
+              ><img src="media/{{ request.user.username }}.jpg" alt="" />
+            </a>
+            {% endif %}
+            <br /><br /><p2>This is the description field.</p2><br /><br />
+            <p2>Email: {{ request.user.email }}</p2>
           </article>
         </section>
       </center>

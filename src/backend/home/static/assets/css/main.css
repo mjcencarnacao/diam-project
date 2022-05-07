@@ -3892,7 +3892,6 @@ body.is-preload #intro:not(.hidden) + #header + #nav {
   z-index: 2;
 }
 
-
 #main > * {
   padding: 4rem 4rem 2rem 4rem;
   border-top: solid 2px #eeeeee;

@@ -10,6 +10,8 @@ from services.scrapper import Scrapper
 from services.AIService import AIService
 from members.forms import SignUpForm
 from django.urls import reverse
+from django.core.files.storage import FileSystemStorage
+
 
 def movie_details(request, movie_id):
 
@@ -107,4 +109,12 @@ def dislike(request):
 
 def user_comment(request):
     return render(request, 'details.html')
+
+def fazer_upload(request):
+    if request.method == 'POST':
+        myfile = request.POST.FILES('thefile', False)
+        fs = FileSystemStorage()
+        filename = fs.save(request.user.username, myfile)
+        uploaded_file_url = fs.url(filename)
+        return render(request, 'votacao/fazer_upload.html', {'uploaded_file_url': uploaded_file_url})
 
