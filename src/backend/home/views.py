@@ -19,20 +19,35 @@ def movie_details(request, movie_id):
             movie_id = movie_id
             movie = Movie.objects.get(pk=movie_id)
             comments = Comments.objects.filter(movie=movie, Ai_FeedBack=0)
-            return render(request, 'details.html', {'movie': movie, 'comments': comments})
+            return render(request,
+                          'details.html',
+                          {'movie': movie,
+                           'comments': comments,
+                           'positive_percentage': 0,})
 
         if 'filter_button_positive' in request.POST:
             movie_id = movie_id
             movie = Movie.objects.get(pk=movie_id)
             comments = Comments.objects.filter(movie=movie, Ai_FeedBack=1)
-            return render(request, 'details.html', {'movie': movie, 'comments': comments})
+            return render(request,
+                          'details.html',
+                          {'movie': movie,
+                           'comments': comments,
+                           'positive_percentage': 100, })
 
         if 'filter_button_user' in request.POST:
             movie_id = movie_id
             movie = Movie.objects.get(pk=movie_id)
             critic_id: int = request.POST.get('filter_button_user')
             comments = Comments.objects.filter(movie=movie, critic_id=critic_id)
-            return render(request, 'details.html', {'movie': movie, 'comments': comments})
+            number_of_comments = len(comments)
+            filter_positive_comments = len([comment for comment in comments if comment.Ai_FeedBack == 1])
+            positive_percentage = int(filter_positive_comments / number_of_comments * 100)
+            return render(request,
+                          'details.html',
+                          {'movie': movie,
+                           'comments': comments,
+                           'positive_percentage': positive_percentage, })
 
         ai_service: AIService = AIService()
         comment_value = request.POST.get('comentario')
@@ -69,7 +84,13 @@ def movie_details(request, movie_id):
                      Ai_Probability_NegativeFeedBack=neg).save()
 
     comments = Comments.objects.filter(movie=movie)
-    return render(request, 'details.html', {'movie': movie, 'comments': comments})
+    number_of_comments = len(comments)
+    filter_positive_comments = len([comment for comment in comments if comment.Ai_FeedBack == 1])
+    positive_percentage = int(filter_positive_comments / number_of_comments * 100)
+
+    return render(request, 'details.html', {'movie': movie,
+                                            'comments': comments,
+                                            'positive_percentage': positive_percentage, })
 
 
 def search_movies(request):
