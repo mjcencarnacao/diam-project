@@ -25,7 +25,9 @@ class Comments(models.Model):
     entry = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
     Ai_FeedBack = models.IntegerField("AiFeedBack", null=True)
-    Ai_Probability_FeedBack = models.FloatField("AiProbabilityFeedBack", null=True)
+    Ai_Probability_PositiveFeedBack = models.FloatField("PositiveProbabilityAi", null=True)
+    Ai_Probability_NegativeFeedBack = models.FloatField("NegativeProbabilityAI", null=True)
+
 
 
 class WatchList(models.Model):
