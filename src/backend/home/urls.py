@@ -11,4 +11,5 @@ urlpatterns = [
     path('dislike/', views.dislike, name='dislike'),
     path('register', views.get_register_page, name='register'),
     path('<int:user_id>/profile', views.get_profile_page, name='profile'),
+    path('search', views.search_movies, name='movie-search'),
 ]
