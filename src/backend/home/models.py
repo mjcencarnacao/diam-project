@@ -24,5 +24,20 @@ class Comments(models.Model):
     likes = models.IntegerField(default=0)
     Ai_FeedBack = models.IntegerField("AiFeedBack", null=True)
     Ai_Probability_FeedBack = models.FloatField("AiProbabilityFeedBack", null=True)
-   
-    
+
+
+class WatchList(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    have_seen = models.BooleanField(default=False)
+
+
+class CommentsLikes(models.Model):
+    comment = models.ForeignKey(Comments, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    like = models.BooleanField(default=False)
+
+
+class UserLikeMovie(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    like = models.BooleanField(default=False)
