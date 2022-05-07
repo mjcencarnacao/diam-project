@@ -117,3 +117,11 @@ function doThisThumbsup(id){
   var str_thumbsup = id + "-likesprofile";
   document.getElementById(str_thumbsup).style.display = "inline";
 }
+
+function searchbuttonover(id){
+  document.getElementById(id).style.color = "#18bfef";
+}
+
+function searchbuttonout(id){
+  document.getElementById(id).style.color = "#ffffff";
+}
