@@ -9,6 +9,8 @@ from .models import Movie, Comments
 from services.scrapper import Scrapper
 from services.AIService import AIService
 from members.forms import SignUpForm
+from members.models import User
+from django.urls import reverse
 from services.DictionaryManager import DictionaryManager
 
 
@@ -37,10 +39,12 @@ def movie_details(request, movie_id):
         comment_value = request.POST.get('comentario')
         ai_feedback, ai_prob = ai_service.classify(comment_value)
         movie = Movie.objects.get(pk=movie_id)
-        Comments(title=request.POST.get('titulo'),
-                 comment=comment_value,
-                 movie=movie,
-                 critic=request.user,
+        Comments(title = request.POST.get('titulo'),
+                 comment = comment_value,
+                 movie = movie,
+                 movie_name = movie.name,
+                 critic = request.user,
+                 critic_username = request.user.username,
                  Ai_FeedBack=ai_feedback,
                  Ai_Probability_FeedBack=ai_prob).save()
 
@@ -57,7 +61,9 @@ def movie_details(request, movie_id):
             Comments(title=keys,
                      comment=value,
                      movie=movie,
+                     movie_name = movie.name,
                      critic=request.user,
+                     critic_username = request.user.username,
                      Ai_FeedBack=ai_feedback,
                      Ai_Probability_FeedBack=ai_prob).save()
 
@@ -141,3 +147,8 @@ def dislike(request):
 
 def user_comment(request):
     return render(request, 'details.html')
+
+def get_profile_page(request, user_id):
+    comments_context = Comments.objects.filter(critic_id=user_id)
+    user_context = User.objects.get(pk=user_id)
+    return render(request, 'profile.html', {'user': user_context, 'comments':comments_context})
