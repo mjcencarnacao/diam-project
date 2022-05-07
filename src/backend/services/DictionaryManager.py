@@ -20,9 +20,8 @@ class DictionaryManager:
         return lst
 
     @staticmethod
-    def merge_two_dictionaries(lst1: [Dict], lst2: [Dict]) -> [Dict]:
-        d = defaultdict(dict)
-        for item in lst1 + lst2:
-            d[item["name"]].update(item)
-        return list(d.values())
+    def set_fix_imdb_url(lst: [Dict]) -> None:
+        for d in lst:
+            d["imdb_url"] = f'/title/{d["imdb_url"]}/'
+
 

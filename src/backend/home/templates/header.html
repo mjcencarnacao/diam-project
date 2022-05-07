@@ -23,6 +23,11 @@
         <li class="active"><a href="index.html">IMDB Top 250 Movies</a></li>
         {% if user.is_authenticated %}
         <li><a href="{% url 'members:profile' %}">Profile</a></li>
+        <form class="d-flex" method=POST action="{% url 'home:movie-search' %}">
+        {% csrf_token %}
+        <input class="form-control" type="search" placeholder="Search Movie" aria-label="Search" name="searched">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </form>
         {% else %}
         <li><a href="{% url 'members:login_user' %}">Login</a></li>
         <li><a href="{% url 'members:register' %}">Register</a></li>
