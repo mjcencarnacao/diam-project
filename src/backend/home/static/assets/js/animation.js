@@ -112,3 +112,8 @@ function slideupover(){
 function slideupout(){
   document.getElementById('slide_up').style.transform = 'scale(1)';
 }
+
+function doThisThumbsup(id){
+  var str_thumbsup = id + "-likesprofile";
+  document.getElementById(str_thumbsup).style.display = "inline";
+}

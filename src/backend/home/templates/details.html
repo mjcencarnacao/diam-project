@@ -109,10 +109,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                   <div class="panel-body" style="display: inline">
                     <header class="text-left">
                       <div class="comment-user">
-                        <i class="fa fa-user"></i> User
+                        <i class="fa fa-user"></i><a href="{% url 'home:profile' comment.critic_id %}"> {{ comment.critic_username }}</a>
                       </div>
                       <time class="comment-date" datetime="16-12-2014 01:05">
-                        <i class="fa fa-clock-o"></i>Dec 16, 2014</time>
+                        <i class="fa fa-clock-o"></i>{{ comment.entry }}</time>
                     </header>
                   </div>
                   <div class="comment-post">

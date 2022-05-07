@@ -1,8 +1,11 @@
+from xml.etree.ElementTree import Comment
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, LoginForm
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth import logout
+from django.shortcuts import get_object_or_404
+from .models import User
 
 
 
@@ -50,6 +53,3 @@ def home(request):
 def logout_user(request):
     logout(request)
     return render(request, 'authenticate/login.html')
-
-def get_profile_page(request):
-    return render(request, 'profile.html')
