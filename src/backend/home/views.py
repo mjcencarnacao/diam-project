@@ -1,5 +1,4 @@
 from typing import Dict
-from urllib.request import Request
 
 from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponseRedirect, JsonResponse
@@ -97,12 +96,13 @@ def search_movies(request):
     if request.method == "POST":
         searched = request.POST['searched']
         searched_movies = Scrapper.get_search_movies(searched)
-        converted_dict = DictionaryManager.change_keys_in_dictionary_list(searched_movies)
-        DictionaryManager.set_fix_imdb_url(converted_dict)
-        for i in range(0, len(converted_dict)):
-            check = Movie.objects.filter(name=converted_dict[i]['name'])
+        all_information_movies = DictionaryManager.get_all_information(searched_movies)
+        DictionaryManager.change_keys_in_dictionary_list(all_information_movies)
+        DictionaryManager.set_fix_imdb_url(all_information_movies)
+        for i in range(0, len(all_information_movies)):
+            check = Movie.objects.filter(name=all_information_movies[i]['name'])
             if not check:
-                Movie(name=converted_dict[i]['name'], raw=converted_dict[i]).save()
+                Movie(name=all_information_movies[i]['name'], raw=all_information_movies[i]).save()
 
         db_movies = Movie.objects.filter(name__regex=rf'({searched})+')
         return render(request, 'searched_movies.html', {'movies': db_movies})
@@ -157,7 +157,7 @@ def dislike(request):
         id: int = request.POST.get('postid')
         p_id: int = id
         post = get_object_or_404(Comments, id=id)
-        if (post.likes == 0):
+        if post.likes == 0:
             result = post.likes
             return JsonResponse({'result': result, 'p_id': p_id, })
         post.likes -= 1

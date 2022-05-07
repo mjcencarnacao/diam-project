@@ -22,3 +22,9 @@ class Scrapper:
         url: str = f"https://www.omdbapi.com/?s={movie_name}&apikey=1bf54cb4"
         request = json.loads(requests.get(url).text)
         return request["Search"]
+
+    @staticmethod
+    def get_all_movie_info(movie_name: str):
+        url: str = f"https://www.omdbapi.com/?t={movie_name}&apikey=1bf54cb4"
+        request = json.loads(requests.get(url).text)
+        return request
