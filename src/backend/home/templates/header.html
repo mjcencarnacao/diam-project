@@ -17,11 +17,11 @@
       </ul>
     </div>
     <header id="header">
-      <a href="index.html" class="logo">AI For You</a>
+      <a href="{% url 'home:home_page' %}" class="logo">AI For You</a>
     </header>
     <nav id="nav">
       <ul class="links">
-        <li class="active"><a href="index.html">IMDB Top 250 Movies</a></li>
+        <li class="active"><a href="{% url 'home:home_page' %}">IMDB Top 250 Movies</a></li>
         {% if user.is_authenticated %}
         <li><a href="{% url 'home:profile' request.user.id %}">Profile</a></li>
         {% else %}
@@ -29,6 +29,7 @@
         <li><a href="{% url 'members:register' %}">Register</a></li>
         {% endif %}
       </ul>
+      {% if user.is_authenticated %}
       <form style="display: inline !important; margin-bottom: 0px !important;padding-left: 55% !important;" class="d-flex" method=POST action="{% url 'home:movie-search' %}">
         {% csrf_token %}
         <input style="display: inline !important; width: 80% !important; height: 45% !important; font-size: medium !important;"
@@ -38,6 +39,7 @@
         </button>
       </input>
       </form>
+      {% endif %}
       <ul class="icons">
         <li>
           <a href="#" class="icon brands fa-github"

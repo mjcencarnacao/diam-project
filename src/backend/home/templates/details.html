@@ -55,32 +55,55 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
         <form method="post" action="{% url 'home:movie-details' movie.id %}" style="all: unset !important;">
           {% csrf_token %}
         <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_user" value="{{ request.user.id }}">
-          <i id="comment_filter_user" class="fa fa-id-card-clip" onmouseover="hoverfilter('comment_filter_user')"
+          <i style="cursor: pointer;" id="comment_filter_user" class="fa fa-id-card-clip" onmouseover="hoverfilter('comment_filter_user')"
             onmouseout="hoverfilterout('comment_filter_user')"></i>
       </button></form>
       </div>
-
+      {% if user.is_premium_user %}
       <div style="display:inline; padding-left: 1% !important;">
         <form method="post" action="{% url 'home:movie-details' movie.id %}" style="all: unset !important;">
           {% csrf_token %}
         <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_positive">
-          <i id="comment_filter_positive" class="fa fa-heart-circle-plus" onmouseover="hoverfilter('comment_filter_positive')"
+          <i style="cursor: pointer;" id="comment_filter_positive" class="fa fa-heart-circle-plus" onmouseover="hoverfilter('comment_filter_positive')"
             onmouseout="hoverfilterout('comment_filter_positive')"></i>
       </button></form>
       </div>
-
+      {% else %}
+      <div style="display:inline; padding-left: 1% !important;">
+        <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_positive">
+          <i style="cursor: pointer;" id="comment_filter_positive" class="fa fa-heart-circle-plus" onmouseover="hoverfilter('comment_filter_positive')"
+            onmouseout="hoverfilterout('comment_filter_positive')" onclick="paga()"></i>
+      </button>
+      </div>
+      {% endif %}
+      {% if user.is_premium_user %}
       <div style="display:inline; padding-left: 1% !important;">
         <form method="post" action="{% url 'home:movie-details' movie.id %}" style="all: unset !important;">
           {% csrf_token %}
         <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_negative">
-          <i id="comment_filter_negative" class="fa fa-heart-circle-minus" onmouseover="hoverfilter('comment_filter_negative')"
+          <i style="cursor: pointer;" id="comment_filter_negative" class="fa fa-heart-circle-minus" onmouseover="hoverfilter('comment_filter_negative')"
             onmouseout="hoverfilterout('comment_filter_negative')"></i>
       </button>
       </form>
       </div>
-      <div style="display:inline; padding-left: 1% !important;"><i id="comment_plus" class="fa fa-plus"
+      {% else %}
+      <div style="display:inline; padding-left: 1% !important;">
+        
+        <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_negative">
+          <i style="cursor: pointer;" id="comment_filter_negative" class="fa fa-heart-circle-minus" onmouseover="hoverfilter('comment_filter_negative')"
+            onmouseout="hoverfilterout('comment_filter_negative')" onclick="paga()"></i>
+      </button>
+      </div>
+      {% endif %}
+      {% if user.is_premium_user %}
+      <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
           onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="clickplus()"></i>
       </div>
+      {% else %}
+      <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
+        onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="paga()"></i>
+    </div>
+      {% endif %}
     </div>
     <hr style="width: 90% !important; margin-left: 5%;" />
 
@@ -109,7 +132,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                   <div class="panel-body" style="display: inline">
                     <header class="text-left">
                       <div class="comment-user">
-                        <i class="fa fa-user"></i><a href="{% url 'home:profile' comment.critic_id %}"> {{ comment.critic_username }}</a>
+                        <i class="fa fa-user"></i> 
+                        {% if user.is_premium_user %}<a href="{% url 'home:profile' comment.critic_id %}"> {{ comment.critic_username }}</a> {% else %}
+                        {{ comment.critic_username }}{% endif %}
                       </div>
                       <time class="comment-date" datetime="16-12-2014 01:05">
                         <i class="fa fa-clock-o"></i>{{ comment.entry }}</time>
@@ -131,6 +156,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                       id="{{ comment.id }}-nota" style="display: none">
                     </h2>
                     &nbsp;
+                    {% if user.is_premium_user %}
                     <div style="display: inline-block !important">
                       <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
                         data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
@@ -152,6 +178,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                     <h2 id="{{ comment.id }}-likes"
                       style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
                     </h2>
+                    {% else %}
+                    {% endif %}
                   </div>
                 </div>
               </div>

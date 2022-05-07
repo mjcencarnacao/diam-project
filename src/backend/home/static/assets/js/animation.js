@@ -125,3 +125,7 @@ function searchbuttonover(id){
 function searchbuttonout(id){
   document.getElementById(id).style.color = "#ffffff";
 }
+
+function paga() {
+  alert("Only available for PREMIUM users!");
+}
