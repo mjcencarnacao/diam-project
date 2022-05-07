@@ -1,10 +1,13 @@
 {% extends 'base.html' %} {% load static %}
 <!DOCTYPE html>
 <html>
+  {% block extrastyle %}
+  <link rel="stylesheet" href="{% static '../static/assets/css/main2.css' %}" />
+  {% endblock extrastyle %}
   <body class="is-preload">
     {% block content %}
     <div id="main">
-      <article class="post featured">
+      <article class="post featured" style="padding-bottom: 3rem !important;">
         <header class="major">
           <span class="date">Updated IMDB List</span>
           <h2>
@@ -26,16 +29,17 @@
           </li>
         </ul>
       </article>
+      <hr style="width: 90% !important; margin-left: 5%;" />
       <!-- Posts -->
-      <center>
+      <center style="padding-bottom: 2px !important;">
         <section class="posts">
           <article>
             <header>
               <span class="date"
-                >Member since: {{ request.user.user_since }}</span
+                >Member since: {{ user.user_since }}</span
               >
               <h2>
-                <a>{{ request.user.first_name }}</a>
+                <a>{{ user.first_name }}</a>
               </h2>
             </header>
             {% if profile.user.user_picture == None %}
@@ -57,7 +61,62 @@
           </article>
         </section>
       </center>
+      <div style="display: block; padding-top: 100px !important; padding-bottom: 2px !important;">
+        <h2 style="display:inline; font-size: larger;">Os Meus Comentários</h2>
+        </div>
+        <hr style="width: 90% !important; margin-left: 5%;" />
+        
+        {% for comment in comments %}
+        <section class="comment-list">
+          <article class="row">
+            <div class="col-md-2 col-sm-2 hidden-xs">
+              <div class="col-md-10 col-sm-10">
+                <div class="panel-body" style="display: inline">
+                  <header class="text-left">
+                    <div class="comment-user">
+                      <i class="fa fa-user"></i><a href="{% url 'home:profile' comment.critic_id %}"> {{ comment.critic_username }}</a>
+                      &nbsp;
+                      <i class="fa fa-film"></i><a href="{% url 'home:movie-details' comment.movie_id %}"> {{ comment.movie_name }}</a>
+                    </div>
+                    <time class="comment-date" datetime="16-12-2014 01:05">
+                      <i class="fa fa-clock-o"></i>{{ comment.entry }}</time>
+                  </header>
+                </div>
+                <div class="comment-post">
+                  <p>
+                    <strong>{{ comment.title }}</strong><br />
+                    {{ comment.comment }}
+                  </p>
+                </div>
+                <div style="display: flex; height: 16px !important;" class="text-right">
+                  <i id="{{ comment.id }}-aifeedback"
+                    onmouseover="doThis('{{ comment.id }}', '{{ comment.Ai_FeedBack }}')"
+                    onclick="doThat('{{ comment.id }}')" class="fa fa-search"></i>
+                  <h2 style="display:none; margin-bottom: 0 !important; font-size: large !important;"
+                    id="{{ comment.id }}-aiscore">&nbsp;<b>AI Score:</b></h2>&nbsp;<h2
+                    style="display:none; margin-bottom: 0 !important; font-size: large !important;"
+                    id="{{ comment.id }}-nota">
+                  </h2>
+                  &nbsp;
+                  <div style="display: flex; height: 16px !important;" class="text-right">
+                    <i id="{{ comment.id }}-likebutton"
+                      onmouseover="doThisThumbsup('{{ comment.id }}')"
+                      class="fas fa-thumbs-up"></i>
+                  </div>
+                  &nbsp;
+                  
+                  <h2 id="{{ comment.id }}-likesprofile"
+                    style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
+                    {{ comment.likes }} likes
+                  </h2>
+                </div>
+              </div>
+            </div>
+          </article>
+          <hr />
+          {% endfor %}
     </div>
+   
     {% endblock content %}
   </body>
 </html>

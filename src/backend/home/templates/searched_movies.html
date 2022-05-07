@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+   <section class="posts">
+        {% for movie in movies %}
+        <article>
+          <header>
+            <span class="date">{{ movie.raw | get_movie_year }}</span>
+            <h2>
+              <a href="{% url 'home:movie-details' movie.id %}"
+                >{{ movie.raw | get_movie_name }}</a
+              >
+            </h2>
+          </header>
+          <a href="{% url 'home:movie-details' movie.id %}" class="image fit"
+            ><img src="{{ movie.raw | get_movie_cover }}" alt=""
+          /></a>
+          <p>{{ movie.raw | get_movie_description }}</p>
+          <ul class="actions special">
+            <li>
+              <a href="{% url 'home:movie-details' movie.id %}" class="button"
+                >AI Rating</a
+              >
+            </li>
+          </ul>
+        </article>
+        {% endfor %}
+      </section>
+
+</body>
+</html>

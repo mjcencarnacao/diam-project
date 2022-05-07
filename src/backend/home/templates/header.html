@@ -23,12 +23,21 @@
       <ul class="links">
         <li class="active"><a href="index.html">IMDB Top 250 Movies</a></li>
         {% if user.is_authenticated %}
-        <li><a href="{% url 'members:profile' %}">Profile</a></li>
+        <li><a href="{% url 'home:profile' request.user.id %}">Profile</a></li>
         {% else %}
         <li><a href="{% url 'members:login_user' %}">Login</a></li>
         <li><a href="{% url 'members:register' %}">Register</a></li>
         {% endif %}
       </ul>
+      <form style="display: inline !important; margin-bottom: 0px !important;padding-left: 55% !important;" class="d-flex" method=POST action="{% url 'home:movie-search' %}">
+        {% csrf_token %}
+        <input style="display: inline !important; width: 80% !important; height: 45% !important; font-size: medium !important;"
+        class="form-control" type="text" placeholder="Search Movie" aria-label="Search" name="searched">&nbsp;
+        <button id="-search-btn-" onmouseout="searchbuttonout('-search-btn-')" onmouseover="searchbuttonover('-search-btn-')" class="fas fa-search"
+        style="color: #ffffff !important; line-height: 0 !important; height: inherit !important;display: inline !important; padding-left: 0 !important; padding-right: 0 !important; border: 0px !important; outline: 0px !important;" type="submit">
+        </button>
+      </input>
+      </form>
       <ul class="icons">
         <li>
           <a href="#" class="icon brands fa-github"

@@ -68,7 +68,15 @@ function unpaintthumbsdown(id) {
 
 
 
+function hoverfilter(id){
+  var strfilter = id;
+  document.getElementById(strfilter).style.transform = 'scale(1.5)';
+}
 
+function hoverfilterout(id){
+  var strfilter = id;
+  document.getElementById(strfilter).style.transform = 'scale(1)';
+}
 
 
 function hoverplus(id){
@@ -103,4 +111,17 @@ function slideupover(){
 
 function slideupout(){
   document.getElementById('slide_up').style.transform = 'scale(1)';
+}
+
+function doThisThumbsup(id){
+  var str_thumbsup = id + "-likesprofile";
+  document.getElementById(str_thumbsup).style.display = "inline";
+}
+
+function searchbuttonover(id){
+  document.getElementById(id).style.color = "#18bfef";
+}
+
+function searchbuttonout(id){
+  document.getElementById(id).style.color = "#ffffff";
 }

@@ -11,22 +11,59 @@ from services.AIService import AIService
 from members.forms import SignUpForm
 from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
+from members.models import User
+from services.DictionaryManager import DictionaryManager
 
 
 def movie_details(request, movie_id):
-
     if request.method == 'POST':
+        if 'filter_button_negative' in request.POST:
+            movie_id = movie_id
+            movie = Movie.objects.get(pk=movie_id)
+            comments = Comments.objects.filter(movie=movie, Ai_FeedBack=0)
+            return render(request,
+                          'details.html',
+                          {'movie': movie,
+                           'comments': comments,
+                           'positive_percentage': 0,})
+
+        if 'filter_button_positive' in request.POST:
+            movie_id = movie_id
+            movie = Movie.objects.get(pk=movie_id)
+            comments = Comments.objects.filter(movie=movie, Ai_FeedBack=1)
+            return render(request,
+                          'details.html',
+                          {'movie': movie,
+                           'comments': comments,
+                           'positive_percentage': 100, })
+
+        if 'filter_button_user' in request.POST:
+            movie_id = movie_id
+            movie = Movie.objects.get(pk=movie_id)
+            critic_id: int = request.POST.get('filter_button_user')
+            comments = Comments.objects.filter(movie=movie, critic_id=critic_id)
+            number_of_comments = len(comments)
+            filter_positive_comments = len([comment for comment in comments if comment.Ai_FeedBack == 1])
+            positive_percentage = int(filter_positive_comments / number_of_comments * 100)
+            return render(request,
+                          'details.html',
+                          {'movie': movie,
+                           'comments': comments,
+                           'positive_percentage': positive_percentage, })
+
         ai_service: AIService = AIService()
         comment_value = request.POST.get('comentario')
-        ai_feedback, ai_prob = ai_service.classify(comment_value)
+        ai_feedback, neg, pos = ai_service.classify(comment_value)
         movie = Movie.objects.get(pk=movie_id)
-        Comments(title = request.POST.get('titulo'),
-                 comment = comment_value,
-                 movie = movie,
-                 critic = request.user,
+        Comments(title=request.POST.get('titulo'),
+                 comment=comment_value,
+                 movie=movie,
+                 movie_name=movie.name,
+                 critic=request.user,
+                 critic_username=request.user.username,
                  Ai_FeedBack=ai_feedback,
-                 Ai_Probability_FeedBack=ai_prob).save()
-                  
+                 Ai_Probability_PositiveFeedBack=pos,
+                 Ai_Probability_NegativeFeedBack=neg).save()
 
     ai_service: AIService = AIService()
     movie = Movie.objects.get(pk=movie_id)
@@ -37,21 +74,47 @@ def movie_details(request, movie_id):
         # Podemos vir a ter um problema aqui caso sejamos nós a adicionar um filme ( solução pode passar por um boolean)
         comments_dictionary: Dict = Scrapper.get_movie_comments(movie_comments_path)
         for keys, value in comments_dictionary.items():
-            ai_feedback, ai_prob = ai_service.classify(value)
+            ai_feedback, neg, pos = ai_service.classify(value)
             Comments(title=keys,
                      comment=value,
                      movie=movie,
+                     movie_name=movie.name,
                      critic=request.user,
+                     critic_username=request.user.username,
                      Ai_FeedBack=ai_feedback,
-                     Ai_Probability_FeedBack=ai_prob).save()
+                     Ai_Probability_PositiveFeedBack=pos,
+                     Ai_Probability_NegativeFeedBack=neg).save()
 
     comments = Comments.objects.filter(movie=movie)
-    return render(request, 'details.html', {'movie': movie, 'comments': comments})
+    number_of_comments = len(comments)
+    filter_positive_comments = len([comment for comment in comments if comment.Ai_FeedBack == 1])
+    positive_percentage = int(filter_positive_comments / number_of_comments * 100)
+
+    return render(request, 'details.html', {'movie': movie,
+                                            'comments': comments,
+                                            'positive_percentage': positive_percentage, })
+
+
+def search_movies(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        searched_movies = Scrapper.get_search_movies(searched)
+        converted_dict = DictionaryManager.change_keys_in_dictionary_list(searched_movies)
+        DictionaryManager.set_fix_imdb_url(converted_dict)
+        for i in range(0, len(converted_dict)):
+            check = Movie.objects.filter(name=converted_dict[i]['name'])
+            if not check:
+                Movie(name=converted_dict[i]['name'], raw=converted_dict[i]).save()
+
+        db_movies = Movie.objects.filter(name__regex=rf'({searched})+')
+        return render(request, 'searched_movies.html', {'movies': db_movies})
+    else:
+        return render(request, 'searched_movies.html',
+                      {})
 
 
 def get_home_page(request):
     movies_source = json.loads(views.request_top_movies(request).content)
-    print(movies_source[0]['name'])
     for movie in movies_source:
         try:
             movie_info = Movie.objects.get(name=movie['name'])
@@ -77,13 +140,12 @@ def get_register_page(request):
     return render(request, 'register.html', {'form': form, 'submitted': submitted})
 
 
-
 def like(request):
     if request.method == 'POST':
-        result = '' 
-        id : int = request.POST.get('postid')
-        p_id : int = id
-        post = get_object_or_404(Comments, id = id)
+        result = ''
+        id: int = request.POST.get('postid')
+        p_id: int = id
+        post = get_object_or_404(Comments, id=id)
         post.likes += 1
         result = post.likes
         post.save()
@@ -93,11 +155,11 @@ def like(request):
 
 def dislike(request):
     if request.method == 'POST':
-        result = '' 
-        id : int = request.POST.get('postid')
-        p_id : int = id
-        post = get_object_or_404(Comments, id = id)
-        if(post.likes == 0):
+        result = ''
+        id: int = request.POST.get('postid')
+        p_id: int = id
+        post = get_object_or_404(Comments, id=id)
+        if (post.likes == 0):
             result = post.likes
             return JsonResponse({'result': result, 'p_id': p_id, })
         post.likes -= 1
@@ -117,4 +179,9 @@ def fazer_upload(request):
         filename = fs.save(request.user.username, myfile)
         uploaded_file_url = fs.url(filename)
         return render(request, 'votacao/fazer_upload.html', {'uploaded_file_url': uploaded_file_url})
+
+def get_profile_page(request, user_id):
+    comments_context = Comments.objects.filter(critic_id=user_id)
+    user_context = User.objects.get(pk=user_id)
+    return render(request, 'profile.html', {'user': user_context, 'comments': comments_context})
 
