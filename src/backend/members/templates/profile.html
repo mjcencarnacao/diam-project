@@ -110,24 +110,30 @@
                   
                   <h2 id="{{ comment.id }}-likesprofile"
                     style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
-                    {{ comment.likes }} likes
+                    {{ comment.likes }} likes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                   </h2>
                   
                   <h2 id="{{ comment.id }}-question" style="display: inline !important; font-size: large !important; margin-left: auto;">Do you agree with the AI?</h2>
                   &nbsp;
                   <div style="display: flex; height: 16px !important;" class="text-right">
-                    <i id="{{ comment.id }}-agreewithai"
-                      style="vertical-align: 5px; padding-top: 3px; padding-left: 5px; cursor: pointer;"
+                    <button style="all: unset !important; cursor: pointer;" type="submit" class="check-button"
+                    data-rowid="{{ comment.id }}" value="{{ comment.id }}-1" id="check-button-{{ comment.id }}">
+                    <span id="{{ comment.id }}-agreewithai"
+                      style="vertical-align: 12px; padding-top: 3px; padding-left: 5px; cursor: pointer;"
                       onmouseover="doThisAgreeWithAI('{{ comment.id }}')"
                       onmouseout="doThisAgreeWithAI_out('{{ comment.id }}')"
-                      class="fas fa-check"></i>
+                      class="fas fa-check"></span>
+                    </button>
                   </div>
                   <div style="display: flex; height: 16px !important;" class="text-right">
-                    <i id="{{ comment.id }}-disagreewithai"
-                      style="vertical-align: 5px; padding-top: 3px; padding-left: 8px; cursor: pointer;"
+                    <button style="all: unset !important; cursor: pointer;" type="submit" class="times-button"
+                    data-rowid="{{ comment.id }}" value="{{ comment.id }}-0" id="times-button-{{ comment.id }}">
+                    <span id="{{ comment.id }}-disagreewithai"
+                      style="vertical-align: 12px; padding-top: 3px; padding-left: 8px; cursor: pointer;"
                       onmouseover="doThisDisagreeWithAI('{{ comment.id }}')"
                       onmouseout="doThisDisagreeWithAI_out('{{ comment.id }}')"
-                      class="fa fa-times"></i>
+                      class="fa fa-times"></span>
+                      </button>
                   </div>
                 </div>
               </div>
@@ -137,8 +143,62 @@
           <hr />
           {% endfor %}
           <br><br>
-    </div>
-   
+    </div> 
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+    $(document).on('click', '.check-button', function (e) {
+      e.preventDefault();
+      var rowid = $(this).data('rowid')
+      var check_button = "#check-button-" + rowid
+      $.ajax({
+        type: 'POST',
+        url: '{% url "home:eval" %}',
+        data: {
+          postid: $(check_button).val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
+          action: 'post'
+        },
+        success: function (json) {
+          var nota_id = json['p_id'] + "-nota"
+          document.getElementById(nota_id).value = ""
+          document.getElementById(nota_id).innerHTML = json['result']
+          document.getElementById(nota_id).style.display = "inline"
+          console.log(json)
+        },
+        error: function (xhr, errmsg, err) {
+        }
+      });
+    })
+
+    $(document).on('click', '.timesbutton', function (e) {
+      e.preventDefault();
+      var rowid = $(this).data('rowid')
+      var times_button = "#times-button-" + rowid
+      $.ajax({
+        type: 'POST',
+        url: '{% url "home:eval" %}',
+        data: {
+          postid: $(times_button).val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
+          action: 'post'
+        },
+        success: function (json) {
+          var nota_id = json['p_id'] + "-nota"
+          document.getElementById(nota_id).value = ""
+          document.getElementById(nota_id).innerHTML = json['result']
+          document.getElementById(nota_id).style.display = "inline"
+          console.log(json)
+        },
+        error: function (xhr, errmsg, err) {
+        }
+      });
+    })
+
+
+
+  </script>
     {% endblock content %}
   </body>
 </html>

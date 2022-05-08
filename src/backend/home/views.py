@@ -180,3 +180,12 @@ def get_profile_page(request, user_id):
     user_context = User.objects.get(pk=user_id)
     return render(request, 'profile.html', {'user': user_context, 'comments': comments_context})
 
+
+def get_eval(request):
+    if request.method == 'POST':
+        new_result = 'ya meu'
+        id_and_oldresult: str = request.POST.get('postid')
+        parts: list(str) = id_and_oldresult.split("-")
+        p_id :str = parts[0]
+
+    return JsonResponse({'result': new_result, 'p_id': p_id, })
