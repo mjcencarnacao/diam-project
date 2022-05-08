@@ -17,7 +17,6 @@ class AIService(object):
         label = {0: 'negative', 1: 'positive'}
         X = self.vect.transform([document])
         y = self.clf.predict(X)[0]
-        print(self.clf.predict_proba(X))
         lst = self.clf.predict_proba(X)[0]
         return y, lst[0], lst[1]
 
