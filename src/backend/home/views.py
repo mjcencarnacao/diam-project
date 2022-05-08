@@ -8,6 +8,8 @@ from .models import Movie, Comments
 from services.scrapper import Scrapper
 from services.AIService import AIService
 from members.forms import SignUpForm
+from django.urls import reverse
+from django.core.files.storage import FileSystemStorage
 from members.models import User
 from services.DictionaryManager import DictionaryManager
 
@@ -170,8 +172,16 @@ def dislike(request):
 def user_comment(request):
     return render(request, 'details.html')
 
+def fazer_upload(request):
+    if request.method == 'POST':
+        myfile = request.POST.FILES('thefile', False)
+        fs = FileSystemStorage()
+        filename = fs.save(request.user.username, myfile)
+        uploaded_file_url = fs.url(filename)
+        return render(request, 'votacao/fazer_upload.html', {'uploaded_file_url': uploaded_file_url})
 
 def get_profile_page(request, user_id):
     comments_context = Comments.objects.filter(critic_id=user_id)
     user_context = User.objects.get(pk=user_id)
     return render(request, 'profile.html', {'user': user_context, 'comments': comments_context})
+

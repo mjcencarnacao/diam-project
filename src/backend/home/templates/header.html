@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
   <body>
@@ -16,30 +17,52 @@
       </ul>
     </div>
     <header id="header">
-      <a href="index.html" class="logo">AI For You</a>
+      <a href="{% url 'home:home_page' %}" class="logo">AI For You</a>
     </header>
     <nav id="nav">
       <ul class="links">
-        <li class="active"><a href="index.html">IMDB Top 250 Movies</a></li>
+        <li class="active"><a href="{% url 'home:home_page' %}">IMDB Top 250 Movies</a></li>
         {% if user.is_authenticated %}
-        <form class="d-flex" method=POST action="{% url 'home:movie-search' %}">
-        {% csrf_token %}
-        <input class="form-control" type="search" placeholder="Search Movie" aria-label="Search" name="searched">
-        <button class="btn btn-outline-secondary" type="submit">Search</button>
-      </form>
         <li><a href="{% url 'home:profile' request.user.id %}">Profile</a></li>
         {% else %}
         <li><a href="{% url 'members:login_user' %}">Login</a></li>
         <li><a href="{% url 'members:register' %}">Register</a></li>
         {% endif %}
       </ul>
+      {% if user.is_authenticated %}
+      <form style="display: inline !important; margin-bottom: 0px !important;padding-left: 55% !important;" class="d-flex" method=POST action="{% url 'home:movie-search' %}">
+        {% csrf_token %}
+        <input style="display: inline !important; width: 80% !important; height: 45% !important; font-size: medium !important;"
+        class="form-control" type="text" placeholder="Search Movie" aria-label="Search" name="searched">&nbsp;
+        <button id="-search-btn-" onmouseout="searchbuttonout('-search-btn-')" onmouseover="searchbuttonover('-search-btn-')" class="fas fa-search"
+        style="color: #ffffff !important; line-height: 0 !important; height: inherit !important;display: inline !important; padding-left: 0 !important; padding-right: 0 !important; border: 0px !important; outline: 0px !important;" type="submit">
+        </button>
+      </input>
+      </form>
+      {% endif %}
       <ul class="icons">
+        {% if user.is_authenticated %}
+        <li style="padding-right: 0 !important;">
+          {% else %}
         <li>
+          {% endif %}
           <a href="#" class="icon brands fa-github"
             ><span class="label">GitHub</span></a
           >
         </li>
         {% if user.is_authenticated %}
+        <li>
+          {% if profile.user.user_picture == None %}
+          <img
+            src="{% static 'default-user-image.png' %}"
+            style="max-width: 27px; max-height: 27px; border-radius: 50%; vertical-align: -5%;"
+          />
+          {% else %}
+          <a href="" class="image fit"
+            ><img src="{{ request.user.user_picture }}" alt="" />
+          </a>
+          {% endif %}
+        </li>
         <li>
           <a href="{% url 'members:logout' %}" class="fas fa-sign-out-alt"></a>
         </li>
