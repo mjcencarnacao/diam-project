@@ -8,7 +8,6 @@ from django.shortcuts import get_object_or_404
 from .models import User
 
 
-
 # Create your views here.
 def register(request):
     msg = None
@@ -43,7 +42,6 @@ def login_user(request):
     else:
         msg = 'error validation form'
         return render(request, 'authenticate/login.html', {'form': form})
-
 
 
 def home(request):

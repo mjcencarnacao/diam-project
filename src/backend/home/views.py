@@ -1,6 +1,6 @@
 from typing import Dict
 
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, JsonResponse
 from services import views
 import json
@@ -8,10 +8,10 @@ from .models import Movie, Comments
 from services.scrapper import Scrapper
 from services.AIService import AIService
 from members.forms import SignUpForm
-from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
 from members.models import User
 from services.DictionaryManager import DictionaryManager
+from services.ProcessingService import ProcessingService
 
 
 def movie_details(request, movie_id):
@@ -41,9 +41,7 @@ def movie_details(request, movie_id):
             movie = Movie.objects.get(pk=movie_id)
             critic_id: int = request.POST.get('filter_button_user')
             comments = Comments.objects.filter(movie=movie, critic_id=critic_id)
-            number_of_comments = len(comments)
-            filter_positive_comments = len([comment for comment in comments if comment.Ai_FeedBack == 1])
-            positive_percentage = int(filter_positive_comments / number_of_comments * 100)
+            positive_percentage = ProcessingService.positive_percentage(comments)
             return render(request,
                           'details.html',
                           {'movie': movie,
@@ -78,16 +76,13 @@ def movie_details(request, movie_id):
                      comment=value,
                      movie=movie,
                      movie_name=movie.name,
-                     critic=request.user,
-                     critic_username=request.user.username,
+                     critic_username='ImdbUser',
                      Ai_FeedBack=ai_feedback,
                      Ai_Probability_PositiveFeedBack=pos,
                      Ai_Probability_NegativeFeedBack=neg).save()
 
     comments = Comments.objects.filter(movie=movie)
-    number_of_comments = len(comments)
-    filter_positive_comments = len([comment for comment in comments if comment.Ai_FeedBack == 1])
-    positive_percentage = int(filter_positive_comments / number_of_comments * 100)
+    positive_percentage = ProcessingService.positive_percentage(comments)
 
     return render(request, 'details.html', {'movie': movie,
                                             'comments': comments,
@@ -98,8 +93,8 @@ def search_movies(request):
     if request.method == "POST":
         searched = request.POST['searched']
         searched_movies = Scrapper.get_search_movies(searched)
-        all_information_movies = DictionaryManager.get_all_information(searched_movies)
-        DictionaryManager.change_keys_in_dictionary_list(all_information_movies)
+        pre_movie_list = DictionaryManager.get_all_information(searched_movies)
+        all_information_movies = DictionaryManager.change_keys_in_dictionary_list(pre_movie_list)
         DictionaryManager.set_fix_imdb_url(all_information_movies)
         for i in range(0, len(all_information_movies)):
             check = Movie.objects.filter(name=all_information_movies[i]['name'])

@@ -4,21 +4,19 @@ from .scrapper import Scrapper
 
 
 class DictionaryManager:
-    old = ["Title", "Year", "imdbID", "Poster","Plot", "Actors", "Genre"]
+    old = ["Title", "Year", "imdbID", "Poster", "Plot", "Actors", "Genre"]
     new = ["name", "year", "imdb_url", "image_url", "desc", "actors", "genre"]
 
     @staticmethod
-    def __change_key(d: Dict, lst_new_keys: [str], lst_old_keys: [str]) -> None:
-        for (i, j) in zip(lst_new_keys, lst_old_keys):
+    def __change_key(d: Dict) -> Dict:
+        for (i, j) in zip(DictionaryManager.new, DictionaryManager.old):
             d[i] = d.pop(j)
+        return d
 
     @staticmethod
-    def change_keys_in_dictionary_list(lst: [Dict],
-                                       lst_new_keys: [str] = new,
-                                       lst_old_keys: [str] = old) -> [Dict]:
-        for d in lst:
-            DictionaryManager.__change_key(d, lst_new_keys, lst_old_keys)
-
+    def change_keys_in_dictionary_list(lst: [Dict]) -> [Dict]:
+        correct_list = [d for d in lst if all(k in d.keys() for k in DictionaryManager.old)]
+        return list(map(DictionaryManager.__change_key, correct_list))
 
     @staticmethod
     def set_fix_imdb_url(lst: [Dict]) -> None:
@@ -36,9 +34,6 @@ class DictionaryManager:
         return lst_of_all_info
 
     @staticmethod
-    def set_Genre_and_Actor_to_correct_format(dct: Dict) -> Dict:
+    def set_Genre_and_Actor_to_correct_format(dct: Dict) -> None:
         dct["genre"] = dct["genre"].split(',')
         dct["actors"] = dct["actors"].split(',')
-
-
-
