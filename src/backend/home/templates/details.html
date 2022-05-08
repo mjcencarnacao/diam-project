@@ -149,6 +149,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                   <div style="display: flex; height: 16px !important;" class="text-right">
                     <i id="{{ comment.id }}-aifeedback"
                       onmouseover="doThis('{{ comment.id }}', '{{ comment.Ai_FeedBack }}')"
+                      style="cursor: pointer;"
                       onclick="doThat('{{ comment.id }}')" class="fa fa-search"></i>
                     <h2 style="display:none; margin-bottom: 0 !important; font-size: large !important;"
                       id="{{ comment.id }}-aiscore">&nbsp;<b>AI Score:</b></h2>&nbsp;<h2
@@ -160,7 +161,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                     <div style="display: inline-block !important">
                       <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
                         data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
-                        <span style="vertical-align: 10px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsup"
+                        <span style="vertical-align: 10px; margin-bottom: 0px; " id="{{ comment.id }}-thumbsup"
                           class="fas fa-thumbs-up" onmouseover="paintthumbsup('{{ comment.id }}')"
                           onmouseout="unpaintthumbsup('{{ comment.id }}')"></span>
                     </div>

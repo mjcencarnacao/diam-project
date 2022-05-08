@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% load static %}
+{% extends 'base.html' %}
+{% load static %}
 <!DOCTYPE html>
 <html>
   {% block extrastyle %}
@@ -91,6 +92,7 @@
                 <div style="display: flex; height: 16px !important;" class="text-right">
                   <i id="{{ comment.id }}-aifeedback"
                     onmouseover="doThis('{{ comment.id }}', '{{ comment.Ai_FeedBack }}')"
+                    style="cursor: pointer;"
                     onclick="doThat('{{ comment.id }}')" class="fa fa-search"></i>
                   <h2 style="display:none; margin-bottom: 0 !important; font-size: large !important;"
                     id="{{ comment.id }}-aiscore">&nbsp;<b>AI Score:</b></h2>&nbsp;<h2
@@ -100,6 +102,7 @@
                   &nbsp;
                   <div style="display: flex; height: 16px !important;" class="text-right">
                     <i id="{{ comment.id }}-likebutton"
+                      style="cursor: pointer;"
                       onmouseover="doThisThumbsup('{{ comment.id }}')"
                       class="fas fa-thumbs-up"></i>
                   </div>
@@ -109,9 +112,27 @@
                     style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
                     {{ comment.likes }} likes
                   </h2>
+                  
+                  <h2 id="{{ comment.id }}-question" style="display: inline !important; font-size: large !important; margin-left: auto;">Do you agree with the AI?</h2>
+                  &nbsp;
+                  <div style="display: flex; height: 16px !important;" class="text-right">
+                    <i id="{{ comment.id }}-agreewithai"
+                      style="vertical-align: 5px; padding-top: 3px; padding-left: 5px; cursor: pointer;"
+                      onmouseover="doThisAgreeWithAI('{{ comment.id }}')"
+                      onmouseout="doThisAgreeWithAI_out('{{ comment.id }}')"
+                      class="fas fa-check"></i>
+                  </div>
+                  <div style="display: flex; height: 16px !important;" class="text-right">
+                    <i id="{{ comment.id }}-disagreewithai"
+                      style="vertical-align: 5px; padding-top: 3px; padding-left: 8px; cursor: pointer;"
+                      onmouseover="doThisDisagreeWithAI('{{ comment.id }}')"
+                      onmouseout="doThisDisagreeWithAI_out('{{ comment.id }}')"
+                      class="fa fa-times"></i>
+                  </div>
                 </div>
               </div>
             </div>
+
           </article>
           <hr />
           {% endfor %}
