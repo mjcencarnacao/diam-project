@@ -1,4 +1,6 @@
 from email.mime import image
+
+from django.conf import settings
 from django.db import models
 from members.models import User
 
@@ -20,7 +22,7 @@ class Comments(models.Model):
     comment = models.TextField('Comment', blank=True, null=True)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     movie_name = models.CharField('Movie_Name', max_length=500, blank=True, null=True)
-    critic = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    critic = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     critic_username = models.CharField('Critic_Name', max_length=500, blank=True, null=True)
     entry = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)

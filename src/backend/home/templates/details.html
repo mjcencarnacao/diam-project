@@ -133,7 +133,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                     <header class="text-left">
                       <div class="comment-user">
                         <i class="fa fa-user"></i> 
-                        {% if user.is_premium_user %}<a href="{% url 'home:profile' comment.critic_id %}"> {{ comment.critic_username }}</a> {% else %}
+                        {% if user.is_premium_user and comment.critic_id is not None %}<a href="{% url 'home:profile' comment.critic_id %}"> {{ comment.critic_username }}</a> {% else %}
                         {{ comment.critic_username }}{% endif %}
                       </div>
                       <time class="comment-date" datetime="16-12-2014 01:05">
