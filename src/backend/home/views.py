@@ -1,7 +1,6 @@
 from typing import Dict
-from urllib.request import Request
 
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, JsonResponse
 from services import views
 import json
@@ -9,10 +8,10 @@ from .models import Movie, Comments
 from services.scrapper import Scrapper
 from services.AIService import AIService
 from members.forms import SignUpForm
-from django.urls import reverse
 from django.core.files.storage import FileSystemStorage
 from members.models import User
 from services.DictionaryManager import DictionaryManager
+from services.ProcessingService import ProcessingService
 
 
 def movie_details(request, movie_id):
@@ -42,9 +41,7 @@ def movie_details(request, movie_id):
             movie = Movie.objects.get(pk=movie_id)
             critic_id: int = request.POST.get('filter_button_user')
             comments = Comments.objects.filter(movie=movie, critic_id=critic_id)
-            number_of_comments = len(comments)
-            filter_positive_comments = len([comment for comment in comments if comment.Ai_FeedBack == 1])
-            positive_percentage = int(filter_positive_comments / number_of_comments * 100)
+            positive_percentage = ProcessingService.positive_percentage(comments)
             return render(request,
                           'details.html',
                           {'movie': movie,
@@ -79,16 +76,13 @@ def movie_details(request, movie_id):
                      comment=value,
                      movie=movie,
                      movie_name=movie.name,
-                     critic=request.user,
-                     critic_username=request.user.username,
+                     critic_username='ImdbUser',
                      Ai_FeedBack=ai_feedback,
                      Ai_Probability_PositiveFeedBack=pos,
                      Ai_Probability_NegativeFeedBack=neg).save()
 
     comments = Comments.objects.filter(movie=movie)
-    number_of_comments = len(comments)
-    filter_positive_comments = len([comment for comment in comments if comment.Ai_FeedBack == 1])
-    positive_percentage = int(filter_positive_comments / number_of_comments * 100)
+    positive_percentage = ProcessingService.positive_percentage(comments)
 
     return render(request, 'details.html', {'movie': movie,
                                             'comments': comments,
@@ -99,12 +93,13 @@ def search_movies(request):
     if request.method == "POST":
         searched = request.POST['searched']
         searched_movies = Scrapper.get_search_movies(searched)
-        converted_dict = DictionaryManager.change_keys_in_dictionary_list(searched_movies)
-        DictionaryManager.set_fix_imdb_url(converted_dict)
-        for i in range(0, len(converted_dict)):
-            check = Movie.objects.filter(name=converted_dict[i]['name'])
+        pre_movie_list = DictionaryManager.get_all_information(searched_movies)
+        all_information_movies = DictionaryManager.change_keys_in_dictionary_list(pre_movie_list)
+        DictionaryManager.set_fix_imdb_url(all_information_movies)
+        for i in range(0, len(all_information_movies)):
+            check = Movie.objects.filter(name=all_information_movies[i]['name'])
             if not check:
-                Movie(name=converted_dict[i]['name'], raw=converted_dict[i]).save()
+                Movie(name=all_information_movies[i]['name'], raw=all_information_movies[i]).save()
 
         db_movies = Movie.objects.filter(name__regex=rf'({searched})+')
         return render(request, 'searched_movies.html', {'movies': db_movies})
@@ -159,7 +154,7 @@ def dislike(request):
         id: int = request.POST.get('postid')
         p_id: int = id
         post = get_object_or_404(Comments, id=id)
-        if (post.likes == 0):
+        if post.likes == 0:
             result = post.likes
             return JsonResponse({'result': result, 'p_id': p_id, })
         post.likes -= 1
@@ -185,3 +180,12 @@ def get_profile_page(request, user_id):
     user_context = User.objects.get(pk=user_id)
     return render(request, 'profile.html', {'user': user_context, 'comments': comments_context})
 
+
+def get_eval(request):
+    if request.method == 'POST':
+        new_result = 'ya meu'
+        id_and_oldresult: str = request.POST.get('postid')
+        parts: list(str) = id_and_oldresult.split("-")
+        p_id :str = parts[0]
+
+    return JsonResponse({'result': new_result, 'p_id': p_id, })

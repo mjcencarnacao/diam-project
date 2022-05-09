@@ -129,3 +129,67 @@ function searchbuttonout(id){
 function paga() {
   alert("Only available for PREMIUM users!");
 }
+
+function doThisAgreeWithAI(id){
+  var str_yes = id + "-agreewithai";
+  document.getElementById(str_yes).style.color = "green";
+  document.getElementById(str_yes).style.transform = "scale(1.2)";
+
+}
+
+function doThisDisagreeWithAI(id){
+  var str_no = id + "-disagreewithai";
+  document.getElementById(str_no).style.color = "red";
+  document.getElementById(str_no).style.transform = "scale(1.2)";
+
+}
+
+function doThisAgreeWithAI_out(id){
+  var str_yes = id + "-agreewithai";
+  document.getElementById(str_yes).style.color = "black";
+  document.getElementById(str_yes).style.transform = "scale(1)";
+
+}
+
+function doThisDisagreeWithAI_out(id){
+  var str_no = id + "-disagreewithai";
+  document.getElementById(str_no).style.color = "black";
+  document.getElementById(str_no).style.transform = "scale(1)";
+
+}
+
+function nav(page){
+
+const list = document.querySelectorAll("li");
+
+
+  if (page == 'index'){
+    list[0].classList.add = "active";
+    list[1].className = "";
+    list[2].className = "";
+    list[3].className = "";
+    
+  }
+  if (page == 'profile'){
+    
+    list[0].className = "";
+    list[1].className = "active";
+    list[2].className = "";
+    list[3].className = "";
+
+  }
+  if (page == 'login'){
+    list[0].className = "";
+    list[1].className = "";
+    list[2].className = "active";
+    list[3].className = "";
+
+  }
+  if (page == 'register'){
+    list[0].className = "";
+    list[1].className = "";
+    list[2].className = "";
+    list[3].className = "active";
+
+  }
+}
