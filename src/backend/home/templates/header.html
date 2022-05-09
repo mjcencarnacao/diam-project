@@ -21,12 +21,12 @@
     </header>
     <nav id="nav">
       <ul class="links">
-        <li class="active"><a href="{% url 'home:home_page' %}">IMDB Top 250 Movies</a></li>
+        <li id="imdbtop250"><a href="{% url 'home:home_page' %}">IMDB Top 250 Movies</a></li>
         {% if user.is_authenticated %}
-        <li><a href="{% url 'home:profile' request.user.id %}">Profile</a></li>
+        <li id="profile"><a href="{% url 'home:profile' request.user.id %}">Profile</a></li>
         {% else %}
-        <li><a href="{% url 'members:login_user' %}">Login</a></li>
-        <li><a href="{% url 'members:register' %}">Register</a></li>
+        <li id="login"><a href="{% url 'members:login_user' %}">Login</a></li>
+        <li id="register"><a href="{% url 'members:register' %}">Register</a></li>
         {% endif %}
       </ul>
       {% if user.is_authenticated %}

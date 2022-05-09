@@ -157,3 +157,39 @@ function doThisDisagreeWithAI_out(id){
   document.getElementById(str_no).style.transform = "scale(1)";
 
 }
+
+function nav(page){
+
+const list = document.querySelectorAll("li");
+
+
+  if (page == 'index'){
+    list[0].classList.add = "active";
+    list[1].className = "";
+    list[2].className = "";
+    list[3].className = "";
+    
+  }
+  if (page == 'profile'){
+    
+    list[0].className = "";
+    list[1].className = "active";
+    list[2].className = "";
+    list[3].className = "";
+
+  }
+  if (page == 'login'){
+    list[0].className = "";
+    list[1].className = "";
+    list[2].className = "active";
+    list[3].className = "";
+
+  }
+  if (page == 'register'){
+    list[0].className = "";
+    list[1].className = "";
+    list[2].className = "";
+    list[3].className = "active";
+
+  }
+}
