@@ -24,7 +24,7 @@ def movie_details(request, movie_id):
                           'details.html',
                           {'movie': movie,
                            'comments': comments,
-                           'positive_percentage': 0,})
+                           'positive_percentage': 0, })
 
         if 'filter_button_positive' in request.POST:
             movie_id = movie_id
@@ -167,6 +167,7 @@ def dislike(request):
 def user_comment(request):
     return render(request, 'details.html')
 
+
 def fazer_upload(request):
     if request.method == 'POST':
         myfile = request.POST.FILES('thefile', False)
@@ -174,6 +175,7 @@ def fazer_upload(request):
         filename = fs.save(request.user.username, myfile)
         uploaded_file_url = fs.url(filename)
         return render(request, 'votacao/fazer_upload.html', {'uploaded_file_url': uploaded_file_url})
+
 
 def get_profile_page(request, user_id):
     comments_context = Comments.objects.filter(critic_id=user_id)
@@ -186,6 +188,19 @@ def get_eval(request):
         new_result = 'ya meu'
         id_and_oldresult: str = request.POST.get('postid')
         parts: list(str) = id_and_oldresult.split("-")
-        p_id :str = parts[0]
-
-    return JsonResponse({'result': new_result, 'p_id': p_id, })
+        p_id: str = parts[0]
+        ai_service: AIService = AIService()
+        p_appreciation: str = parts[1]
+        print(p_appreciation)
+        comment_object: Comments = Comments.objects.get(pk=p_id)
+        comment = comment_object.comment
+        ai_comment_feedback = comment_object.Ai_FeedBack
+        user_feedback: int = ProcessingService.get_user_feedback(ai_comment_feedback, p_appreciation)
+        ai_service.train_and_serialize(comment, user_feedback)
+        ai_feedback, neg, pos = ai_service.classify(comment)
+        comment_object.Ai_FeedBack = ai_feedback
+        ai_feedback_plain_text = ai_service.get_comment_plaintext(ai_feedback)
+        comment_object.Ai_Probability_PositiveFeedBack = pos
+        comment_object.Ai_Probability_NegativeFeedBack = neg
+        comment_object.save()
+    return JsonResponse({'result': ai_feedback_plain_text, 'p_id': p_id, })

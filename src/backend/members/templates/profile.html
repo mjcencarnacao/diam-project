@@ -168,11 +168,12 @@
           console.log(json)
         },
         error: function (xhr, errmsg, err) {
+
         }
       });
     })
 
-    $(document).on('click', '.timesbutton', function (e) {
+    $(document).on('click', '.times-button', function (e) {
       e.preventDefault();
       var rowid = $(this).data('rowid')
       var times_button = "#times-button-" + rowid
