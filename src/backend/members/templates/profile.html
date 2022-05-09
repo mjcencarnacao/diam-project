@@ -91,7 +91,7 @@
                 </div>
                 <div style="display: flex; height: 16px !important;" class="text-right">
                   <i id="{{ comment.id }}-aifeedback"
-                    onmouseover="doThis('{{ comment.id }}', '{{ comment.Ai_FeedBack }}')"
+                    onmouseover="doThis('{{ comment.id }}', '{{ comment.AI_FeedBack }}')"
                     style="cursor: pointer;"
                     onclick="doThat('{{ comment.id }}')" class="fa fa-search"></i>
                   <h2 style="display:none; margin-bottom: 0 !important; font-size: large !important;"
@@ -112,10 +112,14 @@
                     style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
                     {{ comment.likes }} likes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                   </h2>
-                  
+
+                   {% if comment.critic_feedback == False %}
                   <h2 id="{{ comment.id }}-question" style="display: inline !important; font-size: large !important; margin-left: auto;">Do you agree with the AI?</h2>
                   &nbsp;
+                  {% endif %}
                   <div style="display: flex; height: 16px !important;" class="text-right">
+
+                     {% if comment.critic_feedback == False %}
                     <button style="all: unset !important; cursor: pointer;" type="submit" class="check-button"
                     data-rowid="{{ comment.id }}" value="{{ comment.id }}-1" id="check-button-{{ comment.id }}">
                     <span id="{{ comment.id }}-agreewithai"
@@ -134,6 +138,7 @@
                       onmouseout="doThisDisagreeWithAI_out('{{ comment.id }}')"
                       class="fa fa-times"></span>
                       </button>
+                    {% endif %}
                   </div>
                 </div>
               </div>
