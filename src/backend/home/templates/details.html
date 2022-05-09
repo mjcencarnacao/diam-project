@@ -50,7 +50,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
     </div>
     <div style="display: block; padding-bottom: 2px !important;">
       <h2 style="display:inline; font-size: larger;">Comentários dos Utilizadores</h2>
-
+      {% if user.is_premium_user %}
       <div style="display:inline; padding-left: 55% !important;">
         <form method="post" action="{% url 'home:movie-details' movie.id %}" style="all: unset !important;">
           {% csrf_token %}
@@ -59,6 +59,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
             onmouseout="hoverfilterout('comment_filter_user')"></i>
       </button></form>
       </div>
+      {% else %}
+      <div style="display:inline; padding-left: 55% !important;">
+        <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_user" value="{{ request.user.id }}">
+          <i style="cursor: pointer;" id="comment_filter_user" class="fa fa-id-card-clip" onmouseover="hoverfilter('comment_filter_user')"
+            onmouseout="hoverfilterout('comment_filter_user')" onclick="paga()"></i>
+      </button>
+      </div>
+      {% endif %}
       {% if user.is_premium_user %}
       <div style="display:inline; padding-left: 1% !important;">
         <form method="post" action="{% url 'home:movie-details' movie.id %}" style="all: unset !important;">
