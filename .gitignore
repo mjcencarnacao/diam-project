@@ -54,3 +54,6 @@ __pycache__/
 !.vscode/launch.json
 !.vscode/extensions.json
 .history
+
+#IA. Ignore IA for now beacuse of different training process and testing
+**/backend/services/AISerialized
