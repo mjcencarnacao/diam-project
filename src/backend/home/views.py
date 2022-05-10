@@ -19,17 +19,17 @@ def movie_details(request, movie_id):
         if 'filter_button_negative' in request.POST:
             movie_id = movie_id
             movie = Movie.objects.get(pk=movie_id)
-            comments = Comments.objects.filter(movie=movie, Ai_FeedBack=0)
+            comments = Comments.objects.filter(movie=movie, AI_FeedBack=0)
             return render(request,
                           'details.html',
                           {'movie': movie,
                            'comments': comments,
-                           'positive_percentage': 0,})
+                           'positive_percentage': 0, })
 
         if 'filter_button_positive' in request.POST:
             movie_id = movie_id
             movie = Movie.objects.get(pk=movie_id)
-            comments = Comments.objects.filter(movie=movie, Ai_FeedBack=1)
+            comments = Comments.objects.filter(movie=movie, AI_FeedBack=1)
             return render(request,
                           'details.html',
                           {'movie': movie,
@@ -58,9 +58,9 @@ def movie_details(request, movie_id):
                  movie_name=movie.name,
                  critic=request.user,
                  critic_username=request.user.username,
-                 Ai_FeedBack=ai_feedback,
-                 Ai_Probability_PositiveFeedBack=pos,
-                 Ai_Probability_NegativeFeedBack=neg).save()
+                 AI_FeedBack=ai_feedback,
+                 AI_Probability_PositiveFeedBack=pos,
+                 AI_Probability_NegativeFeedBack=neg).save()
 
     ai_service: AIService = AIService()
     movie = Movie.objects.get(pk=movie_id)
@@ -77,9 +77,9 @@ def movie_details(request, movie_id):
                      movie=movie,
                      movie_name=movie.name,
                      critic_username='ImdbUser',
-                     Ai_FeedBack=ai_feedback,
-                     Ai_Probability_PositiveFeedBack=pos,
-                     Ai_Probability_NegativeFeedBack=neg).save()
+                     AI_FeedBack=ai_feedback,
+                     AI_Probability_PositiveFeedBack=pos,
+                     AI_Probability_NegativeFeedBack=neg).save()
 
     comments = Comments.objects.filter(movie=movie)
     positive_percentage = ProcessingService.positive_percentage(comments)
@@ -167,6 +167,7 @@ def dislike(request):
 def user_comment(request):
     return render(request, 'details.html')
 
+
 def fazer_upload(request):
     if request.method == 'POST':
         myfile = request.POST.FILES('thefile', False)
@@ -174,6 +175,7 @@ def fazer_upload(request):
         filename = fs.save(request.user.username, myfile)
         uploaded_file_url = fs.url(filename)
         return render(request, 'votacao/fazer_upload.html', {'uploaded_file_url': uploaded_file_url})
+
 
 def get_profile_page(request, user_id):
     comments_context = Comments.objects.filter(critic_id=user_id)
@@ -183,9 +185,12 @@ def get_profile_page(request, user_id):
 
 def get_eval(request):
     if request.method == 'POST':
-        new_result = 'ya meu'
-        id_and_oldresult: str = request.POST.get('postid')
-        parts: list(str) = id_and_oldresult.split("-")
-        p_id :str = parts[0]
-
-    return JsonResponse({'result': new_result, 'p_id': p_id, })
+        id_and_user_feedback: str = request.POST.get('postid')
+        parts: [str] = id_and_user_feedback.split("-")
+        comment_id: str = parts[0]
+        user_appreciation_of_ai_prevision: str = parts[1]
+        ai_new_feedback_plain_text = ProcessingService.retrain_AI_with_user_feedback(
+                                                                    id_comment=comment_id,
+                                                                    user_appreciation=user_appreciation_of_ai_prevision
+                                                                    )
+    return JsonResponse({'result': ai_new_feedback_plain_text, 'p_id': comment_id, })

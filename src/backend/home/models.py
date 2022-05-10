@@ -26,10 +26,10 @@ class Comments(models.Model):
     critic_username = models.CharField('Critic_Name', max_length=500, blank=True, null=True)
     entry = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
-    Ai_FeedBack = models.IntegerField("AiFeedBack", null=True)
-    Ai_Probability_PositiveFeedBack = models.FloatField("PositiveProbabilityAi", null=True)
-    Ai_Probability_NegativeFeedBack = models.FloatField("NegativeProbabilityAI", null=True)
-
+    AI_FeedBack = models.IntegerField("AiFeedBack", null=True)
+    AI_Probability_PositiveFeedBack = models.FloatField("PositiveProbabilityAi", null=True)
+    AI_Probability_NegativeFeedBack = models.FloatField("NegativeProbabilityAI", null=True)
+    critic_feedback = models.BooleanField("critic_feedback_about_ai_opinion", default=False)
 
 
 class WatchList(models.Model):
