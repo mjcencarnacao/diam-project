@@ -55,5 +55,5 @@ __pycache__/
 !.vscode/extensions.json
 .history
 
-#IA. Ignore IA for now beacuse of different training process and testing
-**/backend/services/AISerialized
+#IA. Ignore IA for now beacuse of different training process and testin
+!src/backend/services/AISerialized
