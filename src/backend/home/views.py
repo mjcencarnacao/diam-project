@@ -2,9 +2,10 @@ from typing import Dict
 
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, JsonResponse
+from numpy import empty
 from services import views
 import json
-from .models import Movie, Comments
+from .models import Movie, Comments, CommentsLikes
 from services.scrapper import Scrapper
 from services.AIService import AIService
 from members.forms import SignUpForm
@@ -140,10 +141,31 @@ def like(request):
         result = ''
         id: int = request.POST.get('postid')
         p_id: int = id
-        post = get_object_or_404(Comments, id=id)
-        post.likes += 1
-        result = post.likes
-        post.save()
+        comments = CommentsLikes.objects.filter(comment_id=p_id)
+        if(not comments):
+            CommentsLikes(
+                like= True,
+                comment_id=p_id,
+                user_id=request.user.id).save()
+            post = get_object_or_404(Comments, id=p_id)
+            post.likes += 1
+            result = post.likes
+            post.save()
+            return JsonResponse({'result': result, 'p_id': p_id, })
+        else:
+            comment_like = get_object_or_404(CommentsLikes, comment_id=p_id)
+            if(comment_like.like == False):
+                comment_like.like = True
+                comment_like.save()
+                post = get_object_or_404(Comments, id=p_id)
+                post.likes += 1
+                result = post.likes
+                post.save()
+                return JsonResponse({'result': result, 'p_id': p_id, })
+            if(comment_like.like == True):
+                post = get_object_or_404(Comments, id=id)
+                result = post.likes
+                return JsonResponse({'result': result, 'p_id': p_id, })
 
     return JsonResponse({'result': result, 'p_id': p_id, })
 
@@ -153,13 +175,33 @@ def dislike(request):
         result = ''
         id: int = request.POST.get('postid')
         p_id: int = id
-        post = get_object_or_404(Comments, id=id)
-        if post.likes == 0:
+        comments = CommentsLikes.objects.filter(comment_id=p_id)
+        if(not comments):
+            CommentsLikes(
+                like= False,
+                comment_id=p_id,
+                user_id=request.user.id).save()
+            post = get_object_or_404(Comments, id=p_id)
+            if(post.likes != 0): 
+                post.likes -= 1
             result = post.likes
+            post.save()
             return JsonResponse({'result': result, 'p_id': p_id, })
-        post.likes -= 1
-        result = post.likes
-        post.save()
+        else:
+            comment_like = get_object_or_404(CommentsLikes, comment_id=p_id)
+            if(comment_like.like == True):
+                comment_like.like = False
+                comment_like.save()
+                post = get_object_or_404(Comments, id=p_id)
+                if(post.likes != 0): 
+                    post.likes -= 1
+                result = post.likes
+                post.save()
+                return JsonResponse({'result': result, 'p_id': p_id, })
+            if(comment_like.like == False):
+                post = get_object_or_404(Comments, id=id)
+                result = post.likes
+                return JsonResponse({'result': result, 'p_id': p_id, })
 
     return JsonResponse({'result': result, 'p_id': p_id, })
 
@@ -186,7 +228,7 @@ def get_profile_page(request, user_id):
 def get_eval(request):
     if request.method == 'POST':
         id_and_user_feedback: str = request.POST.get('postid')
-        parts: [str] = id_and_user_feedback.split("-")
+        parts = id_and_user_feedback.split("-")
         comment_id: str = parts[0]
         user_appreciation_of_ai_prevision: str = parts[1]
         ai_new_feedback_plain_text = ProcessingService.retrain_AI_with_user_feedback(
