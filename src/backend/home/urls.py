@@ -13,4 +13,5 @@ urlpatterns = [
     path('<int:user_id>/profile', views.get_profile_page, name='profile'),
     path('search', views.search_movies, name='movie-search'),
     path('evaluate/', views.get_eval, name= 'eval'),
+    path('erase/', views.erase, name='erase'),
 ]

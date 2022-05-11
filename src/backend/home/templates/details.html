@@ -134,7 +134,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
         <div class="col-md-8">
           {% for comment in comments %}
           <section class="comment-list">
-            <article class="row">
+            <article class="row" id="{{ comment.id }}-container">
               <div class="col-md-2 col-sm-2 hidden-xs">
                 <div class="col-md-10 col-sm-10">
                   <div class="panel-body" style="display: inline">
@@ -194,6 +194,16 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                           style="color: black; display: inline; margin-bottom: 0 !important; font-size: large !important;">
                           {{ comment.likes }} likes
                         </h2>
+                        {% if comment.critic_id == request.user.id %}
+                        <div style="display: inline-block !important; margin-left: auto;">
+                          <button style="all: unset !important; cursor: pointer !important;" type="submit" class="trashcan-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="trashcan-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-trashcan"
+                              class="fa-solid fa-trash-can" onmouseover="trashover('{{ comment.id }}')" onmouseout="trashout('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        {% endif %}
                         {% endif %}
                         {% if next == False %}
                         <div style="display: inline-block !important">
@@ -220,6 +230,16 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                           style="color: black; display: inline; margin-bottom: 0 !important; font-size: large !important;">
                           {{ comment.likes }} likes
                         </h2>
+                        {% if comment.critic_id == request.user.id %}
+                        <div style="display: inline-block !important; margin-left: auto;">
+                          <button style="all: unset !important; cursor: pointer !important;" type="submit" class="trashcan-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="trashcan-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-trashcan"
+                              class="fa-solid fa-trash-can" onmouseover="trashover('{{ comment.id }}')" onmouseout="trashout('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        {% endif %}
                       {% endif %}
                       {% endif %}
                       {% if comment.id not in commentslikes %}
@@ -246,6 +266,16 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                       <h2 id="{{ comment.id }}-likes"
                         style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
                       </h2>
+                      {% if comment.critic_id == request.user.id %}
+                        <div style="display: inline-block !important; margin-left: auto;" id="{{ comment.id }}-trashcandiv">
+                          <button style="all: unset !important; cursor: pointer !important; " type="submit" class="trashcan-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="trashcan-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-trashcan"
+                              class="fa-solid fa-trash-can" onmouseover="trashover('{{ comment.id }}')" onmouseout="trashout('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        {% endif %}
                     {% endif %}
                     {% endif %}
                   </div>
@@ -308,6 +338,27 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       });
     })
 
+    $(document).on('click', '.trashcan-button', function (e) {
+      e.preventDefault();
+      var rowid = $(this).data('rowid')
+      var dislike_button = "#trashcan-button-" + rowid
+      $.ajax({
+        type: 'POST',
+        url: '{% url "home:erase" %}',
+        data: {
+          postid: $(dislike_button).val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
+          action: 'post'
+        },
+        success: function (json) {
+          var container_id = json['p_id'] + "-container"
+          document.getElementById(container_id).style.display = "none"
+          console.log(json)
+        },
+        error: function (xhr, errmsg, err) {
+        }
+      });
+    })
 
 
   </script>

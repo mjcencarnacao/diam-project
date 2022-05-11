@@ -269,3 +269,12 @@ def get_eval(request):
                                                                     user_appreciation=user_appreciation_of_ai_prevision
                                                                     )
     return JsonResponse({'result': ai_new_feedback_plain_text, 'p_id': comment_id, })
+
+
+def erase(request):
+    if request.method == 'POST':
+        comment_id: str = request.POST.get('postid')
+        comment_post = Comments.objects.get(id=comment_id)
+        comment_post.delete()
+        
+    return JsonResponse({'p_id': comment_id, })

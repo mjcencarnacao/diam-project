@@ -165,10 +165,6 @@ function h_paintthumbsdown(id){
   document.getElementById(thumbsup).style.color = "black";
   document.getElementById(thumbsdown).setAttribute("onmouseout", "");
   document.getElementById(thumbsup).reset();
-  
-  
- 
-
 }
 
 function h_paintthumbsup(id){
@@ -178,4 +174,14 @@ function h_paintthumbsup(id){
   document.getElementById(thumbsdown).style.color = "black";
   document.getElementById(thumbsup).setAttribute("onmouseout", "");
   document.getElementById(thumbsdown).reset();
+}
+
+function trashover(id){
+  var trash = id + "-trashcan";
+  document.getElementById(trash).style.transform = 'scale(1.5)';
+}
+
+function trashout(id){
+  var trash = id + "-trashcan";
+  document.getElementById(trash).style.transform = 'scale(1)';
 }
