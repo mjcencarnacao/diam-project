@@ -12,4 +12,5 @@ urlpatterns = [
     path('register', views.get_register_page, name='register'),
     path('search', views.search_movies, name='movie-search'),
     path('evaluate/', views.get_eval, name= 'eval'),
+    path('erase/', views.erase, name='erase'),
 ]

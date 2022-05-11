@@ -1,3 +1,4 @@
+from calendar import c
 from typing import Dict
 
 from django.shortcuts import get_object_or_404, render
@@ -21,20 +22,37 @@ def movie_details(request, movie_id):
             movie_id = movie_id
             movie = Movie.objects.get(pk=movie_id)
             comments = Comments.objects.filter(movie=movie, AI_FeedBack=0)
+
+            commentslikeslist = list()
+            user_id: int = request.user.id
+            commentslikes = CommentsLikes.objects.filter(user_id=user_id)
+            for com in commentslikes:
+                commentslikeslist.extend([int(com.comment_id), com.like])
+            
+
             return render(request,
                           'details.html',
                           {'movie': movie,
                            'comments': comments,
+                           'commentslikes': commentslikeslist,
                            'positive_percentage': 0, })
 
         if 'filter_button_positive' in request.POST:
             movie_id = movie_id
             movie = Movie.objects.get(pk=movie_id)
             comments = Comments.objects.filter(movie=movie, AI_FeedBack=1)
+
+            commentslikeslist = list()
+            user_id: int = request.user.id
+            commentslikes = CommentsLikes.objects.filter(user_id=user_id)
+            for com in commentslikes:
+                commentslikeslist.extend([int(com.comment_id), com.like])
+            
             return render(request,
                           'details.html',
                           {'movie': movie,
                            'comments': comments,
+                           'commentslikes': commentslikeslist,
                            'positive_percentage': 100, })
 
         if 'filter_button_user' in request.POST:
@@ -43,10 +61,18 @@ def movie_details(request, movie_id):
             critic_id: int = request.POST.get('filter_button_user')
             comments = Comments.objects.filter(movie=movie, critic_id=critic_id)
             positive_percentage = ProcessingService.positive_percentage(comments)
+
+            commentslikeslist = list()
+            user_id: int = request.user.id
+            commentslikes = CommentsLikes.objects.filter(user_id=user_id)
+            for com in commentslikes:
+                commentslikeslist.extend([int(com.comment_id), com.like])
+
             return render(request,
                           'details.html',
                           {'movie': movie,
                            'comments': comments,
+                           'commentslikes': commentslikeslist,
                            'positive_percentage': positive_percentage, })
 
         ai_service: AIService = AIService()
@@ -85,8 +111,15 @@ def movie_details(request, movie_id):
     comments = Comments.objects.filter(movie=movie)
     positive_percentage = ProcessingService.positive_percentage(comments)
 
+    commentslikeslist = list()
+    user_id: int = request.user.id
+    commentslikes = CommentsLikes.objects.filter(user_id=user_id)
+    for com in commentslikes:
+        commentslikeslist.extend([int(com.comment_id), com.like])
+
     return render(request, 'details.html', {'movie': movie,
                                             'comments': comments,
+                                            'commentslikes': commentslikeslist,
                                             'positive_percentage': positive_percentage, })
 
 
@@ -233,3 +266,12 @@ def get_eval(request):
                                                                     user_appreciation=user_appreciation_of_ai_prevision
                                                                     )
     return JsonResponse({'result': ai_new_feedback_plain_text, 'p_id': comment_id, })
+
+
+def erase(request):
+    if request.method == 'POST':
+        comment_id: str = request.POST.get('postid')
+        comment_post = Comments.objects.get(id=comment_id)
+        comment_post.delete()
+        
+    return JsonResponse({'p_id': comment_id, })

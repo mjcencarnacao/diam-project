@@ -134,7 +134,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
         <div class="col-md-8">
           {% for comment in comments %}
           <section class="comment-list">
-            <article class="row">
+            <article class="row" id="{{ comment.id }}-container">
               <div class="col-md-2 col-sm-2 hidden-xs">
                 <div class="col-md-10 col-sm-10">
                   <div class="panel-body" style="display: inline">
@@ -166,35 +166,124 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                     </h2>
                     &nbsp;
                     {% if user.is_premium_user %}
-                    <div style="display: inline-block !important">
-                      <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
-                        data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
-                        <span style="vertical-align: 10px; margin-bottom: 0px; " id="{{ comment.id }}-thumbsup"
-                          class="fas fa-thumbs-up" onmouseover="paintthumbsup('{{ comment.id }}')"
-                          onmouseout="unpaintthumbsup('{{ comment.id }}')"></span>
-                      </button>
-                    </div>
-                    &nbsp;
-                    <div style="display: inline-block !important">
-                      <button style="all: unset !important; cursor: pointer;" type="submit" class="dislike-button"
-                        data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="dislike-button-{{ comment.id }}">
-                        <span style="vertical-align: 10px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsdown"
-                          class="fas fa-thumbs-down fa-flip-horizontal"
-                          onmouseover="paintthumbsdown('{{ comment.id }}')"
-                          onmouseout="unpaintthumbsdown('{{ comment.id }}')"></span>
-                      </button>
-                    </div>
-                    &nbsp;
-                    <h2 id="{{ comment.id }}-likes"
-                      style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
-                    </h2>
-                    {% else %}
+                    {% if comment.id in commentslikes %}
+                      {% next_tag commentslikes comment.id as next %}
+                        {% if next == True %}
+                        <div style="display: inline-block !important">
+                          <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px; color:green " id="{{ comment.id }}-thumbsup"
+                              class="fas fa-thumbs-up" onmouseover="paintthumbsup('{{ comment.id }}')"
+                              onmouseout="unpaintthumbsup('{{ comment.id }}')"
+                              onclick="h_paintthumbsup('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        <div style="display: inline-block !important">
+                          <button style="all: unset !important; cursor: pointer;" type="submit" class="dislike-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="dislike-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsdown"
+                              class="fas fa-thumbs-down fa-flip-horizontal"
+                              onmouseover="paintthumbsdown('{{ comment.id }}')"
+                              onmouseout="unpaintthumbsdown('{{ comment.id }}')"
+                              onclick="h_paintthumbsdown('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        <h2 id="{{ comment.id }}-likes"
+                          style="color: black; display: inline; margin-bottom: 0 !important; font-size: large !important;">
+                          {{ comment.likes }} likes
+                        </h2>
+                        {% if comment.critic_id == request.user.id %}
+                        <div style="display: inline-block !important; margin-left: auto;">
+                          <button style="all: unset !important; cursor: pointer !important;" type="submit" class="trashcan-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="trashcan-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-trashcan"
+                              class="fa-solid fa-trash-can" onmouseover="trashover('{{ comment.id }}')" onmouseout="trashout('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        {% endif %}
+                        {% endif %}
+                        {% if next == False %}
+                        <div style="display: inline-block !important">
+                          <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsup"
+                              class="fas fa-thumbs-up" onmouseover="paintthumbsup('{{ comment.id }}')"
+                              onmouseout="unpaintthumbsup('{{ comment.id }}')" onclick="h_paintthumbsup('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        <div style="display: inline-block !important">
+                          <button style="all: unset !important; cursor: pointer;" type="submit" class="dislike-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="dislike-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px; color:red" id="{{ comment.id }}-thumbsdown"
+                              class="fas fa-thumbs-down fa-flip-horizontal"
+                              onmouseover="paintthumbsdown('{{ comment.id }}')"
+                              onmouseout="unpaintthumbsdown('{{ comment.id }}')"
+                              onclick="h_paintthumbsdown('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        <h2 id="{{ comment.id }}-likes"
+                          style="color: black; display: inline; margin-bottom: 0 !important; font-size: large !important;">
+                          {{ comment.likes }} likes
+                        </h2>
+                        {% if comment.critic_id == request.user.id %}
+                        <div style="display: inline-block !important; margin-left: auto;">
+                          <button style="all: unset !important; cursor: pointer !important;" type="submit" class="trashcan-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="trashcan-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-trashcan"
+                              class="fa-solid fa-trash-can" onmouseover="trashover('{{ comment.id }}')" onmouseout="trashout('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        {% endif %}
+                      {% endif %}
+                      {% endif %}
+                      {% if comment.id not in commentslikes %}
+                      <div style="display: inline-block !important">
+                        <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
+                          data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
+                          <span style="vertical-align: 13px; margin-bottom: 0px; " id="{{ comment.id }}-thumbsup"
+                            class="fas fa-thumbs-up" onmouseover="paintthumbsup('{{ comment.id }}')"
+                            onmouseout="unpaintthumbsup('{{ comment.id }}')" onclick="h_paintthumbsup('{{ comment.id }}')"></span>
+                        </button>
+                      </div>
+                      &nbsp;
+                      <div style="display: inline-block !important">
+                        <button style="all: unset !important; cursor: pointer;" type="submit" class="dislike-button"
+                          data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="dislike-button-{{ comment.id }}">
+                          <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsdown"
+                            class="fas fa-thumbs-down fa-flip-horizontal"
+                            onmouseover="paintthumbsdown('{{ comment.id }}')"
+                            onmouseout="unpaintthumbsdown('{{ comment.id }}')"
+                            onclick="h_paintthumbsdown('{{ comment.id }}')"></span>
+                        </button>
+                      </div>
+                      &nbsp;
+                      <h2 id="{{ comment.id }}-likes"
+                        style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
+                      </h2>
+                      {% if comment.critic_id == request.user.id %}
+                      &nbsp;&nbsp;&nbsp;
+                        <div style="display: inline-block !important; margin-left: auto;" id="{{ comment.id }}-trashcandiv">
+                          <button style="all: unset !important; cursor: pointer !important; " type="submit" class="trashcan-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="trashcan-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-trashcan"
+                              class="fa-solid fa-trash-can" onmouseover="trashover('{{ comment.id }}')" onmouseout="trashout('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        {% endif %}
+                    {% endif %}
                     {% endif %}
                   </div>
                 </div>
               </div>
             </article>
-            <hr />
+            <hr id="{{ comment.id }}-hr"/>
             {% endfor %}
           </section>
         </div>
@@ -250,6 +339,29 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       });
     })
 
+    $(document).on('click', '.trashcan-button', function (e) {
+      e.preventDefault();
+      var rowid = $(this).data('rowid')
+      var dislike_button = "#trashcan-button-" + rowid
+      $.ajax({
+        type: 'POST',
+        url: '{% url "home:erase" %}',
+        data: {
+          postid: $(dislike_button).val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
+          action: 'post'
+        },
+        success: function (json) {
+          var container_id = json['p_id'] + "-container"
+          var hr_id = json['p_id'] + "-hr"
+          document.getElementById(container_id).style.display = "none"
+          document.getElementById(hr_id).style.display = "none"
+          console.log(json)
+        },
+        error: function (xhr, errmsg, err) {
+        }
+      });
+    })
 
 
   </script>
