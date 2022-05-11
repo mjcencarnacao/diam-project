@@ -108,6 +108,7 @@ def search_movies(request):
         return render(request, 'searched_movies.html',
                       {})
 
+def redirect(request):
 
 def get_home_page(request):
     movies_source = json.loads(views.request_top_movies(request).content)

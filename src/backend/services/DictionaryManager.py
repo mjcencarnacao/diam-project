@@ -29,11 +29,16 @@ class DictionaryManager:
         lst_of_all_info = []
         for d in lst:
             movie_all_info = Scrapper.get_all_movie_info(d['Title'])
-            movie_all_info["imdb_url"] = d["imdbID"]
-            lst_of_all_info.append(movie_all_info)
+            DictionaryManager.add_movie_info_to_list(lst_of_all_info, srapper_info=movie_all_info,dict=d)
         return lst_of_all_info
 
     @staticmethod
     def set_Genre_and_Actor_to_correct_format(dct: Dict) -> None:
         dct["genre"] = dct["genre"].split(',')
         dct["actors"] = dct["actors"].split(',')
+
+    @staticmethod
+    def add_movie_info_to_list(lst: [Dict],srapper_info: Dict, dict: Dict) -> None:
+        if srapper_info["Plot"] != "N/A" and srapper_info["Poster"] != "N/A":
+            srapper_info["imdb_url"] = dict["imdbID"]
+            lst.append(srapper_info)
