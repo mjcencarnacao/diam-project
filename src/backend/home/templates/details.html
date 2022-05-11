@@ -267,6 +267,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                         style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
                       </h2>
                       {% if comment.critic_id == request.user.id %}
+                      &nbsp;&nbsp;&nbsp;
                         <div style="display: inline-block !important; margin-left: auto;" id="{{ comment.id }}-trashcandiv">
                           <button style="all: unset !important; cursor: pointer !important; " type="submit" class="trashcan-button"
                             data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="trashcan-button-{{ comment.id }}">
@@ -282,7 +283,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                 </div>
               </div>
             </article>
-            <hr />
+            <hr id="{{ comment.id }}-hr"/>
             {% endfor %}
           </section>
         </div>
@@ -352,7 +353,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
         },
         success: function (json) {
           var container_id = json['p_id'] + "-container"
+          var hr_id = json['p_id'] + "-hr"
           document.getElementById(container_id).style.display = "none"
+          document.getElementById(hr_id).style.display = "none"
           console.log(json)
         },
         error: function (xhr, errmsg, err) {
