@@ -15,6 +15,7 @@ psycopg2 = "*"
 requests = "*"
 bs4 = "*"
 lxml = "*"
+pillow = "*"
 
 [dev-packages]
 

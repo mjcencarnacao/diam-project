@@ -1,9 +1,12 @@
 from xml.etree.ElementTree import Comment
+
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
-from .forms import SignUpForm, LoginForm
+from .forms import SignUpForm, LoginForm, Profile
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth import logout
+from home.models import Comments
 from django.shortcuts import get_object_or_404
 from .models import User
 
@@ -46,6 +49,23 @@ def login_user(request):
 
 def home(request):
     return render(request, 'index.html')
+
+
+def login_user_profile(request):
+    user = request.user
+    comments = Comments.objects.filter(critic_id=user.id)
+    form = Profile(instance=user)
+    if request.method == 'POST':
+        form = Profile(request.POST,request.FILES,  instance=user)
+        if form.is_valid():
+            form.save()
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments})
+
+
+def get_profile_page(request, user_id):
+    comments_context = Comments.objects.filter(critic_id=user_id)
+    user_context = User.objects.get(pk=user_id)
+    return render(request, 'profile.html', {'critic': user_context, 'comments': comments_context})
 
 
 def logout_user(request):
