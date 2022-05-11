@@ -158,38 +158,24 @@ function doThisDisagreeWithAI_out(id){
 
 }
 
-function nav(page){
+function h_paintthumbsdown(id){
+  var thumbsup = id + "-thumbsup";
+  var thumbsdown = id + "-thumbsdown";
+  document.getElementById(thumbsdown).style.color = "red";
+  document.getElementById(thumbsup).style.color = "black";
+  document.getElementById(thumbsdown).setAttribute("onmouseout", "");
+  document.getElementById(thumbsup).reset();
+  
+  
+ 
 
-const list = document.querySelectorAll("li");
+}
 
-
-  if (page == 'index'){
-    list[0].classList.add = "active";
-    list[1].className = "";
-    list[2].className = "";
-    list[3].className = "";
-    
-  }
-  if (page == 'profile'){
-    
-    list[0].className = "";
-    list[1].className = "active";
-    list[2].className = "";
-    list[3].className = "";
-
-  }
-  if (page == 'login'){
-    list[0].className = "";
-    list[1].className = "";
-    list[2].className = "active";
-    list[3].className = "";
-
-  }
-  if (page == 'register'){
-    list[0].className = "";
-    list[1].className = "";
-    list[2].className = "";
-    list[3].className = "active";
-
-  }
+function h_paintthumbsup(id){
+  var thumbsup = id + "-thumbsup";
+  var thumbsdown = id + "-thumbsdown";
+  document.getElementById(thumbsup).style.color = "green";
+  document.getElementById(thumbsdown).style.color = "black";
+  document.getElementById(thumbsup).setAttribute("onmouseout", "");
+  document.getElementById(thumbsdown).reset();
 }
