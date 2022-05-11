@@ -172,19 +172,21 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                         <div style="display: inline-block !important">
                           <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
                             data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
-                            <span style="vertical-align: 10px; margin-bottom: 0px; color:green " id="{{ comment.id }}-thumbsup"
+                            <span style="vertical-align: 13px; margin-bottom: 0px; color:green " id="{{ comment.id }}-thumbsup"
                               class="fas fa-thumbs-up" onmouseover="paintthumbsup('{{ comment.id }}')"
-                              onmouseout="unpaintthumbsup('{{ comment.id }}')"></span>
+                              onmouseout="unpaintthumbsup('{{ comment.id }}')"
+                              onclick="h_paintthumbsup('{{ comment.id }}')"></span>
                           </button>
                         </div>
                         &nbsp;
                         <div style="display: inline-block !important">
                           <button style="all: unset !important; cursor: pointer;" type="submit" class="dislike-button"
                             data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="dislike-button-{{ comment.id }}">
-                            <span style="vertical-align: 10px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsdown"
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsdown"
                               class="fas fa-thumbs-down fa-flip-horizontal"
                               onmouseover="paintthumbsdown('{{ comment.id }}')"
-                              onmouseout="unpaintthumbsdown('{{ comment.id }}')"></span>
+                              onmouseout="unpaintthumbsdown('{{ comment.id }}')"
+                              onclick="h_paintthumbsdown('{{ comment.id }}')"></span>
                           </button>
                         </div>
                         &nbsp;
@@ -197,19 +199,20 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                         <div style="display: inline-block !important">
                           <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
                             data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
-                            <span style="vertical-align: 10px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsup"
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsup"
                               class="fas fa-thumbs-up" onmouseover="paintthumbsup('{{ comment.id }}')"
-                              onmouseout="unpaintthumbsup('{{ comment.id }}')"></span>
+                              onmouseout="unpaintthumbsup('{{ comment.id }}')" onclick="h_paintthumbsup('{{ comment.id }}')"></span>
                           </button>
                         </div>
                         &nbsp;
                         <div style="display: inline-block !important">
                           <button style="all: unset !important; cursor: pointer;" type="submit" class="dislike-button"
                             data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="dislike-button-{{ comment.id }}">
-                            <span style="vertical-align: 10px; margin-bottom: 0px; color:red" id="{{ comment.id }}-thumbsdown"
+                            <span style="vertical-align: 13px; margin-bottom: 0px; color:red" id="{{ comment.id }}-thumbsdown"
                               class="fas fa-thumbs-down fa-flip-horizontal"
                               onmouseover="paintthumbsdown('{{ comment.id }}')"
-                              onmouseout="unpaintthumbsdown('{{ comment.id }}')"></span>
+                              onmouseout="unpaintthumbsdown('{{ comment.id }}')"
+                              onclick="h_paintthumbsdown('{{ comment.id }}')"></span>
                           </button>
                         </div>
                         &nbsp;
@@ -223,19 +226,20 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                       <div style="display: inline-block !important">
                         <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
                           data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
-                          <span style="vertical-align: 10px; margin-bottom: 0px; " id="{{ comment.id }}-thumbsup"
+                          <span style="vertical-align: 13px; margin-bottom: 0px; " id="{{ comment.id }}-thumbsup"
                             class="fas fa-thumbs-up" onmouseover="paintthumbsup('{{ comment.id }}')"
-                            onmouseout="unpaintthumbsup('{{ comment.id }}')"></span>
+                            onmouseout="unpaintthumbsup('{{ comment.id }}')" onclick="h_paintthumbsup('{{ comment.id }}')"></span>
                         </button>
                       </div>
                       &nbsp;
                       <div style="display: inline-block !important">
                         <button style="all: unset !important; cursor: pointer;" type="submit" class="dislike-button"
                           data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="dislike-button-{{ comment.id }}">
-                          <span style="vertical-align: 10px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsdown"
+                          <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsdown"
                             class="fas fa-thumbs-down fa-flip-horizontal"
                             onmouseover="paintthumbsdown('{{ comment.id }}')"
-                            onmouseout="unpaintthumbsdown('{{ comment.id }}')"></span>
+                            onmouseout="unpaintthumbsdown('{{ comment.id }}')"
+                            onclick="h_paintthumbsdown('{{ comment.id }}')"></span>
                         </button>
                       </div>
                       &nbsp;
