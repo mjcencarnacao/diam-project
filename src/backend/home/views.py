@@ -116,6 +116,7 @@ def movie_details(request, movie_id):
     commentslikes = CommentsLikes.objects.filter(user_id=user_id)
     for com in commentslikes:
         commentslikeslist.extend([int(com.comment_id), com.like])
+    print(*commentslikeslist)
 
     return render(request, 'details.html', {'movie': movie,
                                             'comments': comments,
@@ -174,16 +175,17 @@ def like(request):
         result = ''
         id: int = request.POST.get('postid')
         p_id: int = id
-        comments = CommentsLikes.objects.filter(comment_id=p_id)
+        user_id: int = request.user.id
+        comments = CommentsLikes.objects.filter(user_id=user_id, comment_id=p_id)
         if(not comments):
             CommentsLikes(
                 like= True,
                 comment_id=p_id,
-                user_id=request.user.id).save()
+                user_id=user_id).save()
             post = get_object_or_404(Comments, id=p_id)
             post.likes += 1
-            result = post.likes
             post.save()
+            result = post.likes
             return JsonResponse({'result': result, 'p_id': p_id, })
         else:
             comment_like = get_object_or_404(CommentsLikes, comment_id=p_id)
@@ -192,8 +194,8 @@ def like(request):
                 comment_like.save()
                 post = get_object_or_404(Comments, id=p_id)
                 post.likes += 1
-                result = post.likes
                 post.save()
+                result = post.likes
                 return JsonResponse({'result': result, 'p_id': p_id, })
             if(comment_like.like == True):
                 post = get_object_or_404(Comments, id=id)
@@ -208,8 +210,9 @@ def dislike(request):
         result = ''
         id: int = request.POST.get('postid')
         p_id: int = id
-        comments = CommentsLikes.objects.filter(comment_id=p_id)
-        if not comments:
+        user_id: int = request.user.id
+        comments = CommentsLikes.objects.filter(user_id=user_id, comment_id=p_id)
+        if ( not comments):
             CommentsLikes(
                 like= False,
                 comment_id=p_id,
@@ -217,8 +220,8 @@ def dislike(request):
             post = get_object_or_404(Comments, id=p_id)
             if(post.likes != 0): 
                 post.likes -= 1
-            result = post.likes
             post.save()
+            result = post.likes
             return JsonResponse({'result': result, 'p_id': p_id, })
         else:
             comment_like = get_object_or_404(CommentsLikes, comment_id=p_id)
@@ -228,8 +231,8 @@ def dislike(request):
                 post = get_object_or_404(Comments, id=p_id)
                 if(post.likes != 0): 
                     post.likes -= 1
-                result = post.likes
                 post.save()
+                result = post.likes
                 return JsonResponse({'result': result, 'p_id': p_id, })
             if(comment_like.like == False):
                 post = get_object_or_404(Comments, id=id)
