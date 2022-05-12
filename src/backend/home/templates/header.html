@@ -31,7 +31,7 @@
         {% endif %}
       </ul>
       {% if user.is_authenticated %}
-      <form style="display: inline !important; margin-bottom: 0px !important;padding-left: 55% !important;" class="d-flex" method=POST action="{% url 'home:movie-search' %}">
+      <form style="display: inline !important; margin-bottom: 0px !important;padding-left: 45% !important;" class="d-flex" method=POST action="{% url 'home:movie-search' %}">
         {% csrf_token %}
         <input style="display: inline !important; width: 80% !important; height: 45% !important; font-size: medium !important;"
         class="form-control" type="text" placeholder="Search Movie" aria-label="Search" name="searched">&nbsp;
