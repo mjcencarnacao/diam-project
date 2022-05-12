@@ -42,17 +42,15 @@
             </header>
             <br>
             {% if request.user.profile_pic %}
-            <form method="post" enctype="multipart/form-data">
                 <img
                   src= "{{ request.user.profile_pic.url }}"
                   style="max-width: 25%; max-height: 25%; border-radius: 50%"
                 />
-            </form>
             {% else %}
-            <a href="" class="image fit"
-              ><img src="{% static 'default-user-image.png' %}"/>
-            </a>
+            <img src="{% static 'default-user-image.png' %}"
+                 style="max-width: 25%; max-height: 25%; border-radius: 50%"/>
             {% endif %}
+            <br><br>
            <p2>{{ request.user.description }}</p2><br /><br />
             <p2><b>Email:</b> {{ request.user.email }}</p2>
           </article>

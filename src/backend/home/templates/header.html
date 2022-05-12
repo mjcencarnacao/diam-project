@@ -61,8 +61,8 @@
           />
           </a>
           {% else %}
-          <a href="" class="image fit"
-            ><img src="{% static 'default-user-image.png' %}"
+          <a href="{% url 'members:logged_profile_user' %}">
+            <img src="{% static 'default-user-image.png' %}"
                   style="max-width: 28px; max-height: 28px; border-radius: 50%; vertical-align: -5%;"
                   />
           </a>
