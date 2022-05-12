@@ -17,6 +17,7 @@ function doThis(id, feedback) {
   document.getElementById(strnota).innerHTML = evaluation;
   document.getElementById(strnota).style.display = "inline";
   document.getElementById(aiscore).style.display = "inline";
+  doThisThumbsup(id);
 }
 
 function doThat(id) {

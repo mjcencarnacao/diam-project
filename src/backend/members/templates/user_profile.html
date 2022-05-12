@@ -114,37 +114,32 @@
                     {{ comment.likes }} likes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                   </h2>
 
-                   {% if comment.critic_feedback == False %}
-                  <h2 id="{{ comment.id }}-question" style="display: inline !important; font-size: large !important; margin-left: auto;">Do you agree with the AI?</h2>
-                  &nbsp;
-                  {% endif %}
-                  <div style="display: flex; height: 16px !important;" class="text-right">
-
-                     {% if comment.critic_feedback == False %}
-                    <button style="all: unset !important; cursor: pointer;" type="submit" class="check-button"
-                    data-rowid="{{ comment.id }}" value="{{ comment.id }}-1" id="check-button-{{ comment.id }}">
-                    <span id="{{ comment.id }}-agreewithai"
-                      style="vertical-align: 12px; padding-top: 3px; padding-left: 5px; cursor: pointer;"
-                      onmouseover="doThisAgreeWithAI('{{ comment.id }}')"
-                      onmouseout="doThisAgreeWithAI_out('{{ comment.id }}')"
-                      class="fas fa-check"></span>
-                    </button>
-                  </div>
-                  <div style="display: flex; height: 16px !important;" class="text-right">
-                    <button style="all: unset !important; cursor: pointer;" type="submit" class="times-button"
-                    data-rowid="{{ comment.id }}" value="{{ comment.id }}-0" id="times-button-{{ comment.id }}">
-                    <span id="{{ comment.id }}-disagreewithai"
-                      style="vertical-align: 12px; padding-top: 3px; padding-left: 8px; cursor: pointer;"
-                      onmouseover="doThisDisagreeWithAI('{{ comment.id }}')"
-                      onmouseout="doThisDisagreeWithAI_out('{{ comment.id }}')"
-                      class="fa fa-times"></span>
-                      </button>
-                    {% endif %}
-                   </div>
+                  {% if comment.critic_feedback == False and user.is_pro_user == True %}
+                  &nbsp; &nbsp;
+                  <div style="display: flex; height: 16px !important;margin-left: auto !important;" class="text-right">
+                 <h2 id="{{ comment.id }}-question" style="display: inline !important; font-size: large !important; margin-left: auto !important;">Do you agree with the AI?</h2>
+                 &nbsp;
+                   <button style="all: unset !important; cursor: pointer;" type="submit" class="check-button"
+                   data-rowid="{{ comment.id }}" value="{{ comment.id }}-1" id="check-button-{{ comment.id }}">
+                   <span id="{{ comment.id }}-agreewithai"
+                     style="vertical-align: 12px; padding-top: 3px; padding-left: 5px; cursor: pointer;"
+                     onmouseover="doThisAgreeWithAI('{{ comment.id }}')"
+                     onmouseout="doThisAgreeWithAI_out('{{ comment.id }}')"
+                     class="fas fa-check"></span>
+                   </button>
+                   <button style="all: unset !important; cursor: pointer;" type="submit" class="times-button"
+                   data-rowid="{{ comment.id }}" value="{{ comment.id }}-0" id="times-button-{{ comment.id }}">
+                   <span id="{{ comment.id }}-disagreewithai"
+                     style="vertical-align: 12px; padding-top: 3px; padding-left: 8px; cursor: pointer;"
+                     onmouseover="doThisDisagreeWithAI('{{ comment.id }}')"
+                     onmouseout="doThisDisagreeWithAI_out('{{ comment.id }}')"
+                     class="fa fa-times"></span>
+                     </button>
+               </div>
+                 {% endif %}
                 </div>
               </div>
             </div>
-
           </article>
           <hr />
           {% endfor %}
@@ -168,9 +163,21 @@
         },
         success: function (json) {
           var nota_id = json['p_id'] + "-nota"
+          var question_id = json['p_id'] + "-question"
+          var checkbutton_id = json['p_id'] + "-agreewithai"
+          var timebutton_id = json['p_id'] + "-disagreewithai"
           document.getElementById(nota_id).value = ""
+          document.getElementById(question_id).value = ""
           document.getElementById(nota_id).innerHTML = json['result']
+          if(json['result'] == "negative"){
+            document.getElementById(nota_id).style.color = "red";
+          } else {
+            document.getElementById(nota_id).style.color = "green";
+          }
+          document.getElementById(question_id).innerHTML = "Avaliação submetida com sucesso!"
           document.getElementById(nota_id).style.display = "inline"
+          document.getElementById(checkbutton_id).remove()
+          document.getElementById(timebutton_id).remove()
           console.log(json)
         },
         error: function (xhr, errmsg, err) {
@@ -193,9 +200,21 @@
         },
         success: function (json) {
           var nota_id = json['p_id'] + "-nota"
+          var question_id = json['p_id'] + "-question"
+          var checkbutton_id = json['p_id'] + "-agreewithai"
+          var timebutton_id = json['p_id'] + "-disagreewithai"
           document.getElementById(nota_id).value = ""
+          document.getElementById(question_id).value = ""
           document.getElementById(nota_id).innerHTML = json['result']
+          if(json['result'] == "negative"){
+            document.getElementById(nota_id).style.color = "red";
+          } else {
+            document.getElementById(nota_id).style.color = "green";
+          }
+          document.getElementById(question_id).innerHTML = "Avaliação submetida com sucesso!"
           document.getElementById(nota_id).style.display = "inline"
+          document.getElementById(checkbutton_id).remove()
+          document.getElementById(timebutton_id).remove()
           console.log(json)
         },
         error: function (xhr, errmsg, err) {
