@@ -17,9 +17,6 @@ class Movie(models.Model):
 
     def __str__(self) -> str:
         return self.name.__str__()
-    
-    def get_likes(self) -> int:
-        return self.likes.count()
 
 
 class Comments(models.Model):
