@@ -366,12 +366,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
     $(document).on('click', '.trashcan-button', function (e) {
       e.preventDefault();
       var rowid = $(this).data('rowid')
-      var dislike_button = "#trashcan-button-" + rowid
+      var trash_button = "#trashcan-button-" + rowid
       $.ajax({
         type: 'POST',
         url: '{% url "home:erase" %}',
         data: {
-          postid: $(dislike_button).val(),
+          postid: $(trash_button).val(),
           csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
           action: 'post'
         },

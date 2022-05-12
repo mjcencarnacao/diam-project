@@ -27,7 +27,7 @@ class LoginForm(forms.Form):
 class Profile(ModelForm):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'username', 'email', 'profile_pic', 'is_premium_user')
+        fields = ('first_name', 'last_name', 'username', 'email', 'profile_pic', 'description')
         help_texts = {
             'username': None,
         }
