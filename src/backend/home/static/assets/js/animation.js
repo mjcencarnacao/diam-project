@@ -185,3 +185,11 @@ function trashout(id){
   var trash = id + "-trashcan";
   document.getElementById(trash).style.transform = 'scale(1)';
 }
+
+function reachedlimit_premium(){
+  alert("Number of PREMIUM users' comments limited to 1!");
+}
+
+function reachedlimit_pro(){
+  alert("Number of PRO users' comments limited to 3!");
+}

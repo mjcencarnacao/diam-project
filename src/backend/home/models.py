@@ -12,6 +12,7 @@ class Movie(models.Model):
     raw = models.JSONField()
     name = models.CharField('Movie Name', max_length=120, blank=True, null=True)
     entry = models.DateTimeField(auto_now_add=True)
+    likes = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return self.name.__str__()

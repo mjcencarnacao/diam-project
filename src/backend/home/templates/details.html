@@ -50,7 +50,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
     </div>
     <div style="display: block; padding-bottom: 2px !important;">
       <h2 style="display:inline; font-size: larger;">Comentários dos Utilizadores</h2>
-      {% if user.is_premium_user %}
+      {% if user.is_premium_user or user.is_pro_user %}
       <div style="display:inline; padding-left: 55% !important;">
         <form method="post" action="{% url 'home:movie-details' movie.id %}" style="all: unset !important;">
           {% csrf_token %}
@@ -67,7 +67,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       </button>
       </div>
       {% endif %}
-      {% if user.is_premium_user %}
+      {% if user.is_premium_user or user.is_pro_user %}
       <div style="display:inline; padding-left: 1% !important;">
         <form method="post" action="{% url 'home:movie-details' movie.id %}" style="all: unset !important;">
           {% csrf_token %}
@@ -84,7 +84,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       </button>
       </div>
       {% endif %}
-      {% if user.is_premium_user %}
+      {% if user.is_premium_user or user.is_pro_user %}
       <div style="display:inline; padding-left: 1% !important;">
         <form method="post" action="{% url 'home:movie-details' movie.id %}" style="all: unset !important;">
           {% csrf_token %}
@@ -103,11 +103,32 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       </button>
       </div>
       {% endif %}
+      {% if user.is_pro_user %}
+      {% count_movie_comments movie.id request.user.id as counter %}
+      {% if counter < 3 %}
+      <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
+        onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="clickplus()"></i>
+    </div>
+      {% else %}
+      <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
+        onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="reachedlimit_pro()"></i>
+    </div>
+      {% endif %}
+      {% endif %}
+      
       {% if user.is_premium_user %}
+      {% count_movie_comments movie.id request.user.id as counter %}
+      {% if counter == 0 %}
       <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
           onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="clickplus()"></i>
       </div>
       {% else %}
+      <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
+        onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="reachedlimit_premium()"></i>
+    </div>
+      {% endif %}
+      {% endif %}
+      {% if user.is_premium_user == False and user.is_pro_user == False %}    
       <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
         onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="paga()"></i>
     </div>
@@ -141,8 +162,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                     <header class="text-left">
                       <div class="comment-user">
                         <i class="fa fa-user"></i> 
-                        {% if user.is_premium_user and comment.critic_id is not None %}<a href="{% url 'members:profile' comment.critic_id %}"> {{ comment.critic_username }}</a> {% else %}
-                        {{ comment.critic_username }}{% endif %}
+                        {% if user.is_pro_user and comment.critic_id is not None %}<a href="{% url 'members:profile' comment.critic_id %}"> {{ comment.critic_username }}</a>{% endif %}
+                        {% if user.is_pro_user and comment.critic_id is None %}{{ comment.critic_username }}{% endif %}
+                        {% if user.is_premium_user and comment.critic_id is not None %}<a href="{% url 'members:profile' comment.critic_id %}"> {{ comment.critic_username }}</a> {% endif %}
+                        {% if user.is_premium_user and comment.critic_id is None %}{{ comment.critic_username }}{% endif %}
+                        {% if user.is_premium_user == False and user.is_pro_user == False %}{{ comment.critic_username }}{% endif %}
                       </div>
                       <time class="comment-date" datetime="16-12-2014 01:05">
                         <i class="fa fa-clock-o"></i>{{ comment.entry }}</time>
@@ -165,7 +189,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                       id="{{ comment.id }}-nota" style="display: none">
                     </h2>
                     &nbsp;
-                    {% if user.is_premium_user %}
+                    {% if user.is_premium_user or user.is_pro_user %}
                     {% if comment.id in commentslikes %}
                       {% next_tag commentslikes comment.id as next %}
                         {% if next == True %}
