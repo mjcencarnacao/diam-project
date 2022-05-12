@@ -19,7 +19,11 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
           <a href="#" class="button"><i class="fa fa-eye"></i></a>
         </li>
         <li>
-          <a href="#" class="button"><i class="fas fa-heart"></i></a>
+          <form action="{% url 'home:like-movie' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fas fa-heart"></button>
+            </form>
         </li>
         <li>
           <a href="#" class="button"><i class="fas fa-cloud"></i></a>
@@ -33,6 +37,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       <b>Description: </b>{{ movie.raw | get_movie_description }}<br />
       <br />
       <b>Genre: </b>{{ movie.raw | get_movie_genre }}<br />
+       <b>Likes: </b>{{ movie | get_movie_likes }}<br />
       <b>Actors: </b>{{ movie.raw | get_movie_actors }} <br />
       <div class="flex-wrapper">
         <div class="single-chart">
