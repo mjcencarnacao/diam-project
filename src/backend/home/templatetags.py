@@ -1,5 +1,10 @@
 from django.template.defaulttags import register
-from .models import Comments
+from .models import Comments, Movie
+
+
+@register.simple_tag
+def count_movie_likes(movie: Movie):
+    return movie.likes
 
 
 @register.simple_tag

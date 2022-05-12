@@ -116,7 +116,6 @@ def movie_details(request, movie_id):
     commentslikes = CommentsLikes.objects.filter(user_id=user_id)
     for com in commentslikes:
         commentslikeslist.extend([int(com.comment_id), com.like])
-    print(*commentslikeslist)
 
     return render(request, 'details.html', {'movie': movie,
                                             'comments': comments,

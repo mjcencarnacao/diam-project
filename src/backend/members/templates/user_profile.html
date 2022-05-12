@@ -23,9 +23,16 @@
         </header>
         <ul class="actions special">
           <li>
-            <a href="#" class="button large"
-              >Go Back to your Top 250 IMDB Movies</a
-            >
+            <a href="{% url 'members:regular' %}" class="button large"
+              >Get Regular</a>
+          </li>
+          <li>
+            <a href="{% url 'members:premium' %}" class="button large"
+              >Get Premium</a>
+          </li>
+          <li>
+            <a href="{% url 'members:pro' %}" class="button large"
+              >Get Pro</a>
           </li>
         </ul>
       </article>

@@ -45,7 +45,9 @@
           <ul class="actions special">
             <li>
               <a href="{% url 'home:movie-details' movie.id %}" class="button"
-                >{{ movie.likes }} likes</a
+                >
+                {% count_movie_likes movie as likes %}
+                {{ likes }} likes</a
               >
             </li>
           </ul>

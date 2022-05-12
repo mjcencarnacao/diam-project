@@ -91,3 +91,49 @@ def logout_user(request):
     else:
         msg = 'error validation form'
         return render(request, 'authenticate/login.html', {'form': form})
+
+
+def set_regular(request):
+    user = request.user
+    comments = Comments.objects.filter(critic_id=user.id)
+    form = Profile(instance=user)
+    if request.method == 'POST':
+        form = Profile(request.POST,request.FILES,  instance=user)
+        if form.is_valid():
+            form.save()  
+    cur_user = User.objects.get(pk=request.user.id)
+    cur_user.is_premium_user = False
+    cur_user.is_pro_user = False
+    cur_user.save()
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments})
+
+
+def set_premium(request):
+    user = request.user
+    comments = Comments.objects.filter(critic_id=user.id)
+    form = Profile(instance=user)
+    if request.method == 'POST':
+        form = Profile(request.POST,request.FILES,  instance=user)
+        if form.is_valid():
+            form.save()
+    cur_user = User.objects.get(pk=request.user.id)
+    cur_user.is_premium_user = True
+    cur_user.is_pro_user = False
+    cur_user.save()
+    user_context = User.objects.get(pk=request.user.id)
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments})
+
+def set_pro(request):
+    user = request.user
+    comments = Comments.objects.filter(critic_id=user.id)
+    form = Profile(instance=user)
+    if request.method == 'POST':
+        form = Profile(request.POST,request.FILES,  instance=user)
+        if form.is_valid():
+            form.save()
+    #comments_context = Comments.objects.filter(critic_id=request.user.id)
+    cur_user: User = User.objects.get(pk=request.user.id)
+    cur_user.is_premium_user = False
+    cur_user.is_pro_user = True
+    cur_user.save()
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments})
