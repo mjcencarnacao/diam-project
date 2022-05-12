@@ -1,9 +1,8 @@
-from calendar import c
 from typing import Dict
 
 from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponseRedirect, JsonResponse
-from numpy import empty
+from django.urls import reverse
 from services import views
 import json
 from .models import Movie, Comments, CommentsLikes
@@ -11,9 +10,15 @@ from services.scrapper import Scrapper
 from services.AIService import AIService
 from members.forms import SignUpForm
 from django.core.files.storage import FileSystemStorage
-from members.models import User
+from django.shortcuts import get_object_or_404
 from services.DictionaryManager import DictionaryManager
 from services.ProcessingService import ProcessingService
+
+
+def like_movie(request, pk):
+    movie = get_object_or_404(Movie, id=request.POST.get('movie_id'))
+    movie.likes.add(request.user)
+    return HttpResponseRedirect(reverse("home:movie-details", args=[int(pk)]))
 
 
 def movie_details(request, movie_id):
@@ -21,6 +26,7 @@ def movie_details(request, movie_id):
         if 'filter_button_negative' in request.POST:
             movie_id = movie_id
             movie = Movie.objects.get(pk=movie_id)
+            total_likes = movie.total_likes()
             comments = Comments.objects.filter(movie=movie, AI_FeedBack=0)
 
             commentslikeslist = list()
@@ -28,7 +34,6 @@ def movie_details(request, movie_id):
             commentslikes = CommentsLikes.objects.filter(user_id=user_id)
             for com in commentslikes:
                 commentslikeslist.extend([int(com.comment_id), com.like])
-            
 
             return render(request,
                           'details.html',
@@ -47,7 +52,7 @@ def movie_details(request, movie_id):
             commentslikes = CommentsLikes.objects.filter(user_id=user_id)
             for com in commentslikes:
                 commentslikeslist.extend([int(com.comment_id), com.like])
-            
+
             return render(request,
                           'details.html',
                           {'movie': movie,
@@ -176,9 +181,9 @@ def like(request):
         p_id: int = id
         user_id: int = request.user.id
         comments = CommentsLikes.objects.filter(user_id=user_id, comment_id=p_id)
-        if(not comments):
+        if (not comments):
             CommentsLikes(
-                like= True,
+                like=True,
                 comment_id=p_id,
                 user_id=user_id).save()
             post = get_object_or_404(Comments, id=p_id)
@@ -188,7 +193,7 @@ def like(request):
             return JsonResponse({'result': result, 'p_id': p_id, })
         else:
             comment_like = get_object_or_404(CommentsLikes, comment_id=p_id)
-            if(comment_like.like == False):
+            if (comment_like.like == False):
                 comment_like.like = True
                 comment_like.save()
                 post = get_object_or_404(Comments, id=p_id)
@@ -196,7 +201,7 @@ def like(request):
                 post.save()
                 result = post.likes
                 return JsonResponse({'result': result, 'p_id': p_id, })
-            if(comment_like.like == True):
+            if (comment_like.like == True):
                 post = get_object_or_404(Comments, id=id)
                 result = post.likes
                 return JsonResponse({'result': result, 'p_id': p_id, })
@@ -211,29 +216,29 @@ def dislike(request):
         p_id: int = id
         user_id: int = request.user.id
         comments = CommentsLikes.objects.filter(user_id=user_id, comment_id=p_id)
-        if ( not comments):
+        if (not comments):
             CommentsLikes(
-                like= False,
+                like=False,
                 comment_id=p_id,
                 user_id=request.user.id).save()
             post = get_object_or_404(Comments, id=p_id)
-            if(post.likes != 0): 
+            if (post.likes != 0):
                 post.likes -= 1
             post.save()
             result = post.likes
             return JsonResponse({'result': result, 'p_id': p_id, })
         else:
             comment_like = get_object_or_404(CommentsLikes, comment_id=p_id)
-            if(comment_like.like == True):
+            if (comment_like.like == True):
                 comment_like.like = False
                 comment_like.save()
                 post = get_object_or_404(Comments, id=p_id)
-                if(post.likes != 0): 
+                if (post.likes != 0):
                     post.likes -= 1
                 post.save()
                 result = post.likes
                 return JsonResponse({'result': result, 'p_id': p_id, })
-            if(comment_like.like == False):
+            if (comment_like.like == False):
                 post = get_object_or_404(Comments, id=id)
                 result = post.likes
                 return JsonResponse({'result': result, 'p_id': p_id, })
@@ -254,9 +259,6 @@ def fazer_upload(request):
         return render(request, 'votacao/fazer_upload.html', {'uploaded_file_url': uploaded_file_url})
 
 
-
-
-
 def get_eval(request):
     if request.method == 'POST':
         id_and_user_feedback: str = request.POST.get('postid')
@@ -264,9 +266,9 @@ def get_eval(request):
         comment_id: str = parts[0]
         user_appreciation_of_ai_prevision: str = parts[1]
         ai_new_feedback_plain_text = ProcessingService.retrain_AI_with_user_feedback(
-                                                                    id_comment=comment_id,
-                                                                    user_appreciation=user_appreciation_of_ai_prevision
-                                                                    )
+            id_comment=comment_id,
+            user_appreciation=user_appreciation_of_ai_prevision
+        )
     return JsonResponse({'result': ai_new_feedback_plain_text, 'p_id': comment_id, })
 
 
@@ -275,5 +277,5 @@ def erase(request):
         comment_id: str = request.POST.get('postid')
         comment_post = Comments.objects.get(id=comment_id)
         comment_post.delete()
-        
+
     return JsonResponse({'p_id': comment_id, })

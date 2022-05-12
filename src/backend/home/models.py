@@ -15,6 +15,9 @@ class Movie(models.Model):
     likes = models.ManyToManyField(User, related_name='user_likes')
     watch_list = models.ManyToManyField(User, related_name='watch_list_of')
 
+    def total_likes(self) -> int:
+        return self.likes.choices.count()
+
     def __str__(self) -> str:
         return self.name.__str__()
 
@@ -34,18 +37,8 @@ class Comments(models.Model):
     critic_feedback = models.BooleanField("critic_feedback_about_ai_opinion", default=False)
 
 
-class WatchList(models.Model):
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    have_seen = models.BooleanField(default=False)
-
-
 class CommentsLikes(models.Model):
     comment = models.ForeignKey(Comments, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     like = models.BooleanField(default=False)
 
-
-class UserLikeMovie(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    like = models.BooleanField(default=False)
