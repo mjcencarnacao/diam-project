@@ -209,7 +209,7 @@ def dislike(request):
         id: int = request.POST.get('postid')
         p_id: int = id
         comments = CommentsLikes.objects.filter(comment_id=p_id)
-        if(not comments):
+        if not comments:
             CommentsLikes(
                 like= False,
                 comment_id=p_id,
@@ -252,10 +252,7 @@ def fazer_upload(request):
         return render(request, 'votacao/fazer_upload.html', {'uploaded_file_url': uploaded_file_url})
 
 
-def get_profile_page(request, user_id):
-    comments_context = Comments.objects.filter(critic_id=user_id)
-    user_context = User.objects.get(pk=user_id)
-    return render(request, 'profile.html', {'user': user_context, 'comments': comments_context})
+
 
 
 def get_eval(request):

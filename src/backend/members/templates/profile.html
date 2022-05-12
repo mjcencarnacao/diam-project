@@ -37,28 +37,29 @@
           <article>
             <header>
               <span class="date"
-                >Member since: {{ user.user_since }}</span
+                >Member since: {{ critic.user_since }}</span
               >
               <h2>
-                <a>{{ user.first_name }}</a>
+                <a>{{ critic.first_name }}</a>
               </h2>
             </header>
-            {% if profile.user.user_picture == None %}
+            {% if critic.profile_pic  %}
             <form method="post" enctype="multipart/form-data">
               <a type="submit">
                 <img
-                  src="{% static 'default-user-image.png' %}"
+                  src="{{ critic.profile_pic.url }}"
                   style="max-width: 25%; max-height: 25%; border-radius: 50%"
                 />
               </a>
             </form>
             {% else %}
             <a href="" class="image fit"
-              ><img src="media/{{ request.user.username }}.jpg" alt="" />
+              ><img src="{% static 'default-user-image.png' %}"
+                    style="max-width: 25%; max-height: 25%; border-radius: 50%" />
             </a>
             {% endif %}
             <br /><br /><p2>This is the description field.</p2><br /><br />
-            <p2>Email: {{ request.user.email }}</p2>
+            <p2>Email: {{ critic.email }}</p2>
           </article>
         </section>
       </center>
@@ -66,7 +67,6 @@
         <h2 style="display:inline; font-size: larger;">Os Meus Comentários</h2>
         </div>
         <hr style="width: 90% !important; margin-left: 5%;" />
-        
         {% for comment in comments %}
         <section class="comment-list">
           <article class="row">
@@ -75,7 +75,7 @@
                 <div class="panel-body" style="display: inline">
                   <header class="text-left">
                     <div class="comment-user">
-                      <i class="fa fa-user"></i><a href="{% url 'home:profile' comment.critic_id %}"> {{ comment.critic_username }}</a>
+                      <i class="fa fa-user"></i><a href="{% url 'members:profile' comment.critic_id %}"> {{ comment.critic_username }}</a>
                       &nbsp;
                       <i class="fa fa-film"></i><a href="{% url 'home:movie-details' comment.movie_id %}"> {{ comment.movie_name }}</a>
                     </div>
@@ -107,7 +107,7 @@
                       class="fas fa-thumbs-up"></i>
                   </div>
                   &nbsp;
-                  
+
                   <h2 id="{{ comment.id }}-likesprofile"
                     style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
                     {{ comment.likes }} likes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
@@ -148,7 +148,7 @@
           <hr />
           {% endfor %}
           <br><br>
-    </div> 
+    </div>
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -201,9 +201,6 @@
         }
       });
     })
-
-
-
   </script>
     {% endblock content %}
   </body>

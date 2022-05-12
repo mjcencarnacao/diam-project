@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% load static %}
+<html>
+  {% block extrastyle %}
+  <link rel="stylesheet" href="{% static '../static/assets/css/main2.css' %}" />
+  {% endblock extrastyle %}
+  <body class="is-preload">
+    {% block content %}
+    <div id="main">
+      <article class="post featured" style="padding-bottom: 3rem !important;">
+        <header class="major">
+          <span class="date">Updated IMDB List</span>
+          <h2>
+            <a href="#"
+              >Welcome to<br />
+              Your Profile Page</a
+            >
+          </h2>
+          <p>
+            Here you can find your personal info that you shared with us! <br />
+            For any information please contact the website administrator.
+          </p>
+        </header>
+        <ul class="actions special">
+          <li>
+            <a href="#" class="button large"
+              >Go Back to your Top 250 IMDB Movies</a
+            >
+          </li>
+        </ul>
+      </article>
+      <hr style="width: 90% !important; margin-left: 5%;" />
+      <!-- Posts -->
+      <center style="padding-bottom: 2px !important;">
+        <section class="posts">
+          <article>
+            <header>
+              <span class="date"
+                >Member since: {{ user.user_since }}</span
+              >
+              <h2>
+                <a>{{ user.first_name }}</a>
+              </h2>
+            </header>
+            {% if request.user.profile_pic %}
+            <form method="post" enctype="multipart/form-data">
+                <img
+                  src= "{{ request.user.profile_pic.url }}"
+                  style="max-width: 25%; max-height: 25%; border-radius: 50%"
+                />
+            </form>
+            {% else %}
+            <a href="" class="image fit"
+              ><img src="{% static 'default-user-image.png' %}"/>
+            </a>
+            {% endif %}
+           <br /><p2>This is the description field.</p2><br /><br />
+            <p2>Email: {{ request.user.email }}</p2>
+          </article>
+        </section>
+      </center>
+      <div style="display: block; padding-top: 100px !important; padding-bottom: 2px !important;">
+        <form method=POST action="" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{form.as_p}}
+          <button class="btn btn-secondary">Post</button>
+        </form>
+        <h2 style="display:inline; font-size: larger;">Os Meus Comentários</h2>
+        </div>
+        <hr style="width: 90% !important; margin-left: 5%;" />
+        {% for comment in comments %}
+        <section class="comment-list">
+          <article class="row">
+            <div class="col-md-2 col-sm-2 hidden-xs">
+              <div class="col-md-10 col-sm-10">
+                <div class="panel-body" style="display: inline">
+                  <header class="text-left">
+                    <div class="comment-user">
+                      <i class="fa fa-user"></i><a href="{% url 'members:profile' comment.critic_id %}"> {{ comment.critic_username }}</a>
+                      &nbsp;
+                      <i class="fa fa-film"></i><a href="{% url 'home:movie-details' comment.movie_id %}"> {{ comment.movie_name }}</a>
+                    </div>
+                    <time class="comment-date" datetime="16-12-2014 01:05">
+                      <i class="fa fa-clock-o"></i>{{ comment.entry }}</time>
+                  </header>
+                </div>
+                <div class="comment-post">
+                  <p>
+                    <strong>{{ comment.title }}</strong><br />
+                    {{ comment.comment }}
+                  </p>
+                </div>
+                <div style="display: flex; height: 16px !important;" class="text-right">
+                  <i id="{{ comment.id }}-aifeedback"
+                    onmouseover="doThis('{{ comment.id }}', '{{ comment.AI_FeedBack }}')"
+                    style="cursor: pointer;"
+                    onclick="doThat('{{ comment.id }}')" class="fa fa-search"></i>
+                  <h2 style="display:none; margin-bottom: 0 !important; font-size: large !important;"
+                    id="{{ comment.id }}-aiscore">&nbsp;<b>AI Score:</b></h2>&nbsp;<h2
+                    style="display:none; margin-bottom: 0 !important; font-size: large !important;"
+                    id="{{ comment.id }}-nota">
+                  </h2>
+                  &nbsp;
+                  <div style="display: flex; height: 16px !important;" class="text-right">
+                    <i id="{{ comment.id }}-likebutton"
+                      style="cursor: pointer;"
+                      onmouseover="doThisThumbsup('{{ comment.id }}')"
+                      class="fas fa-thumbs-up"></i>
+                  </div>
+                  &nbsp;
+
+                  <h2 id="{{ comment.id }}-likesprofile"
+                    style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
+                    {{ comment.likes }} likes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                  </h2>
+
+                   {% if comment.critic_feedback == False %}
+                  <h2 id="{{ comment.id }}-question" style="display: inline !important; font-size: large !important; margin-left: auto;">Do you agree with the AI?</h2>
+                  &nbsp;
+                  {% endif %}
+                  <div style="display: flex; height: 16px !important;" class="text-right">
+
+                     {% if comment.critic_feedback == False %}
+                    <button style="all: unset !important; cursor: pointer;" type="submit" class="check-button"
+                    data-rowid="{{ comment.id }}" value="{{ comment.id }}-1" id="check-button-{{ comment.id }}">
+                    <span id="{{ comment.id }}-agreewithai"
+                      style="vertical-align: 12px; padding-top: 3px; padding-left: 5px; cursor: pointer;"
+                      onmouseover="doThisAgreeWithAI('{{ comment.id }}')"
+                      onmouseout="doThisAgreeWithAI_out('{{ comment.id }}')"
+                      class="fas fa-check"></span>
+                    </button>
+                  </div>
+                  <div style="display: flex; height: 16px !important;" class="text-right">
+                    <button style="all: unset !important; cursor: pointer;" type="submit" class="times-button"
+                    data-rowid="{{ comment.id }}" value="{{ comment.id }}-0" id="times-button-{{ comment.id }}">
+                    <span id="{{ comment.id }}-disagreewithai"
+                      style="vertical-align: 12px; padding-top: 3px; padding-left: 8px; cursor: pointer;"
+                      onmouseover="doThisDisagreeWithAI('{{ comment.id }}')"
+                      onmouseout="doThisDisagreeWithAI_out('{{ comment.id }}')"
+                      class="fa fa-times"></span>
+                      </button>
+                    {% endif %}
+                   </div>
+                </div>
+              </div>
+            </div>
+
+          </article>
+          <hr />
+          {% endfor %}
+          <br><br>
+    </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+    $(document).on('click', '.check-button', function (e) {
+      e.preventDefault();
+      var rowid = $(this).data('rowid')
+      var check_button = "#check-button-" + rowid
+      $.ajax({
+        type: 'POST',
+        url: '{% url "home:eval" %}',
+        data: {
+          postid: $(check_button).val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
+          action: 'post'
+        },
+        success: function (json) {
+          var nota_id = json['p_id'] + "-nota"
+          document.getElementById(nota_id).value = ""
+          document.getElementById(nota_id).innerHTML = json['result']
+          document.getElementById(nota_id).style.display = "inline"
+          console.log(json)
+        },
+        error: function (xhr, errmsg, err) {
+
+        }
+      });
+    })
+
+    $(document).on('click', '.times-button', function (e) {
+      e.preventDefault();
+      var rowid = $(this).data('rowid')
+      var times_button = "#times-button-" + rowid
+      $.ajax({
+        type: 'POST',
+        url: '{% url "home:eval" %}',
+        data: {
+          postid: $(times_button).val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
+          action: 'post'
+        },
+        success: function (json) {
+          var nota_id = json['p_id'] + "-nota"
+          document.getElementById(nota_id).value = ""
+          document.getElementById(nota_id).innerHTML = json['result']
+          document.getElementById(nota_id).style.display = "inline"
+          console.log(json)
+        },
+        error: function (xhr, errmsg, err) {
+        }
+      });
+    })
+  </script>
+    {% endblock content %}
+  </body>
+</html>

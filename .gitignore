@@ -57,3 +57,6 @@ __pycache__/
 
 #IA. Ignore IA for now beacuse of different training process and testin
 !src/backend/services/AISerialized
+
+#User Images
+!src/backend/media
