@@ -9,6 +9,7 @@ from django.contrib.auth import logout
 from home.models import Comments
 from django.shortcuts import get_object_or_404
 from .models import User
+from home.models import Movie
 
 
 # Create your views here.
@@ -66,6 +67,10 @@ def get_profile_page(request, user_id):
     comments_context = Comments.objects.filter(critic_id=user_id)
     user_context = User.objects.get(pk=user_id)
     return render(request, 'profile.html', {'critic': user_context, 'comments': comments_context})
+
+def get_watchlist_page(request, user_id):
+    movies = Movie.objects.filter(watchlist=user_id)
+    return render(request, 'watchlist.html', {'movies': movies})
 
 
 def logout_user(request):

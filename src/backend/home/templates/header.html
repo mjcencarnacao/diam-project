@@ -24,6 +24,7 @@
         <li class="{% if 'top' in request.path %} active {% endif %}"><a href="{% url 'home:home_page' %}">IMDB Top 250 Movies</a></li>
         {% if user.is_authenticated %}
         <li class="{% if 'Profile' in request.path %} active {% endif %}"><a href="{% url 'members:logged_profile_user' %}">Profile</a></li>
+        <li class="{% if 'watchlist' in request.path %} active {% endif %}"><a href="{% url 'members:watchlist' request.user.id %}">Watchlist</a></li>
         {% else %}
         <li class="{% if 'login' in request.path %} active {% endif %}"><a href="{% url 'members:login_user' %}">Login</a></li>
         <li class="{% if 'register' in request.path %} active {% endif %}"><a href="{% url 'members:register' %}">Register</a></li>

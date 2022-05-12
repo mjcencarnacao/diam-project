@@ -1,0 +1,37 @@
+{% extends 'base.html' %} {% load static %}
+<!DOCTYPE html>
+<html>
+  <body class="is-preload">
+    {% block content %}
+
+    <div id="main">
+      <!-- Posts -->
+      <section class="posts">
+        {% for movie in movies %}
+        <article>
+          <header>
+            <span class="date">{{ movie.raw | get_movie_year }}</span>
+            <h2>
+              <a href="{% url 'home:movie-details' movie.id %}"
+                >{{ movie.raw | get_movie_name }}</a
+              >
+            </h2>
+          </header>
+          <a href="{% url 'home:movie-details' movie.id %}" class="image fit"
+            ><img src="{{ movie.raw | get_movie_cover }}" alt=""
+          /></a>
+          <p>{{ movie.raw | get_movie_description }}</p>
+          <ul class="actions special">
+            <li>
+              <a href="{% url 'home:movie-details' movie.id %}" class="button"
+                >AI Rating</a
+              >
+            </li>
+          </ul>
+        </article>
+        {% endfor %}
+      </section>
+    </div>
+    {% endblock content %}
+  </body>
+</html>
