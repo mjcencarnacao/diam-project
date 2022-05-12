@@ -36,35 +36,33 @@
         <section class="posts">
           <article>
             <header>
-              <span class="date"
-                >Member since: {{ critic.user_since }}</span
-              >
-              <h2>
-                <a>{{ critic.first_name }}</a>
+              <span class="date">Member since: {{ critic.user_since }}</span>
+              <h2 style="font-size: 20px !important">{{ critic.first_name }} - {% if critic.is_pro_user %} Pro User {% endif %}{% if critic.is_premium_user %} Premium User {% endif %}
+                {% if critic.is_regular_user == True and critic.is_premium_user == False and critic.is_pro_user == False %} Regular User {% endif %}
               </h2>
             </header>
+            <br>
             {% if critic.profile_pic  %}
             <form method="post" enctype="multipart/form-data">
-              <a type="submit">
+              
                 <img
                   src="{{ critic.profile_pic.url }}"
                   style="max-width: 25%; max-height: 25%; border-radius: 50%"
                 />
-              </a>
+
             </form>
             {% else %}
-            <a href="" class="image fit"
-              ><img src="{% static 'default-user-image.png' %}"
-                    style="max-width: 25%; max-height: 25%; border-radius: 50%" />
-            </a>
+            <img src="{% static 'default-user-image.png' %}"
+                 style="max-width: 25%; max-height: 25%; border-radius: 50%" />
             {% endif %}
-            <br /><br /><p2>This is the description field.</p2><br /><br />
-            <p2>Email: {{ critic.email }}</p2>
+            <br><br>
+            <p2>{{ critic.description }}</p2><br /><br />
+            <p2><b>Email:</b> {{ critic.email }}</p2>
           </article>
         </section>
       </center>
       <div style="display: block; padding-top: 100px !important; padding-bottom: 2px !important;">
-        <h2 style="display:inline; font-size: larger;">Os Meus Comentários</h2>
+        <h2 style="display:inline; font-size: larger;">My Comments</h2>
         </div>
         <hr style="width: 90% !important; margin-left: 5%;" />
         {% for comment in comments %}

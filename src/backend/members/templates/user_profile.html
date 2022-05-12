@@ -23,9 +23,16 @@
         </header>
         <ul class="actions special">
           <li>
-            <a href="#" class="button large"
-              >Go Back to your Top 250 IMDB Movies</a
-            >
+            <a href="{% url 'members:regular' %}" class="button large"
+              >Get Regular</a>
+          </li>
+          <li>
+            <a href="{% url 'members:premium' %}" class="button large"
+              >Get Premium</a>
+          </li>
+          <li>
+            <a href="{% url 'members:pro' %}" class="button large"
+              >Get Pro</a>
           </li>
         </ul>
       </article>
@@ -35,27 +42,24 @@
         <section class="posts">
           <article>
             <header>
-              <span class="date"
-                >Member since: {{ user.user_since }}</span
-              >
-              <h2>
-                <a>{{ user.first_name }}</a>
-              </h2>
+              <span class="date">Member since: {{ user.user_since }}</span>
+                <h2 style="font-size: 20px !important">{{ user.first_name }} - {% if request.user.is_pro_user %} Pro User {% endif %}{% if request.user.is_premium_user %} Premium User {% endif %}
+                  {% if request.user.is_regular_user == True and request.user.is_premium_user == False and request.user.is_pro_user == False %} Regular User {% endif %}
+                </h2>
             </header>
+            <br>
             {% if request.user.profile_pic %}
-            <form method="post" enctype="multipart/form-data">
                 <img
                   src= "{{ request.user.profile_pic.url }}"
                   style="max-width: 25%; max-height: 25%; border-radius: 50%"
                 />
-            </form>
             {% else %}
-            <a href="" class="image fit"
-              ><img src="{% static 'default-user-image.png' %}"/>
-            </a>
+            <img src="{% static 'default-user-image.png' %}"
+                 style="max-width: 25%; max-height: 25%; border-radius: 50%"/>
             {% endif %}
-           <br /><p2>This is the description field.</p2><br /><br />
-            <p2>Email: {{ request.user.email }}</p2>
+            <br><br>
+           <p2>{{ request.user.description }}</p2><br /><br />
+            <p2><b>Email:</b> {{ request.user.email }}</p2>
           </article>
         </section>
       </center>
@@ -66,7 +70,7 @@
       onmouseover="increaseover('info-slide')"
       onmouseout="decreaseout('info-slide')">
       <i class="fas fa-arrow-right" id="arrow-slide"></i>
-      <h2 style="display:inline; font-size: larger; padding: 0 0 0 0.5rem !important;" id="info-slide-text">Personal Info:</h2>
+      <h2 style="display:inline; font-size: larger; padding: 0 0 0 0.5rem !important;" id="info-slide-text">Edit Personal Info:</h2>
       </div>
       <div style="display: none; padding-top: 30px !important; padding-bottom: 2px !important;" id="form-edit-personalinfo">
         <form method=POST action="" enctype="multipart/form-data">
@@ -77,7 +81,7 @@
       </div>
       <br>
       <br>
-        <h2 style="display:inline; font-size: larger; border:none;">Os Meus Comentários</h2>
+        <h2 style="display:inline; font-size: larger; border:none;">My Comments</h2>
         <hr style="width: 90% !important; margin-left: 5%;" />
         {% for comment in comments %}
         <section class="comment-list">

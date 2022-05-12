@@ -45,7 +45,8 @@
           <ul class="actions special">
             <li>
               <a href="{% url 'home:movie-details' movie.id %}" class="button"
-                >AI Rating</a
+                >
+                {{ movie | get_movie_likes }} likes</a
               >
             </li>
           </ul>

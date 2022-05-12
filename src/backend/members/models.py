@@ -8,6 +8,7 @@ class User(AbstractUser):
     is_premium_user = models.BooleanField('Is Premium', default=False)
     is_pro_user = models.BooleanField('Is Pro', default=False)
     profile_pic = models.ImageField(null=True, blank=True, upload_to="image/profile/")
+    description = models.TextField(default="This is the description field.")
 
 
 ##APAGAR
