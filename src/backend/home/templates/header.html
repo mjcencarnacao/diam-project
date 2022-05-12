@@ -53,14 +53,16 @@
         {% if user.is_authenticated %}
         <li>
           {% if request.user.profile_pic %}
+          <a href="{% url 'members:logged_profile_user' %}">
           <img
             src="{{ request.user.profile_pic.url }}"
-            style="max-width: 60px; max-height: 60px; border-radius: 50%; vertical-align: -5%;"
+            style="max-width: 28px; max-height: 28px; border-radius: 50%; vertical-align: -5%;"
           />
+          </a>
           {% else %}
           <a href="" class="image fit"
             ><img src="{% static 'default-user-image.png' %}"
-                  style="max-width: 60px; max-height: 60px; border-radius: 50%; vertical-align: -5%;"
+                  style="max-width: 28px; max-height: 28px; border-radius: 50%; vertical-align: -5%;"
                   />
           </a>
           {% endif %}
