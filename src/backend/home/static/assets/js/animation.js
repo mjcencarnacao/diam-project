@@ -194,3 +194,22 @@ function reachedlimit_premium(){
 function reachedlimit_pro(){
   alert("Number of PRO users' comments limited to 3!");
 }
+
+
+function revealinfo(id){
+  if(document.getElementById("form-edit-personalinfo").style.display == 'block'){
+    document.getElementById("form-edit-personalinfo").style.display = 'none';
+    document.getElementById("arrow-slide").setAttribute("class", "fas fa-arrow-right");
+    return;
+  }
+  document.getElementById("arrow-slide").setAttribute("class", "fas fa-arrow-down");
+  document.getElementById("form-edit-personalinfo").style.display = 'block'; 
+}
+
+function increaseover(id){
+  document.getElementById("arrow-slide").style.transform = 'scale(1.5)';
+}
+
+function decreaseout(id){
+  document.getElementById("arrow-slide").style.transform = 'scale(1)';
+}

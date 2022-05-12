@@ -59,14 +59,25 @@
           </article>
         </section>
       </center>
-      <div style="display: block; padding-top: 100px !important; padding-bottom: 2px !important;">
+      <br><br>
+      <div style="display:inline; padding-right: 0 !important; cursor: pointer;" 
+      onclick="revealinfo('info-slide')" 
+      id="info-slide"
+      onmouseover="increaseover('info-slide')"
+      onmouseout="decreaseout('info-slide')">
+      <i class="fas fa-arrow-right" id="arrow-slide"></i>
+      <h2 style="display:inline; font-size: larger; padding: 0 0 0 0.5rem !important;" id="info-slide-text">Personal Info:</h2>
+      </div>
+      <div style="display: none; padding-top: 30px !important; padding-bottom: 2px !important;" id="form-edit-personalinfo">
         <form method=POST action="" enctype="multipart/form-data">
           {% csrf_token %}
           {{form.as_p}}
           <button class="btn btn-secondary">Post</button>
         </form>
-        <h2 style="display:inline; font-size: larger;">Os Meus Comentários</h2>
-        </div>
+      </div>
+      <br>
+      <br>
+        <h2 style="display:inline; font-size: larger; border:none;">Os Meus Comentários</h2>
         <hr style="width: 90% !important; margin-left: 5%;" />
         {% for comment in comments %}
         <section class="comment-list">
