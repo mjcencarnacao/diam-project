@@ -54,7 +54,7 @@ def home(request):
 
 def login_user_profile(request):
     user = request.user
-    comments = Comments.objects.filter(critic_id=user.id)
+    comments = Comments.objects.filter(critic_id=user.id).order_by('-entry')
     form = Profile(instance=user)
     if request.method == 'POST':
         form = Profile(request.POST,request.FILES,  instance=user)
@@ -64,7 +64,7 @@ def login_user_profile(request):
 
 
 def get_profile_page(request, user_id):
-    comments_context = Comments.objects.filter(critic_id=user_id)
+    comments_context = Comments.objects.filter(critic_id=user_id).order_by('-entry')
     user_context = User.objects.get(pk=user_id)
     return render(request, 'profile.html', {'critic': user_context, 'comments': comments_context})
 
@@ -98,8 +98,7 @@ def set_regular(request):
     user.is_premium_user = False
     user.is_pro_user = False
     user.save()
-    #user = request.user
-    comments = Comments.objects.filter(critic_id=user.id)
+    comments = Comments.objects.filter(critic_id=user.id).order_by('-entry')
     form = Profile(instance=user)
     if request.method == 'POST':
         form = Profile(request.POST,request.FILES,  instance=user)
@@ -113,8 +112,7 @@ def set_premium(request):
     user.is_premium_user = True
     user.is_pro_user = False
     user.save()
-    #user = request.user
-    comments = Comments.objects.filter(critic_id=user.id)
+    comments = Comments.objects.filter(critic_id=user.id).order_by('-entry')
     form = Profile(instance=user)
     if request.method == 'POST':
         form = Profile(request.POST,request.FILES,  instance=user)
@@ -127,12 +125,10 @@ def set_pro(request):
     user.is_premium_user = False
     user.is_pro_user = True
     user.save()
-    #user = request.user
-    comments = Comments.objects.filter(critic_id=user.id)
+    comments = Comments.objects.filter(critic_id=user.id).order_by('-entry')
     form = Profile(instance=user)
     if request.method == 'POST':
         form = Profile(request.POST,request.FILES,  instance=user)
         if form.is_valid():
             form.save()
-    #comments_context = Comments.objects.filter(critic_id=request.user.id)
     return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser':user})

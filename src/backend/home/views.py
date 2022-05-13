@@ -32,8 +32,7 @@ def movie_details(request, movie_id):
         if 'filter_button_negative' in request.POST:
             movie_id = movie_id
             movie = Movie.objects.get(pk=movie_id)
-            total_likes = movie.total_likes()
-            comments = Comments.objects.filter(movie=movie, AI_FeedBack=0)
+            comments = Comments.objects.filter(movie=movie, AI_FeedBack=0).order_by('-entry')
 
             commentslikeslist = list()
             user_id: int = request.user.id
@@ -51,7 +50,7 @@ def movie_details(request, movie_id):
         if 'filter_button_positive' in request.POST:
             movie_id = movie_id
             movie = Movie.objects.get(pk=movie_id)
-            comments = Comments.objects.filter(movie=movie, AI_FeedBack=1)
+            comments = Comments.objects.filter(movie=movie, AI_FeedBack=1).order_by('-entry')
 
             commentslikeslist = list()
             user_id: int = request.user.id
@@ -70,7 +69,7 @@ def movie_details(request, movie_id):
             movie_id = movie_id
             movie = Movie.objects.get(pk=movie_id)
             critic_id: int = request.POST.get('filter_button_user')
-            comments = Comments.objects.filter(movie=movie, critic_id=critic_id)
+            comments = Comments.objects.filter(movie=movie, critic_id=critic_id).order_by('-entry')
             positive_percentage = ProcessingService.positive_percentage(comments)
 
             commentslikeslist = list()
@@ -119,7 +118,7 @@ def movie_details(request, movie_id):
                      AI_Probability_PositiveFeedBack=pos,
                      AI_Probability_NegativeFeedBack=neg).save()
 
-    comments = Comments.objects.filter(movie=movie)
+    comments = Comments.objects.filter(movie=movie).order_by('-entry')
     positive_percentage = ProcessingService.positive_percentage(comments)
 
     commentslikeslist = list()

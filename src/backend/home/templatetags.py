@@ -70,5 +70,10 @@ def get_movie_genre(dictionary):
 
 @register.filter
 def get_movie_actors(dictionary):
-    genre = dictionary.get('actors')
-    return str(genre).translate({ord(c): None for c in '[]\''})
+    actors = dictionary.get('actors')
+    return str(actors).translate({ord(c): None for c in '[]\''})
+
+@register.filter
+def get_movie_directors(dictionary):
+    directors = dictionary.get('directors')
+    return str(directors).translate({ord(c): None for c in '[]\''})

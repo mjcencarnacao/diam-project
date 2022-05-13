@@ -35,11 +35,11 @@
           <a href="{% url 'home:movie-details' movie.id %}" class="image fit"
             ><img src="{{ movie.raw | get_movie_cover }}" alt=""
           /></a>
-          <p>{{ movie.raw | get_movie_description }}</p>
+          <!-- <p>{{ movie.raw | get_movie_description }}</p> -->
           <ul class="actions special">
             <li>
               <a href="{% url 'home:movie-details' movie.id %}" class="button"
-                >AI Rating</a
+                ><i class="fa-solid fa-trash-can"></i>Remove from Watchlist</a
               >
             </li>
           </ul>
