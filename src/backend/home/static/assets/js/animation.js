@@ -251,3 +251,7 @@ function revealdrop(id){
   }
 }
 }
+
+function getpro(){
+  alert("Only PRO users can access this feature!");
+}

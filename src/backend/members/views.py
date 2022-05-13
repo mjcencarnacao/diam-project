@@ -87,8 +87,14 @@ def get_watchlist_page(request, user_id):
             return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
         if  request.POST['order']:
             res: str = request.POST.get('order')
-            print(res)
-            movies = Movie.objects.filter(watch_list=user_id, raw__genre = res)
+            if res.isdigit():
+                movies = Movie.objects.filter(watch_list=user_id)
+                movie_to_erase = get_object_or_404(Movie, id=res)
+                movie_to_erase.watch_list.remove(request.user)
+                return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
+            else:
+                print(res)
+                movies = Movie.objects.filter(watch_list=user_id, raw__genre = res)
         
     return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
 
