@@ -79,9 +79,16 @@ def get_watchlist_page(request, user_id):
             gender_set.add(g)
 
     if request.method == 'POST':
-        res = request.POST.get('genre')
-        print(res)
-        movies = Movie.objects.filter(watch_list=user_id, raw__genre = res)
+        if request.POST['order'] == 'alphabet':
+            movies = Movie.objects.filter(watch_list=user_id).order_by("name")
+            return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
+        if request.POST['order'] == 'year':
+            movies = Movie.objects.filter(watch_list=user_id).order_by("raw__year")
+            return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
+        if  request.POST['order']:
+            res: str = request.POST.get('order')
+            print(res)
+            movies = Movie.objects.filter(watch_list=user_id, raw__genre = res)
         
     return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
 

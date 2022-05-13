@@ -8,12 +8,24 @@
       
       <ul class="actions special">
         <li>
-          <a href="{% url 'members:regular' %}" class="button large"
+          <form action="{% url 'members:watchlist' request.user.id %}"
+                method="POST" id="submityear">
+                {% csrf_token %}
+          <input type="hidden" name="order" value="year">
+          <a class="button large" onclick="document.getElementById('submityear').submit();"
             >Order by Year</a>
+          </input>
+        </form>
         </li>
         <li>
-          <a href="{% url 'members:premium' %}" class="button large"
-            >Order Alphabetically</a>
+          <form action="{% url 'members:watchlist' request.user.id %}"
+                method="POST" id="submitalphabetically">
+                {% csrf_token %}
+          <input type="hidden" name="order" value="alphabet">
+          <a class="button large" onclick="document.getElementById('submitalphabetically').submit();"
+          >Order Alphabetically</a>
+        </input>
+      </form>
         </li>
         <li>
           <a class="button large" id="drop" onclick="revealdrop('drop')" >Filter Genre</a>
@@ -22,9 +34,9 @@
             <form action="{% url 'members:watchlist' request.user.id %}"
                 method="POST" id="submitstuff{{ forloop.counter }}" style="margin-bottom: 0 !important;">
                 {% csrf_token %}
-            <input type="hidden" name="genre" value="{{ genre }}">
+            <input type="hidden" name="order" value="{{ genre }}">
             <a class="button large" 
-            style="-webkit-box-shadow: 0 0 1px #000 !important; height: 1rem !important; line-height: 1rem !important; display: none !important"
+            style="-webkit-box-shadow: 0 0 3.5px #000 !important; height: 1.5rem !important; line-height: 1.5rem !important; display: none !important"
             id="droplist{{ forloop.counter }}" onclick="document.getElementById('submitstuff{{ forloop.counter }}').submit();">{{ genre }}</a>
             </input>
           </form>

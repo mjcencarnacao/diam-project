@@ -240,12 +240,12 @@ function unpeye(id){
 
 function revealdrop(id){
   if(document.getElementById("droplist1").style.display == 'none'){
-  for(var i = 1; i < 14; i++){
+  for(var i = 1; i < 29; i++){
     var newid = 'droplist' + i;
     if (document.getElementById(newid)) document.getElementById(newid).style.display = "block";
   }
 } else {
-  for(var i = 1; i < 14; i++){
+  for(var i = 1; i < 29; i++){
     var newid = 'droplist' + i;
     if (document.getElementById(newid)) document.getElementById(newid).style.display = "none";
   }
