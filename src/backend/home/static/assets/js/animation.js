@@ -237,3 +237,17 @@ function peye(id){
 function unpeye(id){
   document.getElementById(id).setAttribute("style", "color:rgb(162, 10, 233) !important; box-shadow: inset 0 0 0 2px #9c06f3 !important;");
 }
+
+function revealdrop(id){
+  if(document.getElementById("droplist1").style.display == 'none'){
+  for(var i = 1; i < 14; i++){
+    var newid = 'droplist' + i;
+    if (document.getElementById(newid)) document.getElementById(newid).style.display = "block";
+  }
+} else {
+  for(var i = 1; i < 14; i++){
+    var newid = 'droplist' + i;
+    if (document.getElementById(newid)) document.getElementById(newid).style.display = "none";
+  }
+}
+}

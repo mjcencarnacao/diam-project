@@ -1,7 +1,7 @@
 from xml.etree.ElementTree import Comment
-
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+#from backend.home.views import movie_details
 from .forms import SignUpForm, LoginForm, Profile
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -70,7 +70,20 @@ def get_profile_page(request, user_id):
 
 def get_watchlist_page(request, user_id):
     movies = Movie.objects.filter(watch_list=user_id)
-    return render(request, 'watchlist.html', {'movies': movies})
+    gender_set = set()
+    for movie in movies:
+        genders = movie.raw.get('genre')
+        gender = str(genders).translate({ord(c): None for c in '[]\''})
+        list_genders = gender.split(',')
+        for g in list_genders:
+            gender_set.add(g)
+
+    if request.method == 'POST':
+        res = request.POST.get('genre')
+        print(res)
+        movies = Movie.objects.filter(watch_list=user_id, raw__genre = res)
+        
+    return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
 
 
 def logout_user(request):
