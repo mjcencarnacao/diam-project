@@ -213,3 +213,27 @@ function increaseover(id){
 function decreaseout(id){
   document.getElementById("arrow-slide").style.transform = 'scale(1)';
 }
+
+function plike(id){
+  document.getElementById(id).setAttribute("style", "color: #44beef !important; box-shadow: inset 0 0 0 2px #44beef !important;");
+}
+
+function unplike(id){
+  document.getElementById(id).setAttribute("style", "color: red !important; box-shadow: inset 0 0 0 2px #db1111 !important;");
+}
+
+function pwatch(id){
+  document.getElementById(id).setAttribute("style", "color: #44beef !important; box-shadow: inset 0 0 0 2px #44beef !important;");
+}
+
+function unpwatch(id){
+  document.getElementById(id).setAttribute("style", "color: rgb(9, 243, 79) !important; box-shadow: inset 0 0 0 2px #0ae641 !important;");
+}
+
+function peye(id){
+  document.getElementById(id).setAttribute("style", "color: #44beef !important; box-shadow: inset 0 0 0 2px #44beef !important;");
+}
+
+function unpeye(id){
+  document.getElementById(id).setAttribute("style", "color:rgb(162, 10, 233) !important; box-shadow: inset 0 0 0 2px #9c06f3 !important;");
+}

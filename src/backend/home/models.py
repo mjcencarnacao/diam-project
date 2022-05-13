@@ -14,6 +14,7 @@ class Movie(models.Model):
     entry = models.DateTimeField(auto_now_add=True)
     likes = models.ManyToManyField(User, related_name='user_likes')
     watch_list = models.ManyToManyField(User, related_name='watch_list_of')
+    seen = models.ManyToManyField(User, related_name='seen_movie')
 
     def total_likes(self) -> int:
         return self.likes.choices.count()

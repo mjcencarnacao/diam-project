@@ -60,7 +60,7 @@ def login_user_profile(request):
         form = Profile(request.POST,request.FILES,  instance=user)
         if form.is_valid():
             form.save()
-    return render(request, 'user_profile.html', {'form': form, 'comments': comments})
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser':user})
 
 
 def get_profile_page(request, user_id):
@@ -69,7 +69,7 @@ def get_profile_page(request, user_id):
     return render(request, 'profile.html', {'critic': user_context, 'comments': comments_context})
 
 def get_watchlist_page(request, user_id):
-    movies = Movie.objects.filter(watchlist=user_id)
+    movies = Movie.objects.filter(watch_list=user_id)
     return render(request, 'watchlist.html', {'movies': movies})
 
 
@@ -94,37 +94,40 @@ def logout_user(request):
 
 
 def set_regular(request):
-    user = request.user
+    user = User.objects.get(pk=request.user.id)
+    user.is_premium_user = False
+    user.is_pro_user = False
+    user.save()
+    #user = request.user
     comments = Comments.objects.filter(critic_id=user.id)
     form = Profile(instance=user)
     if request.method == 'POST':
         form = Profile(request.POST,request.FILES,  instance=user)
         if form.is_valid():
             form.save()  
-    cur_user = User.objects.get(pk=request.user.id)
-    cur_user.is_premium_user = False
-    cur_user.is_pro_user = False
-    cur_user.save()
-    return render(request, 'user_profile.html', {'form': form, 'comments': comments})
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser':user})
 
 
 def set_premium(request):
-    user = request.user
+    user = User.objects.get(pk=request.user.id)
+    user.is_premium_user = True
+    user.is_pro_user = False
+    user.save()
+    #user = request.user
     comments = Comments.objects.filter(critic_id=user.id)
     form = Profile(instance=user)
     if request.method == 'POST':
         form = Profile(request.POST,request.FILES,  instance=user)
         if form.is_valid():
             form.save()
-    cur_user = User.objects.get(pk=request.user.id)
-    cur_user.is_premium_user = True
-    cur_user.is_pro_user = False
-    cur_user.save()
-    user_context = User.objects.get(pk=request.user.id)
-    return render(request, 'user_profile.html', {'form': form, 'comments': comments})
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser':user})
 
 def set_pro(request):
-    user = request.user
+    user: User = User.objects.get(pk=request.user.id)
+    user.is_premium_user = False
+    user.is_pro_user = True
+    user.save()
+    #user = request.user
     comments = Comments.objects.filter(critic_id=user.id)
     form = Profile(instance=user)
     if request.method == 'POST':
@@ -132,8 +135,4 @@ def set_pro(request):
         if form.is_valid():
             form.save()
     #comments_context = Comments.objects.filter(critic_id=request.user.id)
-    cur_user: User = User.objects.get(pk=request.user.id)
-    cur_user.is_premium_user = False
-    cur_user.is_pro_user = True
-    cur_user.save()
-    return render(request, 'user_profile.html', {'form': form, 'comments': comments})
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser':user})

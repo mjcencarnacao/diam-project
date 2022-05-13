@@ -15,4 +15,6 @@ urlpatterns = [
     path('search', views.search_movies, name='movie-search'),
     path('evaluate/', views.get_eval, name='eval'),
     path('erase/', views.erase, name='erase'),
+    path('add_movie/<int:pk>', views.add_movie_to_watchlist, name="add-to-watchlist"),
+    path('check_movie_seen/<int:pk>', views.check_movie_seen, name="seen_movie"),
 ]

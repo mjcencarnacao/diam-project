@@ -43,8 +43,8 @@
           <article>
             <header>
               <span class="date">Member since: {{ user.user_since }}</span>
-                <h2 style="font-size: 20px !important">{{ user.first_name }} - {% if request.user.is_pro_user %} Pro User {% endif %}{% if request.user.is_premium_user %} Premium User {% endif %}
-                  {% if request.user.is_regular_user == True and request.user.is_premium_user == False and request.user.is_pro_user == False %} Regular User {% endif %}
+                <h2 style="font-size: 20px !important">{{ user.first_name }} - {% if myuser.is_pro_user %} Pro User {% endif %}{% if myuser.is_premium_user %} Premium User {% endif %}
+                  {% if myuser.is_regular_user == True and myuser.is_premium_user == False and myuser.is_pro_user == False %} Regular User {% endif %}
                 </h2>
             </header>
             <br>

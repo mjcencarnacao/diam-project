@@ -16,17 +16,61 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       <img style="width: 350px !important; height: 500px !important" src="{{ movie.raw | get_movie_cover }}" alt="" />
       <ul class="actions special">
         <li>
-          <a href="#" class="button"><i class="fa fa-eye"></i></a>
+          {% has_on_watchlist request.user.id as haswatch %}
+          {% if haswatch == True %}
+          <form action="{% url 'home:add-to-watchlist' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fas fa-cloud" id="watchlisteye" onmouseover="pwatch('watchlisteye')" onmouseout="unpwatch('watchlisteye')"
+          style="color:rgb(9, 243, 79) !important; box-shadow: inset 0 0 0 2px #0ae641 !important;">
+          </button>
+            </form>
+            {% else %}
+            <form action="{% url 'home:add-to-watchlist' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fas fa-cloud" id="watchlisteye">
+          </button>
+            </form>
+            {% endif %}
         </li>
         <li>
+          {% has_likes request.user.id as haslikes %}
+          {% if haslikes == True %}
           <form action="{% url 'home:like-movie' movie.id %}"
                 method="POST">
                 {% csrf_token %}
-          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fas fa-heart"></button>
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fas fa-heart" id="heartlike" onmouseover="plike('heartlike')" onmouseout="unplike('heartlike')"
+          style="color:red !important; box-shadow: inset 0 0 0 2px #db1111 !important;">
+          </button>
             </form>
+          {% else %}
+          <form action="{% url 'home:like-movie' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fas fa-heart">
+          </button>
+            </form>
+            {% endif %}
         </li>
         <li>
-          <a href="#" class="button"><i class="fas fa-cloud"></i></a>
+          {% has_seen_movie request.user.id as has_seen %}
+          {% if has_seen == True %}
+          <form action="{% url 'home:seen_movie' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fa fa-eye" id="seeneye" onmouseover="peye('seeneye')" onmouseout="unpeye('seeneye')"
+          style="color:rgb(162, 10, 233) !important; box-shadow: inset 0 0 0 2px #9c06f3 !important;">
+          </button>
+            </form>
+            {% else %}
+            <form action="{% url 'home:seen_movie' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fa fa-eye">
+          </button>
+            </form>
+            {% endif %}
         </li>
       </ul>
     </div>
@@ -37,8 +81,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       <b>Description: </b>{{ movie.raw | get_movie_description }}<br />
       <br />
       <b>Genre: </b>{{ movie.raw | get_movie_genre }}<br />
-       <b>Likes: </b>{{ movie | get_movie_likes }}<br />
       <b>Actors: </b>{{ movie.raw | get_movie_actors }} <br />
+      <b>Likes: </b>{{ movie | get_movie_likes }}<br />
+      <b>Positive Reviews Graph: </b><br /><br />
       <div class="flex-wrapper">
         <div class="single-chart">
           <svg viewBox="0 0 36 36" class="circular-chart green">
