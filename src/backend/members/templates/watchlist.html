@@ -5,8 +5,23 @@
     {% block content %}
 
     <div id="main">
-      <!-- Posts -->
-      <section class="posts">
+      <ul class="actions special">
+        <li>
+          <a href="{% url 'members:regular' %}" class="button large"
+            >Get Regular</a>
+        </li>
+        <li>
+          <a href="{% url 'members:premium' %}" class="button large"
+            >Get Premium</a>
+        </li>
+        <li>
+          <a href="{% url 'members:pro' %}" class="button large"
+            >Get Pro</a>
+        </li>
+      </ul>
+      <hr style="width: 90% !important; margin-left: 5%; border-bottom: 0;" />
+
+      <section class="posts" style="border-top: 0;">
         {% for movie in movies %}
         <article>
           <header>

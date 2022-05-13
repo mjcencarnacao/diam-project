@@ -2,24 +2,24 @@ from django.template.defaulttags import register
 from .models import Comments, Movie
 
 @register.simple_tag
-def has_seen_movie(user_id):
-    movies = Movie.objects.filter(seen=user_id)
+def has_seen_movie(user_id, movie_id):
+    movies = Movie.objects.filter(seen=user_id, id=movie_id)
     if not movies:
         return False
     else:
         return True
 
 @register.simple_tag
-def has_on_watchlist(user_id):
-    movies = Movie.objects.filter(watch_list=user_id)
+def has_on_watchlist(user_id, movie_id):
+    movies = Movie.objects.filter(watch_list=user_id, id=movie_id)
     if not movies:
         return False
     else:
         return True
 
 @register.simple_tag
-def has_likes(user_id):
-    movies = Movie.objects.filter(likes=user_id)
+def has_likes(user_id, movie_id):
+    movies = Movie.objects.filter(likes=user_id, id=movie_id)
     if not movies:
         return False
     else:

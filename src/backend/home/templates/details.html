@@ -16,7 +16,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       <img style="width: 350px !important; height: 500px !important" src="{{ movie.raw | get_movie_cover }}" alt="" />
       <ul class="actions special">
         <li>
-          {% has_on_watchlist request.user.id as haswatch %}
+          {% has_on_watchlist request.user.id movie.id as haswatch %}
           {% if haswatch == True %}
           <form action="{% url 'home:add-to-watchlist' movie.id %}"
                 method="POST">
@@ -35,7 +35,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
             {% endif %}
         </li>
         <li>
-          {% has_likes request.user.id as haslikes %}
+          {% has_likes request.user.id movie.id as haslikes %}
           {% if haslikes == True %}
           <form action="{% url 'home:like-movie' movie.id %}"
                 method="POST">
@@ -54,7 +54,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
             {% endif %}
         </li>
         <li>
-          {% has_seen_movie request.user.id as has_seen %}
+          {% has_seen_movie request.user.id movie.id as has_seen %}
           {% if has_seen == True %}
           <form action="{% url 'home:seen_movie' movie.id %}"
                 method="POST">
@@ -83,7 +83,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
       <b>Genre: </b>{{ movie.raw | get_movie_genre }}<br />
       <b>Actors: </b>{{ movie.raw | get_movie_actors }} <br />
       <b>Likes: </b>{{ movie | get_movie_likes }}<br />
-      <b>Positive Reviews Graph: </b><br /><br />
+      <b>AI Positive Reviews Graph: </b><br /><br />
       <div class="flex-wrapper">
         <div class="single-chart">
           <svg viewBox="0 0 36 36" class="circular-chart green">

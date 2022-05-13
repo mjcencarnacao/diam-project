@@ -16,8 +16,9 @@ from services.ProcessingService import ProcessingService
 
 
 def like_movie(request, pk):
-    movie = get_object_or_404(Movie, id=request.POST.get('movie_id'))
-    movie_with_like = Movie.objects.filter(likes=request.user.id)
+    id = request.POST.get('movie_id')
+    movie = get_object_or_404(Movie, id=id)
+    movie_with_like = Movie.objects.filter(likes=request.user.id, id=id)
     if not movie_with_like:
         movie.likes.add(request.user)
         return HttpResponseRedirect(reverse("home:movie-details", args=[int(pk)]))
@@ -286,8 +287,9 @@ def erase(request):
     return JsonResponse({'p_id': comment_id, })
 
 def add_movie_to_watchlist(request, pk):
-    movie = get_object_or_404(Movie, id=request.POST.get('movie_id'))
-    movie_on_watchlist = Movie.objects.filter(watch_list=request.user.id)
+    id=request.POST.get('movie_id')
+    movie = get_object_or_404(Movie, id=id)
+    movie_on_watchlist = Movie.objects.filter(watch_list=request.user.id, id=id)
     if not movie_on_watchlist:
         movie.watch_list.add(request.user)
         return HttpResponseRedirect(reverse("home:movie-details", args=[int(pk)]))
@@ -296,8 +298,9 @@ def add_movie_to_watchlist(request, pk):
         return HttpResponseRedirect(reverse("home:movie-details", args=[int(pk)]))
 
 def check_movie_seen(request, pk):
-    movie = get_object_or_404(Movie, id=request.POST.get('movie_id'))
-    movie_seen = Movie.objects.filter(seen=request.user.id)
+    id=request.POST.get('movie_id')
+    movie = get_object_or_404(Movie, id=id)
+    movie_seen = Movie.objects.filter(seen=request.user.id, id=id)
     if not movie_seen:
         movie.seen.add(request.user)
         return HttpResponseRedirect(reverse("home:movie-details", args=[int(pk)]))
