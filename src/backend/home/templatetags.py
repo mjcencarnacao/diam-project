@@ -42,6 +42,8 @@ def count_movie_comments(movie_id, user_id):
 
 @register.simple_tag
 def next_tag(lista, arg1):
+    if lista.index(arg1) == 1:
+        return lista[lista.index(arg1)]
     return lista[lista.index(arg1) + 1]
 
 
