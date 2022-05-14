@@ -1,6 +1,5 @@
 import pickle
 import os
-import numpy as np
 from .Tokenizer import Tokenizer
 
 cur_dir = os.path.dirname(__file__)

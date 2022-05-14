@@ -39,7 +39,6 @@ class DictionaryManager:
 
     @staticmethod
     def add_movie_info_to_list(lst: [Dict], srapper_info: Dict, dict: Dict) -> None:
-        print(srapper_info)
         try:
             if srapper_info["Plot"] != "N/A" and srapper_info["Poster"] != "N/A":
                 srapper_info["imdb_url"] = dict["imdbID"]
