@@ -1,12 +1,10 @@
-from xml.etree.ElementTree import Comment
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.shortcuts import render, redirect
-#from backend.home.views import movie_details
 from .forms import SignUpForm, LoginForm, Profile
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth import logout
-from home.models import Comments
+from home.models import Comments, GenderMovies
 from django.shortcuts import get_object_or_404
 from .models import User
 from home.models import Movie
@@ -57,10 +55,10 @@ def login_user_profile(request):
     comments = Comments.objects.filter(critic_id=user.id).order_by('-entry')
     form = Profile(instance=user)
     if request.method == 'POST':
-        form = Profile(request.POST,request.FILES,  instance=user)
+        form = Profile(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser':user})
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser': user})
 
 
 def get_profile_page(request, user_id):
@@ -68,16 +66,21 @@ def get_profile_page(request, user_id):
     user_context = User.objects.get(pk=user_id)
     return render(request, 'profile.html', {'critic': user_context, 'comments': comments_context})
 
+
+def user_is_not_regular_check(user):
+    if user.is_premium_user is False and user.is_pro_user is False:
+        return False
+    else:
+        return True
+
+
 def get_watchlist_page(request, user_id):
     movies = Movie.objects.filter(watch_list=user_id)
     gender_set = set()
     for movie in movies:
-        genders = movie.raw.get('genre')
-        gender = str(genders).translate({ord(c): None for c in '[]\''})
-        list_genders = gender.split(',')
-        for g in list_genders:
-            gender_set.add(g)
-
+        genders = movie.gender.all()
+        for g in genders:
+            gender_set.add(g.gender)
     if request.method == 'POST':
         if request.POST['order'] == 'alphabet':
             movies = Movie.objects.filter(watch_list=user_id).order_by("name")
@@ -85,7 +88,7 @@ def get_watchlist_page(request, user_id):
         if request.POST['order'] == 'year':
             movies = Movie.objects.filter(watch_list=user_id).order_by("raw__year")
             return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
-        if  request.POST['order']:
+        if request.POST['order']:
             res: str = request.POST.get('order')
             if res.isdigit():
                 movies = Movie.objects.filter(watch_list=user_id)
@@ -94,8 +97,10 @@ def get_watchlist_page(request, user_id):
                 return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
             else:
                 print(res)
-                movies = Movie.objects.filter(watch_list=user_id, raw__genre = res)
-        
+                gender = GenderMovies.objects.get(gender=res)
+                print(gender.id)
+                movies = Movie.objects.filter(watch_list=user_id, gender=gender.id)
+                return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
     return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
 
 
@@ -127,10 +132,10 @@ def set_regular(request):
     comments = Comments.objects.filter(critic_id=user.id).order_by('-entry')
     form = Profile(instance=user)
     if request.method == 'POST':
-        form = Profile(request.POST,request.FILES,  instance=user)
+        form = Profile(request.POST, request.FILES, instance=user)
         if form.is_valid():
-            form.save()  
-    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser':user})
+            form.save()
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser': user})
 
 
 def set_premium(request):
@@ -141,10 +146,11 @@ def set_premium(request):
     comments = Comments.objects.filter(critic_id=user.id).order_by('-entry')
     form = Profile(instance=user)
     if request.method == 'POST':
-        form = Profile(request.POST,request.FILES,  instance=user)
+        form = Profile(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser':user})
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser': user})
+
 
 def set_pro(request):
     user: User = User.objects.get(pk=request.user.id)
@@ -154,7 +160,7 @@ def set_pro(request):
     comments = Comments.objects.filter(critic_id=user.id).order_by('-entry')
     form = Profile(instance=user)
     if request.method == 'POST':
-        form = Profile(request.POST,request.FILES,  instance=user)
+        form = Profile(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
-    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser':user})
+    return render(request, 'user_profile.html', {'form': form, 'comments': comments, 'myuser': user})

@@ -20,7 +20,7 @@ class Scrapper:
         return dict(zip(titles, descriptions))
 
     @staticmethod
-    def get_search_movies(movie_name: str) -> Dict:
+    def get_search_movies(movie_name: str) -> [Dict]:
         url: str = f"https://www.omdbapi.com/?s={movie_name}&apikey=1bf54cb4"
         request = json.loads(requests.get(url).text)
         try:

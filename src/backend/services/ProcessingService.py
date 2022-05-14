@@ -1,6 +1,7 @@
 from .AIService import AIService
 from home.models import Comments
 
+
 class ProcessingService:
     @staticmethod
     def positive_percentage(comments: []):
@@ -32,6 +33,3 @@ class ProcessingService:
         comment_object.critic_feedback = True
         comment_object.save()
         return ai_feedback_plain_text
-
-
-

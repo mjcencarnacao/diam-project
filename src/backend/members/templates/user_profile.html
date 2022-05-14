@@ -11,9 +11,10 @@
         <header class="major">
           <span class="date">Updated IMDB List</span>
           <h2>
-            <a href="#"
+            <a
               >Welcome to<br />
-              Your Profile Page</a
+              Your Profile Page
+            </a
             >
           </h2>
           <p>
@@ -129,7 +130,7 @@
                     {{ comment.likes }} likes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
                   </h2>
 
-                  {% if comment.critic_feedback == False and user.is_pro_user == True %}
+                  {% if comment.critic_feedback == False and myuser.is_pro_user == True %}
                   &nbsp; &nbsp;
                   <div style="display: flex; height: 16px !important;margin-left: auto !important;" class="text-right">
                  <h2 id="{{ comment.id }}-question" style="display: inline !important; font-size: large !important; margin-left: auto !important;">Do you agree with the AI?</h2>
