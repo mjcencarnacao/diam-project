@@ -1,0 +1,445 @@
+{% extends 'base.html' %} {% load static %}
+<html>
+{% block extrastyle %}
+<link rel="stylesheet" href="{% static '../static/assets/css/main2.css' %}" />
+<link rel="stylesheet" 
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% endblock extrastyle %}
+
+<body class="is-preload">
+  {% block content %}
+  <div id="main">
+
+
+    <div style="float: left; margin-right: 40px">
+      <img style="width: 350px !important; height: 500px !important" src="{{ movie.raw | get_movie_cover }}" alt="" />
+      <ul class="actions special">
+        <li>
+          {% has_on_watchlist request.user.id movie.id as haswatch %}
+          {% if haswatch == True %}
+          <form action="{% url 'home:add-to-watchlist' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fas fa-cloud" id="watchlisteye" onmouseover="pwatch('watchlisteye')" onmouseout="unpwatch('watchlisteye')"
+          style="color:rgb(9, 243, 79) !important; box-shadow: inset 0 0 0 2px #0ae641 !important;">
+          </button>
+            </form>
+            {% else %}
+            <form action="{% url 'home:add-to-watchlist' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fas fa-cloud" id="watchlisteye">
+          </button>
+            </form>
+            {% endif %}
+        </li>
+        <li>
+          {% has_likes request.user.id movie.id as haslikes %}
+          {% if haslikes == True %}
+          <form action="{% url 'home:like-movie' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fas fa-heart" id="heartlike" onmouseover="plike('heartlike')" onmouseout="unplike('heartlike')"
+          style="color:red !important; box-shadow: inset 0 0 0 2px #db1111 !important;">
+          </button>
+            </form>
+          {% else %}
+          <form action="{% url 'home:like-movie' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fas fa-heart">
+          </button>
+            </form>
+            {% endif %}
+        </li>
+        <li>
+          {% has_seen_movie request.user.id movie.id as has_seen %}
+          {% if has_seen == True %}
+          <form action="{% url 'home:seen_movie' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fa fa-eye" id="seeneye" onmouseover="peye('seeneye')" onmouseout="unpeye('seeneye')"
+          style="color:rgb(162, 10, 233) !important; box-shadow: inset 0 0 0 2px #9c06f3 !important;">
+          </button>
+            </form>
+            {% else %}
+            <form action="{% url 'home:seen_movie' movie.id %}"
+                method="POST">
+                {% csrf_token %}
+          <button type="submit" name="movie_id" value="{{ movie.id }}" class="fa fa-eye">
+          </button>
+            </form>
+            {% endif %}
+        </li>
+      </ul>
+    </div>
+    <div>
+      <b>Year: </b>{{ movie.raw | get_movie_year }}<br />
+      <b>Title: </b>{{ movie.name }} <br />
+      <br />
+      <b>Description: </b>{{ movie.raw | get_movie_description }}<br />
+      <br />
+      <b>Director: </b>{{ movie.raw | get_movie_directors }}<br />
+      <b>Actors: </b>{{ movie.raw | get_movie_actors }} <br />
+      <b>Genre: </b>{{ movie.raw | get_movie_genre }}<br />
+      <b>AI Positive Reviews Graph: </b><br /><br />
+      <div class="flex-wrapper">
+        <div class="single-chart">
+          <svg viewBox="0 0 36 36" class="circular-chart green">
+            <path class="circle-bg" d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path class="circle" stroke-dasharray="{{ positive_percentage }}, 100" d="M18 2.0845
+          a 15.9155 15.9155 0 0 1 0 31.831
+          a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <text x="18" y="20.35" class="percentage">{{ positive_percentage }}%</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div style="display: block; padding-bottom: 2px !important;">
+      <h2 style="display:inline; font-size: larger;">Comentários dos Utilizadores</h2>
+      {% if user.is_premium_user or user.is_pro_user %}
+      <div style="display:inline; padding-left: 55% !important;">
+        <form method="post" action="{% url 'home:movie-details' movie.id %}" style="all: unset !important;">
+          {% csrf_token %}
+        <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_user" value="{{ request.user.id }}">
+          <i style="cursor: pointer;" id="comment_filter_user" class="fa fa-id-card-clip" onmouseover="hoverfilter('comment_filter_user')"
+            onmouseout="hoverfilterout('comment_filter_user')"></i>
+      </button></form>
+      </div>
+      {% else %}
+      <div style="display:inline; padding-left: 55% !important;">
+        <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_user" value="{{ request.user.id }}">
+          <i style="cursor: pointer;" id="comment_filter_user" class="fa fa-id-card-clip" onmouseover="hoverfilter('comment_filter_user')"
+            onmouseout="hoverfilterout('comment_filter_user')" onclick="paga()"></i>
+      </button>
+      </div>
+      {% endif %}
+      {% if user.is_premium_user or user.is_pro_user %}
+      <div style="display:inline; padding-left: 1% !important;">
+        <form method="post" action="{% url 'home:movie-details' movie.id %}" style="all: unset !important;">
+          {% csrf_token %}
+        <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_positive">
+          <i style="cursor: pointer;" id="comment_filter_positive" class="fa fa-heart-circle-plus" onmouseover="hoverfilter('comment_filter_positive')"
+            onmouseout="hoverfilterout('comment_filter_positive')"></i>
+      </button></form>
+      </div>
+      {% else %}
+      <div style="display:inline; padding-left: 1% !important;">
+        <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_positive">
+          <i style="cursor: pointer;" id="comment_filter_positive" class="fa fa-heart-circle-plus" onmouseover="hoverfilter('comment_filter_positive')"
+            onmouseout="hoverfilterout('comment_filter_positive')" onclick="paga()"></i>
+      </button>
+      </div>
+      {% endif %}
+      {% if user.is_premium_user or user.is_pro_user %}
+      <div style="display:inline; padding-left: 1% !important;">
+        <form method="post" action="{% url 'home:movie-details' movie.id %}" style="all: unset !important;">
+          {% csrf_token %}
+        <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_negative">
+          <i style="cursor: pointer;" id="comment_filter_negative" class="fa fa-heart-circle-minus" onmouseover="hoverfilter('comment_filter_negative')"
+            onmouseout="hoverfilterout('comment_filter_negative')"></i>
+      </button>
+      </form>
+      </div>
+      {% else %}
+      <div style="display:inline; padding-left: 1% !important;">
+        
+        <button style="all: unset !important; cursor: pointer;" type="hidden" name="filter_button_negative">
+          <i style="cursor: pointer;" id="comment_filter_negative" class="fa fa-heart-circle-minus" onmouseover="hoverfilter('comment_filter_negative')"
+            onmouseout="hoverfilterout('comment_filter_negative')" onclick="paga()"></i>
+      </button>
+      </div>
+      {% endif %}
+      {% if user.is_pro_user %}
+      {% count_movie_comments movie.id request.user.id as counter %}
+      {% if counter < 3 %}
+      <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
+        onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="clickplus()"></i>
+    </div>
+      {% else %}
+      <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
+        onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="reachedlimit_pro()"></i>
+    </div>
+      {% endif %}
+      {% endif %}
+      
+      {% if user.is_premium_user %}
+      {% count_movie_comments movie.id request.user.id as counter %}
+      {% if counter == 0 %}
+      <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
+          onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="clickplus()"></i>
+      </div>
+      {% else %}
+      <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
+        onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="reachedlimit_premium()"></i>
+    </div>
+      {% endif %}
+      {% endif %}
+      {% if user.is_premium_user == False and user.is_pro_user == False %}    
+      <div style="display:inline; padding-left: 1% !important;"><i style="cursor: pointer;" id="comment_plus" class="fa fa-plus"
+        onmouseover="hoverplus('comment_plus')" onmouseout="hoverplusout('comment_plus')" onclick="paga()"></i>
+    </div>
+      {% endif %}
+    </div>
+    <hr style="width: 90% !important; margin-left: 5%;" />
+
+
+    <div id="form_comment" class="container" style="display:none !important; padding-bottom: 0 !important;">
+      <form id="form_comment_in" action method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="Title">Título: </label><input style="border: 1px solid #eeeeee !important;" type="text"
+          placeholder="" name="titulo" required /><br />
+        <label for="Comment">Comentário: </label><textarea style="border: 1px solid #eeeeee !important;" type="text"
+          placeholder="Introduza o seu comentário..." name="comentario" required></textarea><br />
+        <input type="submit" value="Submeter">
+      </form>
+    </div>
+    <i id="slide_up" class='fa fa-caret-up' style="padding: 1% 0% 1% 93% !important; display: none;" onclick="slideup()"
+      onmouseover="slideupover()" onmouseout="slideupout()"></i>
+    <hr id="comment_hr" style="width: 90% !important; margin-left: 5%; display:none !important" />
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8">
+          {% for comment in comments %}
+          <section class="comment-list">
+            <article class="row" id="{{ comment.id }}-container">
+              <div class="col-md-2 col-sm-2 hidden-xs">
+                <div class="col-md-10 col-sm-10">
+                  <div class="panel-body" style="display: inline">
+                    <header class="text-left">
+                      <div class="comment-user">
+                        <i class="fa fa-user"></i> 
+                        {% if user.is_pro_user and comment.critic_id is not None %}<a href="{% url 'members:profile' comment.critic_id %}"> {{ comment.critic_username }}</a>{% endif %}
+                        {% if user.is_pro_user and comment.critic_id is None %}{{ comment.critic_username }}{% endif %}
+                        {% if user.is_premium_user and comment.critic_id is not None %}<a href="{% url 'members:profile' comment.critic_id %}"> {{ comment.critic_username }}</a> {% endif %}
+                        {% if user.is_premium_user and comment.critic_id is None %}{{ comment.critic_username }}{% endif %}
+                        {% if user.is_premium_user == False and user.is_pro_user == False %}{{ comment.critic_username }}{% endif %}
+                      </div>
+                      <time class="comment-date" datetime="16-12-2014 01:05">
+                        <i class="fa fa-clock-o"></i>{{ comment.entry }}</time>
+                    </header>
+                  </div>
+                  <div class="comment-post">
+                    <p>
+                      <strong>{{ comment.title }}</strong><br />
+                      {{ comment.comment }}
+                    </p>
+                  </div>
+                  <div style="display: flex; height: 16px !important;" class="text-right">
+                    <i id="{{ comment.id }}-aifeedback"
+                      onmouseover="doThis('{{ comment.id }}', '{{ comment.AI_FeedBack }}')"
+                      style="cursor: pointer;"
+                      onclick="doThat('{{ comment.id }}')" class="fa fa-search"></i>
+                    <h2 style="display:none; margin-bottom: 0 !important; font-size: large !important;"
+                      id="{{ comment.id }}-aiscore">&nbsp;<b>AI Score:</b></h2>&nbsp;<h2
+                      style="display:none; margin-bottom: 0 !important; font-size: large !important;"
+                      id="{{ comment.id }}-nota" style="display: none">
+                    </h2>
+                    &nbsp;
+                    {% if user.is_premium_user or user.is_pro_user %}
+                    {% if comment.id in commentslikes %}
+                      {% next_tag commentslikes comment.id as next %}
+                        {% if next == True %}
+                        <div style="display: inline-block !important">
+                          <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px; color:green " id="{{ comment.id }}-thumbsup"
+                              class="fas fa-thumbs-up" onmouseover="paintthumbsup('{{ comment.id }}')"
+                              onmouseout="unpaintthumbsup('{{ comment.id }}')"
+                              onclick="h_paintthumbsup('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        <div style="display: inline-block !important">
+                          <button style="all: unset !important; cursor: pointer;" type="submit" class="dislike-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="dislike-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsdown"
+                              class="fas fa-thumbs-down fa-flip-horizontal"
+                              onmouseover="paintthumbsdown('{{ comment.id }}')"
+                              onmouseout="unpaintthumbsdown('{{ comment.id }}')"
+                              onclick="h_paintthumbsdown('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        <h2 id="{{ comment.id }}-likes"
+                          style="color: black; display: inline; margin-bottom: 0 !important; font-size: large !important;">
+                          {{ comment.likes }} likes
+                        </h2>
+                        {% if comment.critic_id == request.user.id %}
+                        <div style="display: inline-block !important; margin-left: auto;">
+                          <button style="all: unset !important; cursor: pointer !important;" type="submit" class="trashcan-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="trashcan-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-trashcan"
+                              class="fa-solid fa-trash-can" onmouseover="trashover('{{ comment.id }}')" onmouseout="trashout('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        {% endif %}
+                        {% endif %}
+                        {% if next == False %}
+                        <div style="display: inline-block !important">
+                          <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsup"
+                              class="fas fa-thumbs-up" onmouseover="paintthumbsup('{{ comment.id }}')"
+                              onmouseout="unpaintthumbsup('{{ comment.id }}')" onclick="h_paintthumbsup('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        <div style="display: inline-block !important">
+                          <button style="all: unset !important; cursor: pointer;" type="submit" class="dislike-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="dislike-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px; color:red" id="{{ comment.id }}-thumbsdown"
+                              class="fas fa-thumbs-down fa-flip-horizontal"
+                              onmouseover="paintthumbsdown('{{ comment.id }}')"
+                              onmouseout="unpaintthumbsdown('{{ comment.id }}')"
+                              onclick="h_paintthumbsdown('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        <h2 id="{{ comment.id }}-likes"
+                          style="color: black; display: inline; margin-bottom: 0 !important; font-size: large !important;">
+                          {{ comment.likes }} likes
+                        </h2>
+                        {% if comment.critic_id == request.user.id %}
+                        <div style="display: inline-block !important; margin-left: auto;">
+                          <button style="all: unset !important; cursor: pointer !important;" type="submit" class="trashcan-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="trashcan-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-trashcan"
+                              class="fa-solid fa-trash-can" onmouseover="trashover('{{ comment.id }}')" onmouseout="trashout('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        {% endif %}
+                      {% endif %}
+                      {% endif %}
+                      {% if comment.id not in commentslikes %}
+                      <div style="display: inline-block !important">
+                        <button style="all: unset !important; cursor: pointer;" type="submit" class="like-button"
+                          data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="like-button-{{ comment.id }}">
+                          <span style="vertical-align: 13px; margin-bottom: 0px; " id="{{ comment.id }}-thumbsup"
+                            class="fas fa-thumbs-up" onmouseover="paintthumbsup('{{ comment.id }}')"
+                            onmouseout="unpaintthumbsup('{{ comment.id }}')" onclick="h_paintthumbsup('{{ comment.id }}')"></span>
+                        </button>
+                      </div>
+                      &nbsp;
+                      <div style="display: inline-block !important">
+                        <button style="all: unset !important; cursor: pointer;" type="submit" class="dislike-button"
+                          data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="dislike-button-{{ comment.id }}">
+                          <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-thumbsdown"
+                            class="fas fa-thumbs-down fa-flip-horizontal"
+                            onmouseover="paintthumbsdown('{{ comment.id }}')"
+                            onmouseout="unpaintthumbsdown('{{ comment.id }}')"
+                            onclick="h_paintthumbsdown('{{ comment.id }}')"></span>
+                        </button>
+                      </div>
+                      &nbsp;
+                      <h2 id="{{ comment.id }}-likes"
+                        style="color: black; display: none; margin-bottom: 0 !important; font-size: large !important;">
+                      </h2>
+                      {% if comment.critic_id == request.user.id %}
+                      &nbsp;&nbsp;&nbsp;
+                        <div style="display: inline-block !important; margin-left: auto;" id="{{ comment.id }}-trashcandiv">
+                          <button style="all: unset !important; cursor: pointer !important; " type="submit" class="trashcan-button"
+                            data-rowid="{{ comment.id }}" value="{{ comment.id }}" id="trashcan-button-{{ comment.id }}">
+                            <span style="vertical-align: 13px; margin-bottom: 0px;" id="{{ comment.id }}-trashcan"
+                              class="fa-solid fa-trash-can" onmouseover="trashover('{{ comment.id }}')" onmouseout="trashout('{{ comment.id }}')"></span>
+                          </button>
+                        </div>
+                        &nbsp;
+                        {% endif %}
+                    {% endif %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </article>
+            <hr id="{{ comment.id }}-hr"/>
+            {% endfor %}
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script>
+    $(document).on('click', '.like-button', function (e) {
+      e.preventDefault();
+      var rowid = $(this).data('rowid')
+      var like_button = "#like-button-" + rowid
+      $.ajax({
+        type: 'POST',
+        url: '{% url "home:like" %}',
+        data: {
+          postid: $(like_button).val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
+          action: 'post'
+        },
+        success: function (json) {
+          var comment_id = json['p_id'] + "-likes"
+          document.getElementById(comment_id).innerHTML = json['result'] + " likes"
+          document.getElementById(comment_id).style.display = "inline"
+          console.log(json)
+        },
+        error: function (xhr, errmsg, err) {
+        }
+      });
+    })
+
+    $(document).on('click', '.dislike-button', function (e) {
+      e.preventDefault();
+      var rowid = $(this).data('rowid')
+      var dislike_button = "#dislike-button-" + rowid
+      $.ajax({
+        type: 'POST',
+        url: '{% url "home:dislike" %}',
+        data: {
+          postid: $(dislike_button).val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
+          action: 'post'
+        },
+        success: function (json) {
+          var comment_id = json['p_id'] + "-likes"
+          document.getElementById(comment_id).innerHTML = json['result'] + " likes"
+          document.getElementById(comment_id).style.display = "inline"
+          console.log(json)
+        },
+        error: function (xhr, errmsg, err) {
+        }
+      });
+    })
+
+    $(document).on('click', '.trashcan-button', function (e) {
+      e.preventDefault();
+      var rowid = $(this).data('rowid')
+      var trash_button = "#trashcan-button-" + rowid
+      $.ajax({
+        type: 'POST',
+        url: '{% url "home:erase" %}',
+        data: {
+          postid: $(trash_button).val(),
+          csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken').val(),
+          action: 'post'
+        },
+        success: function (json) {
+          var container_id = json['p_id'] + "-container"
+          var hr_id = json['p_id'] + "-hr"
+          document.getElementById(container_id).style.display = "none"
+          document.getElementById(hr_id).style.display = "none"
+          console.log(json)
+        },
+        error: function (xhr, errmsg, err) {
+        }
+      });
+    })
+
+
+  </script>
+  {% endblock content %}
+</body>
+
+</html>

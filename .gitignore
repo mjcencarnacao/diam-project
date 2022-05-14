@@ -46,6 +46,7 @@ pip-delete-this-directory.txt
 #Pycache
 __pycache__/
  *.pyc
+
 # Visual Studio Code #
 .vscode/*
 !.vscode/settings.json
@@ -53,3 +54,9 @@ __pycache__/
 !.vscode/launch.json
 !.vscode/extensions.json
 .history
+
+#IA. Ignore IA for now beacuse of different training process and testin
+src/backend/services/AISerialized
+
+#User Images
+src/backend/media/

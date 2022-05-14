@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
+from home.models import Comments
+from django.forms import ModelForm
 
 
 class LoginForm(forms.Form):
@@ -19,23 +21,66 @@ class LoginForm(forms.Form):
         )
     )
 
+    fields = ('username', 'password')
+
+
+class Profile(ModelForm):
+    class Meta:
+        model = User
+        fields = ('first_name', 'last_name', 'username', 'email', 'profile_pic', 'description')
+        help_texts = {
+            'username': None,
+        }
+
 
 class SignUpForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2', 'is_regular_user', 'is_premium_user', 'is_pro_user')
 
-        labels = {
-            'name': '',
-            'description': '',
-            'event_date': 'YYYY-MM-DD HH:MM:SS',
-            'venue': 'Venue',
-            'manage': 'Manager',
-            'attendees': 'Attendees',
+        first_name = forms.CharField(
+            widget=forms.TextInput(
+                attrs={
+                    "class": "form-control"
+                }
+            )
+        )
 
-        }
+        last_name = forms.CharField(
+            widget=forms.TextInput(
+                attrs={
+                    "class": "form-control"
+                }
+            )
+        )
+
+        username = forms.CharField(
+            widget=forms.TextInput(
+                attrs={
+                    "class": "form-control"
+                }
+            )
+        )
+        password1 = forms.CharField(
+            widget=forms.PasswordInput(
+                attrs={
+                    "class": "form-control"
+                }
+            )
+        )
+
+        password2 = forms.CharField(
+            widget=forms.PasswordInput(
+                attrs={
+                    "class": "form-control"
+                }
+            )
+        )
+
+        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2')
 
         widgets = {
+            'first_name': forms.TextInput(attrs={"class": "form-control"}),
+            'last_name': forms.TextInput(attrs={"class": "form-control"}),
             'username': forms.TextInput(attrs={"class": "form-control"}),
             'password1': forms.PasswordInput(attrs={"class": "form-control"}),
             'password2': forms.PasswordInput(attrs={"class": "form-control"}),

@@ -1,0 +1,60 @@
+{% extends 'base.html' %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+ {% block content %}
+ <div id="main">
+      <article class="post featured">
+        <header class="major">
+          <span class="date">Updated IMDB List</span>
+          <h2>
+            <a href="#"
+              >Not Sure about<br />
+              what to watch?</a
+            >
+          </h2>
+          <p>
+            Here are the Top 250 movies of all time, powered by AI and Django<br />
+            Comments in movies are analysed by our AI solution in order to give
+            you a general view of what the public thinks of.
+          </p>
+        </header>
+        <ul class="actions special">
+          <li>
+            <a href="#" class="button large">Visit IMDB Official Website</a>
+          </li>
+        </ul>
+      </article>
+   <section class="posts">
+        {% for movie in movies %}
+        <article>
+          <header>
+            <span class="date">{{ movie.raw | get_movie_year }}</span>
+            <h2>
+              <a href="{% url 'home:movie-details' movie.id %}"
+                >{{ movie.raw | get_movie_name }}</a
+              >
+            </h2>
+          </header>
+          <a href="{% url 'home:movie-details' movie.id %}" class="image fit"
+            ><img src="{{ movie.raw | get_movie_cover }}" alt=""
+          /></a>
+          <p>{{ movie.raw | get_movie_description }}</p>
+          <ul class="actions special">
+            <li>
+              <a href="{% url 'home:movie-details' movie.id %}" class="button"
+                >AI Rating</a
+              >
+            </li>
+          </ul>
+        </article>
+        {% endfor %}
+      </section>
+
+</body>
+    {% endblock content %}
+</html>

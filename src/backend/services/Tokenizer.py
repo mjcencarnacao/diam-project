@@ -1,14 +1,16 @@
 import re
-
+import os
+import pickle
 from nltk.stem.porter import PorterStemmer
-from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import HashingVectorizer
+
+cur_dir = os.path.dirname(__file__)
 
 
 class Tokenizer:
     def __init__(self, stop_words: str = 'english'):
         self._stop_words = stop_words
-        self._stop = stopwords.words(stop_words)
+        self._stop = pickle.load(open(os.path.join(cur_dir, 'AISerialized', 'pkl_objects', 'stopwords.pkl'), 'rb'))
 
     @property
     def stop_words(self):
@@ -17,11 +19,6 @@ class Tokenizer:
     @property
     def stop_words_list(self):
         return self._stop
-
-    @stop_words.setter
-    def stop_words(self, value):
-        self._stop_words = value
-        self._stop = stopwords.words(self._stop_words)
 
     @staticmethod
     def tokenize(text: str) -> [str]:

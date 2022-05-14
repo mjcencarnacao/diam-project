@@ -1,0 +1,83 @@
+{% extends 'base.html' %} {% load static %}
+<!DOCTYPE html>
+<html>
+  <body class="is-preload">
+    {% block content %}
+
+    <div id="main">
+      
+      <ul class="actions special">
+        <li>
+          <form action="{% url 'members:watchlist' request.user.id %}"
+                method="POST" id="submityear">
+                {% csrf_token %}
+          <input type="hidden" name="order" value="year">
+          <a class="button large" {% if user.is_pro_user %} onclick="document.getElementById('submityear').submit();" {% else %} onclick="getpro()" {% endif %}
+            >Order by Year</a>
+          </input>
+        </form>
+        </li>
+        <li>
+          <form action="{% url 'members:watchlist' request.user.id %}"
+                method="POST" id="submitalphabetically">
+                {% csrf_token %}
+          <input type="hidden" name="order" value="alphabet">
+          <a class="button large" {% if user.is_pro_user %} onclick="document.getElementById('submitalphabetically').submit();" {% else %} onclick="getpro()"{% endif %}
+          >Order Alphabetically</a>
+        </input>
+      </form>
+        </li>
+        <li>
+          <a class="button large" id="drop" {% if user.is_pro_user %} onclick="revealdrop('drop')" {% else %} onclick="getpro()" {% endif %}>Filter Genre</a>
+          <p style="z-index: 1 !important; box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2) !important; margin-bottom: auto !important">
+            {% for genre in genres %}
+            <form action="{% url 'members:watchlist' request.user.id %}"
+                method="POST" id="submitstuff{{ forloop.counter }}" style="margin-bottom: 0 !important;">
+                {% csrf_token %}
+            <input type="hidden" name="order" value="{{ genre }}">
+            <a class="button large" 
+            style="-webkit-box-shadow: 0 0 3.5px #000 !important; height: 1.5rem !important; line-height: 1.5rem !important; display: none !important"
+            id="droplist{{ forloop.counter }}" onclick="document.getElementById('submitstuff{{ forloop.counter }}').submit();"
+            >{{ genre }}</a>
+            </input>
+          </form>
+            {% endfor %}
+          </p>
+        </li>
+      </ul>
+      
+      <hr style="width: 90% !important; margin-left: 5%; border-bottom: 0;" />
+      
+      <section class="posts" style="border-top: 0;">
+        {% for movie in movies %}
+        <article>
+          <header>
+            <span class="date">{{ movie.raw | get_movie_year }}</span>
+            <h2>
+              <a href="{% url 'home:movie-details' movie.id %}"
+                >{{ movie.raw | get_movie_name }}</a
+              >
+            </h2>
+          </header>
+          <a href="{% url 'home:movie-details' movie.id %}" class="image fit"
+            ><img src="{{ movie.raw | get_movie_cover }}" alt=""
+          /></a>
+          <!-- <p>{{ movie.raw | get_movie_description }}</p> -->
+          <ul class="actions special">
+            <li>
+              <form action="{% url 'members:watchlist' request.user.id %}"
+                method="POST" id="submiterase{{ forloop.counter }}">
+                {% csrf_token %}
+                <input type="hidden" name="order" value="{{ movie.id }}">
+              <a class="button" onclick="document.getElementById('submiterase{{ forloop.counter }}').submit();">Remove from Watchlist</a>
+            </input>
+          </form>
+            </li>
+          </ul>
+        </article>
+        {% endfor %}
+      </section>
+    </div>
+    {% endblock content %}
+  </body>
+</html>
