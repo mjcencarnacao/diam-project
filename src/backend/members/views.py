@@ -96,9 +96,7 @@ def get_watchlist_page(request, user_id):
                 movie_to_erase.watch_list.remove(request.user)
                 return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
             else:
-                print(res)
                 gender = GenderMovies.objects.get(gender=res)
-                print(gender.id)
                 movies = Movie.objects.filter(watch_list=user_id, gender=gender.id)
                 return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})
     return render(request, 'watchlist.html', {'movies': movies, 'genres': gender_set})

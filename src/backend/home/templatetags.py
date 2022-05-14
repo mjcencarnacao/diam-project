@@ -42,7 +42,6 @@ def count_movie_comments(movie_id, user_id):
 
 @register.simple_tag
 def next_tag(lista, arg1):
-    print("comment_id - " + str(arg1) + " nota - " + str(lista[lista.index(arg1) + 1]))
     return lista[lista.index(arg1) + 1]
 
 
