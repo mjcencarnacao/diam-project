@@ -11,7 +11,7 @@
         <header class="major">
           <span class="date">Updated IMDB List</span>
           <h2>
-            <a href="#"
+            <a
               >Welcome to<br />
               Your Profile Page</a
             >
@@ -48,7 +48,7 @@
                 </h2>
             </header>
             <br>
-            {% if request.user.profile_pic %}
+            {% if reqsuest.user.profile_pic %}
                 <img
                   src= "{{ request.user.profile_pic.url }}"
                   style="max-width: 25%; max-height: 25%; border-radius: 50%"

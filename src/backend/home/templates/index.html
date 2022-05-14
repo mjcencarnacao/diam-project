@@ -9,7 +9,7 @@
         <header class="major">
           <span class="date">Updated IMDB List</span>
           <h2>
-            <a href="#"
+            <a href="https://www.imdb.com/chart/top/"
               >Not Sure about<br />
               what to watch?</a
             >
@@ -22,7 +22,9 @@
         </header>
         <ul class="actions special">
           <li>
-            <a href="#" class="button large">Visit IMDB Official Website</a>
+            <a href="https://www.imdb.com/chart/top/" class="button large"
+              >Visit IMDB Official Website</a
+            >
           </li>
         </ul>
       </article>
@@ -44,8 +46,7 @@
           <p>{{ movie.raw | get_movie_description }}</p>
           <ul class="actions special">
             <li>
-              <a href="{% url 'home:movie-details' movie.id %}" class="button"
-                >
+              <a href="{% url 'home:movie-details' movie.id %}" class="button">
                 {{ movie | get_movie_likes }} likes</a
               >
             </li>

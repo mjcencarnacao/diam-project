@@ -44,12 +44,10 @@
             <br>
             {% if critic.profile_pic  %}
             <form method="post" enctype="multipart/form-data">
-              
                 <img
                   src="{{ critic.profile_pic.url }}"
-                  style="max-width: 25%; max-height: 25%; border-radius: 50%"
+                  style="max-width: 25px; max-height: 25px; border-radius: 50%"
                 />
-
             </form>
             {% else %}
             <img src="{% static 'default-user-image.png' %}"
