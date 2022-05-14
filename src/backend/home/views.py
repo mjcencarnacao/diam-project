@@ -16,7 +16,7 @@ from services.ProcessingService import ProcessingService
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 
-@login_required(login_url='/members/login_user/')
+
 def like_movie(request, pk):
     id = request.POST.get('movie_id')
     movie = get_object_or_404(Movie, id=id)
@@ -28,7 +28,7 @@ def like_movie(request, pk):
         movie.likes.remove(request.user)
         return HttpResponseRedirect(reverse("home:movie-details", args=[int(pk)]))
 
-
+@login_required(login_url='/members/login_user/')
 def movie_details(request, movie_id):
     if request.method == 'POST':
         if 'filter_button_negative' in request.POST:
@@ -180,7 +180,6 @@ def get_register_page(request):
             submitted = True
     return render(request, 'register.html', {'form': form, 'submitted': submitted})
 
-@login_required(login_url='/members/login_user/')
 def like(request):
     if request.method == 'POST':
         result = ''
@@ -215,7 +214,6 @@ def like(request):
 
     return JsonResponse({'result': result, 'p_id': p_id, })
 
-@login_required(login_url='/members/login_user/')
 def dislike(request):
     if request.method == 'POST':
         result = ''
@@ -278,7 +276,6 @@ def get_eval(request):
         )
     return JsonResponse({'result': ai_new_feedback_plain_text, 'p_id': comment_id, })
 
-@login_required(login_url='/members/login_user/')
 def erase(request):
     if request.method == 'POST':
         comment_id: str = request.POST.get('postid')
@@ -287,7 +284,6 @@ def erase(request):
 
     return JsonResponse({'p_id': comment_id, })
 
-@login_required(login_url='/members/login_user/')
 def add_movie_to_watchlist(request, pk):
     id=request.POST.get('movie_id')
     movie = get_object_or_404(Movie, id=id)
@@ -299,7 +295,6 @@ def add_movie_to_watchlist(request, pk):
         movie.watch_list.remove(request.user)
         return HttpResponseRedirect(reverse("home:movie-details", args=[int(pk)]))
 
-@login_required(login_url='/members/login_user/')
 def check_movie_seen(request, pk):
     id=request.POST.get('movie_id')
     movie = get_object_or_404(Movie, id=id)
