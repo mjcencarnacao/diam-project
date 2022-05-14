@@ -160,10 +160,8 @@ def search_movies(request):
 def get_home_page(request):
     list_of_top_movies_check = Movie.objects.filter(is_top_250=True)
     if list_of_top_movies_check:
-        print("have top list")
         return render(request, 'index.html', {'movies': list_of_top_movies_check})
     else:
-        print("not have top List")
         movies_source = json.loads(views.request_top_movies(request).content)
         for movie in movies_source:
             gender_list = movie['genre']
