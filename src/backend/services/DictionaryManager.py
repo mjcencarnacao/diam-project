@@ -42,3 +42,8 @@ class DictionaryManager:
         if srapper_info["Plot"] != "N/A" and srapper_info["Poster"] != "N/A":
             srapper_info["imdb_url"] = dict["imdbID"]
             lst.append(srapper_info)
+
+    @staticmethod
+    def get_movie_genre(dictionary: Dict):
+        genre = dictionary.get('genre')
+        return str(genre).translate({ord(c): None for c in '[]\''})

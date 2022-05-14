@@ -5,12 +5,10 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 from services import views
 import json
-from .models import Movie, Comments, CommentsLikes
+from .models import Movie, Comments, CommentsLikes, GenderMovies
 from services.scrapper import Scrapper
 from services.AIService import AIService
 from members.forms import SignUpForm
-from django.core.files.storage import FileSystemStorage
-from django.shortcuts import get_object_or_404
 from services.DictionaryManager import DictionaryManager
 from services.ProcessingService import ProcessingService
 
@@ -155,15 +153,18 @@ def search_movies(request):
 def get_home_page(request):
     movies_source = json.loads(views.request_top_movies(request).content)
     for movie in movies_source:
-        try:
-            movie_info = Movie.objects.get(name=movie['name'])
-        except Movie.DoesNotExist:
+        gender_list = movie['genre']
+        check = Movie.objects.filter(name=movie['name'])
+        if not check:
             Movie(name=movie['name'], raw=movie).save()
-
+            obj: Movie = Movie.objects.get(name=movie['name'])
+            for i in gender_list:
+                obj.gender.add(GenderMovies.objects.get_or_create(gender=i)[0])
     movies = Movie.objects.all()
     return render(request, 'index.html', {'movies': movies})
 
 
+# ?? não devia de estar em members ?
 def get_register_page(request):
     submitted = False
     if request.method == 'POST':
@@ -186,7 +187,7 @@ def like(request):
         p_id: int = id
         user_id: int = request.user.id
         comments = CommentsLikes.objects.filter(user_id=user_id, comment_id=p_id)
-        if (not comments):
+        if not comments:
             CommentsLikes(
                 like=True,
                 comment_id=p_id,
@@ -198,7 +199,7 @@ def like(request):
             return JsonResponse({'result': result, 'p_id': p_id, })
         else:
             comment_like = get_object_or_404(CommentsLikes, comment_id=p_id)
-            if (comment_like.like == False):
+            if not comment_like.like:
                 comment_like.like = True
                 comment_like.save()
                 post = get_object_or_404(Comments, id=p_id)
@@ -206,7 +207,7 @@ def like(request):
                 post.save()
                 result = post.likes
                 return JsonResponse({'result': result, 'p_id': p_id, })
-            if (comment_like.like == True):
+            if comment_like.like:
                 post = get_object_or_404(Comments, id=id)
                 result = post.likes
                 return JsonResponse({'result': result, 'p_id': p_id, })
@@ -217,33 +218,32 @@ def like(request):
 def dislike(request):
     if request.method == 'POST':
         result = ''
-        id: int = request.POST.get('postid')
-        p_id: int = id
+        p_id: int = request.POST.get('postid')
         user_id: int = request.user.id
         comments = CommentsLikes.objects.filter(user_id=user_id, comment_id=p_id)
-        if (not comments):
+        if not comments:
             CommentsLikes(
                 like=False,
                 comment_id=p_id,
                 user_id=request.user.id).save()
             post = get_object_or_404(Comments, id=p_id)
-            if (post.likes != 0):
+            if post.likes != 0:
                 post.likes -= 1
             post.save()
             result = post.likes
             return JsonResponse({'result': result, 'p_id': p_id, })
         else:
             comment_like = get_object_or_404(CommentsLikes, comment_id=p_id)
-            if (comment_like.like == True):
+            if comment_like.like:
                 comment_like.like = False
                 comment_like.save()
                 post = get_object_or_404(Comments, id=p_id)
-                if (post.likes != 0):
+                if post.likes != 0:
                     post.likes -= 1
                 post.save()
                 result = post.likes
                 return JsonResponse({'result': result, 'p_id': p_id, })
-            if (comment_like.like == False):
+            if not comment_like.like:
                 post = get_object_or_404(Comments, id=id)
                 result = post.likes
                 return JsonResponse({'result': result, 'p_id': p_id, })
@@ -251,19 +251,7 @@ def dislike(request):
     return JsonResponse({'result': result, 'p_id': p_id, })
 
 
-def user_comment(request):
-    return render(request, 'details.html')
-
-
-def fazer_upload(request):
-    if request.method == 'POST':
-        myfile = request.POST.FILES('thefile', False)
-        fs = FileSystemStorage()
-        filename = fs.save(request.user.username, myfile)
-        uploaded_file_url = fs.url(filename)
-        return render(request, 'votacao/fazer_upload.html', {'uploaded_file_url': uploaded_file_url})
-
-
+# feedback of user to AI evaluate
 def get_eval(request):
     if request.method == 'POST':
         id_and_user_feedback: str = request.POST.get('postid')
@@ -277,7 +265,7 @@ def get_eval(request):
     return JsonResponse({'result': ai_new_feedback_plain_text, 'p_id': comment_id, })
 
 
-def erase(request):
+def erase_comment(request):
     if request.method == 'POST':
         comment_id: str = request.POST.get('postid')
         comment_post = Comments.objects.get(id=comment_id)
@@ -285,8 +273,9 @@ def erase(request):
 
     return JsonResponse({'p_id': comment_id, })
 
+
 def add_movie_to_watchlist(request, pk):
-    id=request.POST.get('movie_id')
+    id = request.POST.get('movie_id')
     movie = get_object_or_404(Movie, id=id)
     movie_on_watchlist = Movie.objects.filter(watch_list=request.user.id, id=id)
     if not movie_on_watchlist:
@@ -296,8 +285,9 @@ def add_movie_to_watchlist(request, pk):
         movie.watch_list.remove(request.user)
         return HttpResponseRedirect(reverse("home:movie-details", args=[int(pk)]))
 
+
 def check_movie_seen(request, pk):
-    id=request.POST.get('movie_id')
+    id = request.POST.get('movie_id')
     movie = get_object_or_404(Movie, id=id)
     movie_seen = Movie.objects.filter(seen=request.user.id, id=id)
     if not movie_seen:
