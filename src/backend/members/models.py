@@ -9,13 +9,3 @@ class User(AbstractUser):
     is_pro_user = models.BooleanField('Is Pro', default=False)
     profile_pic = models.ImageField(null=True, blank=True, upload_to="image/profile/")
     description = models.TextField(default="This is the description field.")
-
-
-##APAGAR
-class Profile(models.Model):
-    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
-    bio = models.TextField()
-    instagram_url= models.CharField(max_length=225,null=True,blank=True)
-
-    def __str__(self):
-        return str(self.user)

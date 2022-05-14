@@ -11,7 +11,6 @@ urlpatterns = [
     path('like_movie/<int:pk>', views.like_movie, name="like-movie"),
     path('like/', views.like, name='like'),
     path('dislike/', views.dislike, name='dislike'),
-    path('register', views.get_register_page, name='register'),
     path('search', views.search_movies, name='movie-search'),
     path('evaluate/', views.get_eval, name='eval'),
     path('erase/', views.erase_comment, name='erase'),

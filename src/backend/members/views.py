@@ -1,7 +1,5 @@
-from xml.etree.ElementTree import Comment
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import permission_required, user_passes_test
 from django.shortcuts import render, redirect
-# from backend.home.views import movie_details
 from .forms import SignUpForm, LoginForm, Profile
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -67,6 +65,13 @@ def get_profile_page(request, user_id):
     comments_context = Comments.objects.filter(critic_id=user_id).order_by('-entry')
     user_context = User.objects.get(pk=user_id)
     return render(request, 'profile.html', {'critic': user_context, 'comments': comments_context})
+
+
+def user_is_not_regular_check(user):
+    if user.is_premium_user is False and user.is_pro_user is False:
+        return False
+    else:
+        return True
 
 
 def get_watchlist_page(request, user_id):

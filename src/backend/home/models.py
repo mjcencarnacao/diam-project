@@ -19,6 +19,7 @@ class Movie(models.Model):
     watch_list = models.ManyToManyField(User, related_name='watch_list_of')
     gender = models.ManyToManyField(GenderMovies, related_name='genders')
     seen = models.ManyToManyField(User, related_name='seen_movie')
+    is_top_250 = models.BooleanField(default=False)
 
     def total_likes(self) -> int:
         return self.likes.choices.count()

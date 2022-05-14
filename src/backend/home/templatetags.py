@@ -1,6 +1,7 @@
 from django.template.defaulttags import register
 from .models import Comments, Movie
 
+
 @register.simple_tag
 def has_seen_movie(user_id, movie_id):
     movies = Movie.objects.filter(seen=user_id, id=movie_id)
@@ -8,6 +9,7 @@ def has_seen_movie(user_id, movie_id):
         return False
     else:
         return True
+
 
 @register.simple_tag
 def has_on_watchlist(user_id, movie_id):
@@ -17,6 +19,7 @@ def has_on_watchlist(user_id, movie_id):
     else:
         return True
 
+
 @register.simple_tag
 def has_likes(user_id, movie_id):
     movies = Movie.objects.filter(likes=user_id, id=movie_id)
@@ -24,6 +27,7 @@ def has_likes(user_id, movie_id):
         return False
     else:
         return True
+
 
 @register.filter
 def get_movie_likes(movie: Movie):
@@ -72,6 +76,7 @@ def get_movie_genre(dictionary):
 def get_movie_actors(dictionary):
     actors = dictionary.get('actors')
     return str(actors).translate({ord(c): None for c in '[]\''})
+
 
 @register.filter
 def get_movie_directors(dictionary):

@@ -14,6 +14,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
 
     <div style="float: left; margin-right: 40px">
       <img style="width: 350px !important; height: 500px !important" src="{{ movie.raw | get_movie_cover }}" alt="" />
+      {% if request.user.is_premium_user or request.user.is_pro_user %}
       <ul class="actions special">
         <li>
           {% has_on_watchlist request.user.id movie.id as haswatch %}
@@ -73,6 +74,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
             {% endif %}
         </li>
       </ul>
+      {% endif %}
     </div>
     <div>
       <b>Year: </b>{{ movie.raw | get_movie_year }}<br />
@@ -211,6 +213,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
                   <div class="panel-body" style="display: inline">
                     <header class="text-left">
                       <div class="comment-user">
+                        {% if comment.critic.profile_pic %}
+                        {% endif %}
                         <i class="fa fa-user"></i> 
                         {% if user.is_pro_user and comment.critic_id is not None %}<a href="{% url 'members:profile' comment.critic_id %}"> {{ comment.critic_username }}</a>{% endif %}
                         {% if user.is_pro_user and comment.critic_id is None %}{{ comment.critic_username }}{% endif %}
